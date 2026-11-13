@@ -5,5 +5,13 @@
     "types": ["node", "vite/client"],
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "tests/domain/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/domain/**/*.ts",
+    "tests/contracts/**/*.ts",
+    "tests/storage/**/*.ts",
+    "tests/playback/**/*.ts",
+    "tests/electron/**/*.ts"
+  ]
 }

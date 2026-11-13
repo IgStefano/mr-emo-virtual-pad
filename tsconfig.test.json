@@ -1,8 +1,15 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["node"]
   },
-  "include": ["tests/domain/**/*.ts", "src/domain/**/*.ts"]
+  "include": [
+    "tests/domain/**/*.ts",
+    "src/domain/**/*.ts",
+    "tests/contracts/**/*.ts",
+    "tests/storage/**/*.ts",
+    "tests/playback/**/*.ts",
+    "tests/electron/**/*.ts"
+  ]
 }

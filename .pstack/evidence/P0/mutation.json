@@ -1,0 +1,1568 @@
+{
+  "files": {
+    "src/domain/lease.ts": {
+      "language": "typescript",
+      "mutants": [
+        {
+          "id": "17",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { owner: { …(2) }, phase: 'held' } to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 13.499099999999999,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 37, "line": 20 },
+            "start": { "column": 7, "line": 20 }
+          }
+        },
+        {
+          "id": "16",
+          "mutatorName": "BlockStatement",
+          "replacement": "{}",
+          "statusReason": "expected undefined to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 8.100100000000111,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 2, "line": 31 },
+            "start": { "column": 15, "line": 19 }
+          }
+        },
+        {
+          "id": "18",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected null to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 8.793499000000338,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 37, "line": 20 },
+            "start": { "column": 7, "line": 20 }
+          }
+        },
+        {
+          "id": "19",
+          "mutatorName": "EqualityOperator",
+          "replacement": "action !== LeaseAction.Acquire",
+          "statusReason": "expected null to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 13.724298999999974,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 37, "line": 20 },
+            "start": { "column": 7, "line": 20 }
+          }
+        },
+        {
+          "id": "20",
+          "mutatorName": "LogicalOperator",
+          "replacement": "state && {\n  owner,\n  phase: LeasePhase.Held\n}",
+          "statusReason": "expected null to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 9.60779999999977,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 54, "line": 21 },
+            "start": { "column": 12, "line": 21 }
+          }
+        },
+        {
+          "id": "21",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 16.248099999999795,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 54, "line": 21 },
+            "start": { "column": 21, "line": 21 }
+          }
+        },
+        {
+          "id": "22",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { owner: { …(2) }, phase: 'held' } to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 15.595600000000104,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 42, "line": 25 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "23",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "Cannot read properties of null (reading 'owner')",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 9.028900000000249,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 42, "line": 25 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "24",
+          "mutatorName": "LogicalOperator",
+          "replacement": "(state === null || state.owner.sessionId !== owner.sessionId) && state.owner.leaseId !== owner.leaseId",
+          "statusReason": "Cannot read properties of null (reading 'owner')",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 8.0608000000002,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 42, "line": 25 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "25",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "Cannot read properties of null (reading 'owner')",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 9.030200000000605,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 46, "line": 24 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "26",
+          "mutatorName": "LogicalOperator",
+          "replacement": "state === null && state.owner.sessionId !== owner.sessionId",
+          "statusReason": "Cannot read properties of null (reading 'owner')",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 7.146798999999646,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 46, "line": 24 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "27",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "Cannot read properties of null (reading 'owner')",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 6.573899999999867,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 19, "line": 23 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "28",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state !== null",
+          "statusReason": "expected { owner: { …(2) }, phase: 'held' } to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 17.116399,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 19, "line": 23 },
+            "start": { "column": 5, "line": 23 }
+          }
+        },
+        {
+          "id": "29",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { owner: { …(2) }, phase: 'cleaning' } to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 12.32059900000013,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 46, "line": 24 },
+            "start": { "column": 5, "line": 24 }
+          }
+        },
+        {
+          "id": "30",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state.owner.sessionId === owner.sessionId",
+          "statusReason": "expected { owner: { …(2) }, phase: 'held' } to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 16.787398999999823,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 46, "line": 24 },
+            "start": { "column": 5, "line": 24 }
+          }
+        },
+        {
+          "id": "31",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { owner: { …(2) }, phase: 'cleaning' } to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 12.15480000000025,
+          "killedBy": ["19"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 42, "line": 25 },
+            "start": { "column": 5, "line": 25 }
+          }
+        },
+        {
+          "id": "32",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state.owner.leaseId === owner.leaseId",
+          "statusReason": "expected { owner: { …(2) }, phase: 'held' } to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 16.89769999999953,
+          "killedBy": ["18"],
+          "coveredBy": ["18", "19"],
+          "location": {
+            "end": { "column": 42, "line": 25 },
+            "start": { "column": 5, "line": 25 }
+          }
+        },
+        {
+          "id": "33",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { owner: { …(2) }, phase: 'cleaning' } to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 17.674999000000298,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 34, "line": 28 },
+            "start": { "column": 7, "line": 28 }
+          }
+        },
+        {
+          "id": "34",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { owner: { …(2) }, phase: 'held' } to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 11.944300000000112,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 34, "line": 28 },
+            "start": { "column": 7, "line": 28 }
+          }
+        },
+        {
+          "id": "35",
+          "mutatorName": "EqualityOperator",
+          "replacement": "action !== LeaseAction.Stop",
+          "statusReason": "expected { owner: { …(2) }, phase: 'cleaning' } to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 13.000699000000168,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 34, "line": 28 },
+            "start": { "column": 7, "line": 28 }
+          }
+        },
+        {
+          "id": "36",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { owner: { …(2) }, phase: 'cleaning' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 16.583400000000438,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 62, "line": 29 },
+            "start": { "column": 12, "line": 29 }
+          }
+        },
+        {
+          "id": "37",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected null to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 14.00380000000041,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 45, "line": 30 },
+            "start": { "column": 10, "line": 30 }
+          }
+        },
+        {
+          "id": "38",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { owner: { …(2) }, phase: 'cleaning' } to be null",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 11.05109900000025,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 45, "line": 30 },
+            "start": { "column": 10, "line": 30 }
+          }
+        },
+        {
+          "id": "39",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state.phase !== LeasePhase.Cleaning",
+          "statusReason": "expected null to deeply equal { owner: { …(2) }, phase: 'held' }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 11.762499999999818,
+          "killedBy": ["18"],
+          "coveredBy": ["18"],
+          "location": {
+            "end": { "column": 45, "line": 30 },
+            "start": { "column": 10, "line": 30 }
+          }
+        }
+      ],
+      "source": "export const LeasePhase = { Held: 'held', Cleaning: 'cleaning' } as const;\nexport interface Reservation {\n  readonly sessionId: string;\n  readonly leaseId: string;\n}\nexport type LeaseState = null | {\n  readonly owner: Reservation;\n  readonly phase: (typeof LeasePhase)[keyof typeof LeasePhase];\n};\nexport const LeaseAction = {\n  Acquire: 'acquire',\n  Stop: 'stop',\n  AcknowledgeCleanup: 'acknowledge-cleanup',\n} as const;\nexport function transitionLease(\n  state: LeaseState,\n  action: (typeof LeaseAction)[keyof typeof LeaseAction],\n  owner: Reservation,\n): LeaseState {\n  if (action === LeaseAction.Acquire)\n    return state ?? { owner, phase: LeasePhase.Held };\n  if (\n    state === null ||\n    state.owner.sessionId !== owner.sessionId ||\n    state.owner.leaseId !== owner.leaseId\n  )\n    return state;\n  if (action === LeaseAction.Stop)\n    return { owner: state.owner, phase: LeasePhase.Cleaning };\n  return state.phase === LeasePhase.Cleaning ? null : state;\n}\n"
+    },
+    "src/domain/playback.ts": {
+      "language": "typescript",
+      "mutants": [
+        {
+          "id": "40",
+          "mutatorName": "BlockStatement",
+          "replacement": "{}",
+          "statusReason": "expected undefined to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 10.293999999999869,
+          "killedBy": ["6"],
+          "coveredBy": [
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"
+          ],
+          "location": {
+            "end": { "column": 2, "line": 108 },
+            "start": { "column": 23, "line": 67 }
+          }
+        },
+        {
+          "id": "41",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { state: { …(3) }, …(1) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 13.778299000000516,
+          "killedBy": ["7"],
+          "coveredBy": [
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"
+          ],
+          "location": {
+            "end": { "column": 46, "line": 68 },
+            "start": { "column": 7, "line": 68 }
+          }
+        },
+        {
+          "id": "42",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 13.791199999999662,
+          "killedBy": ["6"],
+          "coveredBy": [
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"
+          ],
+          "location": {
+            "end": { "column": 46, "line": 68 },
+            "start": { "column": 7, "line": 68 }
+          }
+        },
+        {
+          "id": "43",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state.status !== PlaybackStatus.Stopped",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 17.701200000000426,
+          "killedBy": ["6"],
+          "coveredBy": [
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"
+          ],
+          "location": {
+            "end": { "column": 46, "line": 68 },
+            "start": { "column": 7, "line": 68 }
+          }
+        },
+        {
+          "id": "44",
+          "mutatorName": "BlockStatement",
+          "replacement": "{}",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 13.974498999999923,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "11", "12", "13", "14", "15"],
+          "location": {
+            "end": { "column": 4, "line": 85 },
+            "start": { "column": 48, "line": 68 }
+          }
+        },
+        {
+          "id": "45",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 12.431098999999449,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "11", "12", "13", "14", "15"],
+          "location": {
+            "end": { "column": 46, "line": 69 },
+            "start": { "column": 9, "line": 69 }
+          }
+        },
+        {
+          "id": "46",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { state: { …(3) }, …(1) } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 2,
+          "duration": 20.870498999998745,
+          "killedBy": ["11"],
+          "coveredBy": ["6", "11", "12", "13", "14", "15"],
+          "location": {
+            "end": { "column": 46, "line": 69 },
+            "start": { "column": 9, "line": 69 }
+          }
+        },
+        {
+          "id": "47",
+          "mutatorName": "EqualityOperator",
+          "replacement": "input.type === PlaybackInputType.Play",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 21.33219899999949,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "11", "12", "13", "14", "15"],
+          "location": {
+            "end": { "column": 46, "line": 69 },
+            "start": { "column": 9, "line": 69 }
+          }
+        },
+        {
+          "id": "48",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 12.241799999999785,
+          "killedBy": ["11"],
+          "coveredBy": ["11", "12", "13", "14"],
+          "location": {
+            "end": { "column": 77, "line": 69 },
+            "start": { "column": 55, "line": 69 }
+          }
+        },
+        {
+          "id": "49",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[\"Stryker was here\"]",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 13.476599999999962,
+          "killedBy": ["11"],
+          "coveredBy": ["11", "12", "13", "14"],
+          "location": {
+            "end": { "column": 75, "line": 69 },
+            "start": { "column": 73, "line": 69 }
+          }
+        },
+        {
+          "id": "50",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 16.858799999999974,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "15"],
+          "location": {
+            "end": { "column": 6, "line": 84 },
+            "start": { "column": 12, "line": 70 }
+          }
+        },
+        {
+          "id": "51",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: {}, effects: [ { …(4) } ] } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 15.617699000000357,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "15"],
+          "location": {
+            "end": { "column": 8, "line": 75 },
+            "start": { "column": 14, "line": 71 }
+          }
+        },
+        {
+          "id": "52",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[]",
+          "statusReason": "expected { state: { …(3) }, effects: [] } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 14.53479999999945,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "15"],
+          "location": {
+            "end": { "column": 8, "line": 83 },
+            "start": { "column": 16, "line": 76 }
+          }
+        },
+        {
+          "id": "53",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: { …(3) }, effects: [ {} ] } to deeply equal { state: { …(3) }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 26.002699000000575,
+          "killedBy": ["6"],
+          "coveredBy": ["6", "15"],
+          "location": {
+            "end": { "column": 10, "line": 82 },
+            "start": { "column": 9, "line": 77 }
+          }
+        },
+        {
+          "id": "54",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "case PlaybackInputType.Play:",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 25.08309999999983,
+          "killedBy": ["7"],
+          "coveredBy": ["7", "8"],
+          "location": {
+            "end": { "column": 37, "line": 88 },
+            "start": { "column": 5, "line": 87 }
+          }
+        },
+        {
+          "id": "55",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 26.011498999999276,
+          "killedBy": ["7"],
+          "coveredBy": ["7", "8"],
+          "location": {
+            "end": { "column": 36, "line": 88 },
+            "start": { "column": 14, "line": 88 }
+          }
+        },
+        {
+          "id": "56",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[\"Stryker was here\"]",
+          "statusReason": "expected { state: { …(3) }, …(1) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 24.006298999998762,
+          "killedBy": ["7"],
+          "coveredBy": ["7", "8"],
+          "location": {
+            "end": { "column": 34, "line": 88 },
+            "start": { "column": 32, "line": 88 }
+          }
+        },
+        {
+          "id": "57",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "case PlaybackInputType.Stop:",
+          "statusReason": "expected { state: { …(3) }, effects: [] } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 29.511498999998366,
+          "killedBy": ["9"],
+          "coveredBy": ["9", "10", "15"],
+          "location": {
+            "end": { "column": 9, "line": 93 },
+            "start": { "column": 5, "line": 89 }
+          }
+        },
+        {
+          "id": "58",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 16.20970000000125,
+          "killedBy": ["9"],
+          "coveredBy": ["9", "10", "15"],
+          "location": {
+            "end": { "column": 8, "line": 93 },
+            "start": { "column": 14, "line": 90 }
+          }
+        },
+        {
+          "id": "59",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: {}, effects: [ { …(2) } ] } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 21.494298999999955,
+          "killedBy": ["9"],
+          "coveredBy": ["9", "10", "15"],
+          "location": {
+            "end": { "column": 50, "line": 91 },
+            "start": { "column": 16, "line": 91 }
+          }
+        },
+        {
+          "id": "60",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[]",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 36.11119899999903,
+          "killedBy": ["9"],
+          "coveredBy": ["9", "10", "15"],
+          "location": {
+            "end": { "column": 77, "line": 92 },
+            "start": { "column": 18, "line": 92 }
+          }
+        },
+        {
+          "id": "61",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 26.12169999999969,
+          "killedBy": ["9"],
+          "coveredBy": ["9", "10", "15"],
+          "location": {
+            "end": { "column": 76, "line": 92 },
+            "start": { "column": 19, "line": 92 }
+          }
+        },
+        {
+          "id": "62",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "case PlaybackInputType.Started:",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { …(2) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 37.932198999998946,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "15", "16"],
+          "location": {
+            "end": { "column": 9, "line": 99 },
+            "start": { "column": 5, "line": 94 }
+          }
+        },
+        {
+          "id": "63",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { state: { …(3) }, effects: [] } to deeply equal { …(2) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 21.61239899999964,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "15", "16"],
+          "location": {
+            "end": { "column": 42, "line": 95 },
+            "start": { "column": 11, "line": 95 }
+          }
+        },
+        {
+          "id": "64",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { …(2) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 29.86399899999924,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "15", "16"],
+          "location": {
+            "end": { "column": 42, "line": 95 },
+            "start": { "column": 11, "line": 95 }
+          }
+        },
+        {
+          "id": "65",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state.attempt === input.attempt",
+          "statusReason": "expected { state: { …(3) }, effects: [] } to deeply equal { …(2) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 33.11159899999984,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "15", "16"],
+          "location": {
+            "end": { "column": 42, "line": 95 },
+            "start": { "column": 11, "line": 95 }
+          }
+        },
+        {
+          "id": "66",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 17.59439999999995,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "15"],
+          "location": {
+            "end": { "column": 73, "line": 95 },
+            "start": { "column": 51, "line": 95 }
+          }
+        },
+        {
+          "id": "67",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[\"Stryker was here\"]",
+          "statusReason": "expected { state: { …(3) }, …(1) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 74.60759900000085,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "15"],
+          "location": {
+            "end": { "column": 71, "line": 95 },
+            "start": { "column": 69, "line": 95 }
+          }
+        },
+        {
+          "id": "68",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { …(2) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 50.41599899999892,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "16"],
+          "location": {
+            "end": { "column": 8, "line": 99 },
+            "start": { "column": 14, "line": 96 }
+          }
+        },
+        {
+          "id": "69",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: {}, effects: [] } to deeply equal { …(2) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 27.688599999999497,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "16"],
+          "location": {
+            "end": { "column": 60, "line": 97 },
+            "start": { "column": 16, "line": 97 }
+          }
+        },
+        {
+          "id": "70",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[\"Stryker was here\"]",
+          "statusReason": "expected { …(2) } to deeply equal { …(2) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 27.987599000000046,
+          "killedBy": ["12"],
+          "coveredBy": ["12", "16"],
+          "location": {
+            "end": { "column": 20, "line": 98 },
+            "start": { "column": 18, "line": 98 }
+          }
+        },
+        {
+          "id": "71",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "case PlaybackInputType.Failed:",
+          "statusReason": "expected undefined to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 18.327698999999484,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14", "15"],
+          "location": {
+            "end": { "column": 9, "line": 106 },
+            "start": { "column": 5, "line": 101 }
+          }
+        },
+        {
+          "id": "72",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "true",
+          "statusReason": "expected { state: { …(3) }, effects: [] } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 28.84979899999962,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14", "15"],
+          "location": {
+            "end": { "column": 42, "line": 102 },
+            "start": { "column": 11, "line": 102 }
+          }
+        },
+        {
+          "id": "73",
+          "mutatorName": "ConditionalExpression",
+          "replacement": "false",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 23.064300000000003,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14", "15"],
+          "location": {
+            "end": { "column": 42, "line": 102 },
+            "start": { "column": 11, "line": 102 }
+          }
+        },
+        {
+          "id": "74",
+          "mutatorName": "EqualityOperator",
+          "replacement": "state.attempt === input.attempt",
+          "statusReason": "expected { state: { …(3) }, effects: [] } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 23.573898999999074,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14", "15"],
+          "location": {
+            "end": { "column": 42, "line": 102 },
+            "start": { "column": 11, "line": 102 }
+          }
+        },
+        {
+          "id": "75",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 24.752598999999464,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14", "15"],
+          "location": {
+            "end": { "column": 73, "line": 102 },
+            "start": { "column": 51, "line": 102 }
+          }
+        },
+        {
+          "id": "76",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[\"Stryker was here\"]",
+          "statusReason": "expected { state: { …(3) }, …(1) } to deeply equal { state: { …(3) }, effects: [] }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 17.42869900000005,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14", "15"],
+          "location": {
+            "end": { "column": 71, "line": 102 },
+            "start": { "column": 69, "line": 102 }
+          }
+        },
+        {
+          "id": "77",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected {} to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 25.464899000000514,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14"],
+          "location": {
+            "end": { "column": 8, "line": 106 },
+            "start": { "column": 14, "line": 103 }
+          }
+        },
+        {
+          "id": "78",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: {}, effects: [ { …(2) } ] } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 17.985500000000684,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14"],
+          "location": {
+            "end": { "column": 50, "line": 104 },
+            "start": { "column": 16, "line": 104 }
+          }
+        },
+        {
+          "id": "79",
+          "mutatorName": "ArrayDeclaration",
+          "replacement": "[]",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 21.32919899999979,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14"],
+          "location": {
+            "end": { "column": 77, "line": 105 },
+            "start": { "column": 18, "line": 105 }
+          }
+        },
+        {
+          "id": "80",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected { state: { status: 'stopped' }, …(1) } to deeply equal { state: { status: 'stopped' }, …(1) }",
+          "status": "Killed",
+          "static": false,
+          "testsCompleted": 1,
+          "duration": 23.904900000001362,
+          "killedBy": ["13"],
+          "coveredBy": ["13", "14"],
+          "location": {
+            "end": { "column": 76, "line": 105 },
+            "start": { "column": 19, "line": 105 }
+          }
+        }
+      ],
+      "source": "export const PlaybackStatus = {\n  Stopped: 'stopped',\n  Starting: 'starting',\n  Playing: 'playing',\n} as const;\nexport type PlaybackStatus =\n  (typeof PlaybackStatus)[keyof typeof PlaybackStatus];\n\nexport const PlaybackInputType = {\n  Play: 'play',\n  Stop: 'stop',\n  Started: 'started',\n  Ended: 'ended',\n  Failed: 'failed',\n} as const;\nexport type PlaybackInputType =\n  (typeof PlaybackInputType)[keyof typeof PlaybackInputType];\n\nexport const PlaybackEffectType = {\n  Start: 'start',\n  Stop: 'stop',\n} as const;\nexport type PlaybackEffectType =\n  (typeof PlaybackEffectType)[keyof typeof PlaybackEffectType];\n\nexport type PlaybackState =\n  | { readonly status: typeof PlaybackStatus.Stopped }\n  | {\n      readonly status:\n        typeof PlaybackStatus.Starting | typeof PlaybackStatus.Playing;\n      readonly padId: string;\n      readonly attempt: number;\n    };\n\nexport type PlaybackInput =\n  | {\n      readonly type: typeof PlaybackInputType.Play;\n      readonly padId: string;\n      readonly attempt: number;\n    }\n  | { readonly type: typeof PlaybackInputType.Stop }\n  | {\n      readonly type:\n        | typeof PlaybackInputType.Started\n        | typeof PlaybackInputType.Ended\n        | typeof PlaybackInputType.Failed;\n      readonly attempt: number;\n    };\n\nexport type PlaybackEffect =\n  | {\n      readonly type: typeof PlaybackEffectType.Start;\n      readonly padId: string;\n      readonly attempt: number;\n      readonly offset: 0;\n    }\n  | { readonly type: typeof PlaybackEffectType.Stop; readonly attempt: number };\n\nexport interface PlaybackTransition {\n  readonly state: PlaybackState;\n  readonly effects: readonly PlaybackEffect[];\n}\n\nexport function transition(\n  state: PlaybackState,\n  input: PlaybackInput,\n): PlaybackTransition {\n  if (state.status === PlaybackStatus.Stopped) {\n    if (input.type !== PlaybackInputType.Play) return { state, effects: [] };\n    return {\n      state: {\n        status: PlaybackStatus.Starting,\n        padId: input.padId,\n        attempt: input.attempt,\n      },\n      effects: [\n        {\n          type: PlaybackEffectType.Start,\n          padId: input.padId,\n          attempt: input.attempt,\n          offset: 0,\n        },\n      ],\n    };\n  }\n  switch (input.type) {\n    case PlaybackInputType.Play:\n      return { state, effects: [] };\n    case PlaybackInputType.Stop:\n      return {\n        state: { status: PlaybackStatus.Stopped },\n        effects: [{ type: PlaybackEffectType.Stop, attempt: state.attempt }],\n      };\n    case PlaybackInputType.Started:\n      if (state.attempt !== input.attempt) return { state, effects: [] };\n      return {\n        state: { ...state, status: PlaybackStatus.Playing },\n        effects: [],\n      };\n    case PlaybackInputType.Ended:\n    case PlaybackInputType.Failed:\n      if (state.attempt !== input.attempt) return { state, effects: [] };\n      return {\n        state: { status: PlaybackStatus.Stopped },\n        effects: [{ type: PlaybackEffectType.Stop, attempt: state.attempt }],\n      };\n  }\n}\n"
+    },
+    "src/contracts/catalog.ts": {
+      "language": "typescript",
+      "mutants": [
+        {
+          "id": "0",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"id\",\n      \"name\",\n      \"durationSeconds\"\n    ],\n    \"path\": [\n      \"assets\",\n      0\n    ],\n    \"message\": \"Unrecognized keys: \\\"id\\\", \\\"name\\\", \\\"durationSeconds\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 15,
+          "duration": 35.12229899999511,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 21 },
+            "start": { "column": 43, "line": 17 }
+          }
+        },
+        {
+          "id": "1",
+          "mutatorName": "MethodExpression",
+          "replacement": "z.string().max(1)",
+          "statusReason": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"assets\",\n      0,\n      \"name\"\n    ],\n    \"message\": \"Too big: expected string to have <=1 characters\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 15,
+          "duration": 40.11560000000463,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 26, "line": 19 },
+            "start": { "column": 9, "line": 19 }
+          }
+        },
+        {
+          "id": "2",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"id\",\n      \"assetId\",\n      \"label\",\n      \"color\"\n    ],\n    \"path\": [\n      \"pads\",\n      0\n    ],\n    \"message\": \"Unrecognized keys: \\\"id\\\", \\\"assetId\\\", \\\"label\\\", \\\"color\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 1,
+          "duration": 13.400899000000209,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 27 },
+            "start": { "column": 41, "line": 22 }
+          }
+        },
+        {
+          "id": "3",
+          "mutatorName": "MethodExpression",
+          "replacement": "z.string().max(1)",
+          "statusReason": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"pads\",\n      0,\n      \"label\"\n    ],\n    \"message\": \"Too big: expected string to have <=1 characters\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 1,
+          "duration": 14.967899999999645,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 27, "line": 25 },
+            "start": { "column": 10, "line": 25 }
+          }
+        },
+        {
+          "id": "4",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"id\",\n      \"name\",\n      \"padIds\"\n    ],\n    \"path\": [\n      \"repertoire\"\n    ],\n    \"message\": \"Unrecognized keys: \\\"id\\\", \\\"name\\\", \\\"padIds\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 1,
+          "duration": 16.804800999998406,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 32 },
+            "start": { "column": 48, "line": 28 }
+          }
+        },
+        {
+          "id": "5",
+          "mutatorName": "MethodExpression",
+          "replacement": "z.string().max(1)",
+          "statusReason": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"repertoire\",\n      \"name\"\n    ],\n    \"message\": \"Too big: expected string to have <=1 characters\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 1,
+          "duration": 17.270300000000134,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 26, "line": 30 },
+            "start": { "column": 9, "line": 30 }
+          }
+        },
+        {
+          "id": "6",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"schemaVersion\",\n      \"revision\",\n      \"assets\",\n      \"pads\",\n      \"repertoire\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized keys: \\\"schemaVersion\\\", \\\"revision\\\", \\\"assets\\\", \\\"pads\\\", \\\"repertoire\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 1,
+          "duration": 8.537499999998545,
+          "killedBy": ["0"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 39 },
+            "start": { "column": 45, "line": 33 }
+          }
+        }
+      ],
+      "source": "import { z } from 'zod';\n\nexport const assetIdSchema = z.uuid().brand<'AssetId'>();\nexport const padIdSchema = z.uuid().brand<'PadId'>();\nexport const repertoireIdSchema = z.uuid().brand<'RepertoireId'>();\nexport const sessionIdSchema = z.uuid().brand<'SessionId'>();\nexport const leaseIdSchema = z.uuid().brand<'LeaseId'>();\nexport const attemptIdSchema = z.number().int().positive().brand<'AttemptId'>();\nexport const revisionSchema = z.number().int().nonnegative();\nexport const PadColor = {\n  Slate: 'slate',\n  Red: 'red',\n  Blue: 'blue',\n  Green: 'green',\n  Amber: 'amber',\n} as const;\nexport const assetSchema = z.strictObject({\n  id: assetIdSchema,\n  name: z.string().min(1),\n  durationSeconds: z.number().positive(),\n});\nexport const padSchema = z.strictObject({\n  id: padIdSchema,\n  assetId: assetIdSchema,\n  label: z.string().min(1),\n  color: z.enum(PadColor),\n});\nexport const repertoireSchema = z.strictObject({\n  id: repertoireIdSchema,\n  name: z.string().min(1),\n  padIds: z.array(padIdSchema),\n});\nexport const catalogSchema = z.strictObject({\n  schemaVersion: z.literal(1),\n  revision: revisionSchema,\n  assets: z.array(assetSchema),\n  pads: z.array(padSchema),\n  repertoire: repertoireSchema,\n});\nexport type AssetId = z.infer<typeof assetIdSchema>;\nexport type PadId = z.infer<typeof padIdSchema>;\nexport type SessionId = z.infer<typeof sessionIdSchema>;\nexport type LeaseId = z.infer<typeof leaseIdSchema>;\nexport type AttemptId = z.infer<typeof attemptIdSchema>;\nexport type Catalog = z.infer<typeof catalogSchema>;\nexport type Asset = z.infer<typeof assetSchema>;\nexport type Pad = z.infer<typeof padSchema>;\nexport type Repertoire = z.infer<typeof repertoireSchema>;\n"
+    },
+    "src/contracts/operations.ts": {
+      "language": "typescript",
+      "mutants": [
+        {
+          "id": "7",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"code\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized key: \\\"code\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 4,
+          "duration": 29.264500999997836,
+          "killedBy": ["3"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 79, "line": 31 },
+            "start": { "column": 52, "line": 31 }
+          }
+        },
+        {
+          "id": "8",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"sessionId\",\n      \"leaseId\",\n      \"kind\",\n      \"attemptId\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized keys: \\\"sessionId\\\", \\\"leaseId\\\", \\\"kind\\\", \\\"attemptId\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 4,
+          "duration": 27.14089999999851,
+          "killedBy": ["3"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 43 },
+            "start": { "column": 43, "line": 38 }
+          }
+        },
+        {
+          "id": "9",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"lease\",\n      \"expectedRevision\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized keys: \\\"lease\\\", \\\"expectedRevision\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 5,
+          "duration": 23.418101000002935,
+          "killedBy": ["4"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 48 },
+            "start": { "column": 49, "line": 45 }
+          }
+        },
+        {
+          "id": "10",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "expected true to be false // Object.is equality",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 5,
+          "duration": 33.65759999999864,
+          "killedBy": ["4"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 64, "line": 46 },
+            "start": { "column": 29, "line": 46 }
+          }
+        },
+        {
+          "id": "11",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"padId\",\n      \"label\",\n      \"color\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized keys: \\\"padId\\\", \\\"label\\\", \\\"color\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 5,
+          "duration": 43.49550100000124,
+          "killedBy": ["4"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 53 },
+            "start": { "column": 57, "line": 49 }
+          }
+        },
+        {
+          "id": "12",
+          "mutatorName": "MethodExpression",
+          "replacement": "z.string().max(1)",
+          "statusReason": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"label\"\n    ],\n    \"message\": \"Too big: expected string to have <=1 characters\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 5,
+          "duration": 42.36200100000133,
+          "killedBy": ["4"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 27, "line": 51 },
+            "start": { "column": 10, "line": 51 }
+          }
+        },
+        {
+          "id": "13",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"padIds\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized key: \\\"padIds\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 5,
+          "duration": 54.2573010000051,
+          "killedBy": ["4"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 56 },
+            "start": { "column": 59, "line": 54 }
+          }
+        },
+        {
+          "id": "14",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"padId\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized key: \\\"padId\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 5,
+          "duration": 43.649600000000646,
+          "killedBy": ["4"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 79, "line": 57 },
+            "start": { "column": 57, "line": 57 }
+          }
+        },
+        {
+          "id": "15",
+          "mutatorName": "ObjectLiteral",
+          "replacement": "{}",
+          "statusReason": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"sessionId\",\n      \"attemptId\",\n      \"padId\"\n    ],\n    \"path\": [],\n    \"message\": \"Unrecognized keys: \\\"sessionId\\\", \\\"attemptId\\\", \\\"padId\\\"\"\n  }\n]",
+          "status": "Killed",
+          "static": true,
+          "testsCompleted": 6,
+          "duration": 51.969701000001805,
+          "killedBy": ["5"],
+          "coveredBy": [],
+          "location": {
+            "end": { "column": 2, "line": 62 },
+            "start": { "column": 53, "line": 58 }
+          }
+        }
+      ],
+      "source": "import { z } from 'zod';\nimport {\n  attemptIdSchema,\n  leaseIdSchema,\n  sessionIdSchema,\n  padIdSchema,\n  revisionSchema,\n  PadColor,\n} from './catalog';\nimport type {\n  AssetId,\n  AttemptId,\n  Catalog,\n  LeaseId,\n  SessionId,\n} from './catalog';\n\nexport const ErrorCode = {\n  InvalidRequest: 'invalid-request',\n  Unauthorized: 'unauthorized',\n  Busy: 'busy',\n  StaleRevision: 'stale-revision',\n  NotFound: 'not-found',\n  UnsupportedFormat: 'unsupported-format',\n  StorageFailure: 'storage-failure',\n  CleanupRequired: 'cleanup-required',\n  FutureSchema: 'future-schema',\n  CorruptCatalog: 'corrupt-catalog',\n  AudioFailure: 'audio-failure',\n} as const;\nexport const operationErrorSchema = z.strictObject({ code: z.enum(ErrorCode) });\nexport type OperationError = z.infer<typeof operationErrorSchema>;\nexport const LeaseKind = {\n  Playback: 'playback',\n  Edit: 'edit',\n  Recovery: 'recovery',\n} as const;\nexport const leaseSchema = z.strictObject({\n  sessionId: sessionIdSchema,\n  leaseId: leaseIdSchema,\n  kind: z.enum(LeaseKind),\n  attemptId: attemptIdSchema,\n});\nexport type Lease = z.infer<typeof leaseSchema>;\nexport const editRequestSchema = z.strictObject({\n  lease: leaseSchema.extend({ kind: z.literal(LeaseKind.Edit) }),\n  expectedRevision: revisionSchema,\n});\nexport const updatePadSchema = editRequestSchema.extend({\n  padId: padIdSchema,\n  label: z.string().min(1),\n  color: z.enum(PadColor),\n});\nexport const reorderPadsSchema = editRequestSchema.extend({\n  padIds: z.array(padIdSchema),\n});\nexport const deletePadSchema = editRequestSchema.extend({ padId: padIdSchema });\nexport const playbackRequestSchema = z.strictObject({\n  sessionId: sessionIdSchema,\n  attemptId: attemptIdSchema,\n  padId: padIdSchema,\n});\nexport type Unsubscribe = () => void;\nexport interface LeaseAuthority {\n  acquire: (request: Omit<Lease, 'leaseId'>) => Promise<Lease>;\n  release: (lease: Lease) => Promise<void>;\n  disposeSession: (sessionId: SessionId) => Promise<void>;\n}\nexport interface CatalogOperations {\n  getCatalog: () => Promise<Catalog>;\n  importAudio: (request: z.infer<typeof editRequestSchema>) => Promise<Catalog>;\n  updatePad: (request: z.infer<typeof updatePadSchema>) => Promise<Catalog>;\n  reorderPads: (request: z.infer<typeof reorderPadsSchema>) => Promise<Catalog>;\n  deletePad: (request: z.infer<typeof deletePadSchema>) => Promise<Catalog>;\n}\nexport const AudioEventKind = {\n  Started: 'started',\n  Ended: 'ended',\n  Failed: 'failed',\n  Progress: 'progress',\n} as const;\nexport interface AudioEvent {\n  readonly kind: (typeof AudioEventKind)[keyof typeof AudioEventKind];\n  readonly attemptId: AttemptId;\n  readonly positionSeconds: number;\n  readonly durationSeconds: number;\n}\nexport interface AudioExecutor {\n  start: (request: {\n    readonly assetId: AssetId;\n    readonly leaseId: LeaseId;\n    readonly attemptId: AttemptId;\n    readonly offset: 0;\n  }) => Promise<void>;\n  stop: (attemptId: AttemptId) => Promise<void>;\n  subscribe: (listener: (event: AudioEvent) => void) => Unsubscribe;\n  dispose: () => Promise<void>;\n}\n"
+    }
+  },
+  "schemaVersion": "1.0",
+  "thresholds": { "high": 100, "low": 100, "break": 100 },
+  "testFiles": {
+    "tests/contracts/catalog.test.ts": {
+      "tests": [
+        {
+          "id": "0",
+          "name": "catalog wire contracts accepts a versioned catalog without a thirty pad limit",
+          "location": { "start": { "column": 3, "line": 33 } }
+        },
+        {
+          "id": "1",
+          "name": "catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions",
+          "location": { "start": { "column": 3, "line": 61 } }
+        },
+        {
+          "id": "2",
+          "name": "catalog wire contracts validates every catalog record and rejects unknown fields",
+          "location": { "start": { "column": 3, "line": 81 } }
+        },
+        {
+          "id": "3",
+          "name": "operation ingress validates session-bound leases and finite errors",
+          "location": { "start": { "column": 3, "line": 111 } }
+        },
+        {
+          "id": "4",
+          "name": "operation ingress requires an edit lease and expected revision for catalog writes",
+          "location": { "start": { "column": 3, "line": 143 } }
+        },
+        {
+          "id": "5",
+          "name": "operation ingress correlates playback requests without accepting paths",
+          "location": { "start": { "column": 3, "line": 176 } }
+        }
+      ],
+      "source": "import { describe, expect, it } from 'vitest';\nimport {\n  assetIdSchema,\n  padIdSchema,\n  repertoireIdSchema,\n  sessionIdSchema,\n  leaseIdSchema,\n  attemptIdSchema,\n  catalogSchema,\n  assetSchema,\n  padSchema,\n  repertoireSchema,\n  revisionSchema,\n} from '../../src/contracts/catalog';\nimport {\n  operationErrorSchema,\n  leaseSchema,\n  editRequestSchema,\n  updatePadSchema,\n  reorderPadsSchema,\n  deletePadSchema,\n  playbackRequestSchema,\n} from '../../src/contracts/operations';\n\nconst id = '00000000-0000-4000-8000-000000000001';\nconst asset = { id, name: 'Track', durationSeconds: 12 };\nconst pad = { id, assetId: id, label: 'Track', color: 'blue' };\nconst repertoire = { id, name: 'Set', padIds: [id] };\nconst lease = { sessionId: id, leaseId: id, kind: 'edit', attemptId: 1 };\nconst edit = { lease, expectedRevision: 0 };\n\ndescribe('catalog wire contracts', () => {\n  it('accepts a versioned catalog without a thirty pad limit', () => {\n    const catalog = {\n      schemaVersion: 1,\n      revision: 0,\n      assets: [asset],\n      pads: [pad],\n      repertoire,\n    };\n    expect(catalogSchema.parse(catalog)).toEqual(catalog);\n    expect(\n      catalogSchema.safeParse({\n        ...catalog,\n        pads: Array.from({ length: 31 }, () => pad),\n      }).success,\n    ).toBe(true);\n    for (const patch of [\n      { schemaVersion: 2 },\n      { revision: -1 },\n      { extra: true },\n      { pads: [{}] },\n      { assets: [{}] },\n      { repertoire: {} },\n    ]) {\n      expect(catalogSchema.safeParse({ ...catalog, ...patch }).success).toBe(\n        false,\n      );\n    }\n  });\n  it('rejects invalid identifiers and nonintegral attempts/revisions', () => {\n    for (const schema of [\n      assetIdSchema,\n      padIdSchema,\n      repertoireIdSchema,\n      sessionIdSchema,\n      leaseIdSchema,\n    ]) {\n      expect(schema.parse(id)).toBe(id);\n      for (const value of ['', '../file', 1])\n        expect(schema.safeParse(value).success).toBe(false);\n    }\n    expect(attemptIdSchema.parse(1)).toBe(1);\n    expect(revisionSchema.parse(0)).toBe(0);\n    for (const value of [-1, 1.5, Infinity, '1']) {\n      expect(attemptIdSchema.safeParse(value).success).toBe(false);\n      expect(revisionSchema.safeParse(value).success).toBe(false);\n    }\n    expect(attemptIdSchema.safeParse(0).success).toBe(false);\n  });\n  it('validates every catalog record and rejects unknown fields', () => {\n    for (const [schema, value, patches] of [\n      [\n        assetSchema,\n        asset,\n        [\n          { name: '' },\n          { durationSeconds: 0 },\n          { durationSeconds: -1 },\n          { id: '' },\n        ],\n      ],\n      [\n        padSchema,\n        pad,\n        [{ label: '' }, { color: 'pink' }, { assetId: '' }, { id: '' }],\n      ],\n      [\n        repertoireSchema,\n        repertoire,\n        [{ name: '' }, { padIds: ['bad'] }, { id: '' }],\n      ],\n    ] as const) {\n      expect(schema.parse(value)).toEqual(value);\n      for (const patch of [...patches, { extra: true }])\n        expect(schema.safeParse({ ...value, ...patch }).success).toBe(false);\n    }\n  });\n});\ndescribe('operation ingress', () => {\n  it('validates session-bound leases and finite errors', () => {\n    expect(leaseSchema.parse(lease)).toEqual(lease);\n    for (const patch of [\n      { sessionId: '' },\n      { leaseId: '' },\n      { kind: 'other' },\n      { attemptId: 0 },\n      { extra: true },\n    ])\n      expect(leaseSchema.safeParse({ ...lease, ...patch }).success).toBe(false);\n    const codes = [\n      'invalid-request',\n      'unauthorized',\n      'busy',\n      'stale-revision',\n      'not-found',\n      'unsupported-format',\n      'storage-failure',\n      'cleanup-required',\n      'future-schema',\n      'corrupt-catalog',\n      'audio-failure',\n    ];\n    for (const code of codes)\n      expect(operationErrorSchema.parse({ code })).toEqual({ code });\n    expect(operationErrorSchema.safeParse({ code: 'other' }).success).toBe(\n      false,\n    );\n    expect(\n      operationErrorSchema.safeParse({ code: 'busy', extra: true }).success,\n    ).toBe(false);\n  });\n  it('requires an edit lease and expected revision for catalog writes', () => {\n    const cases = [\n      [editRequestSchema, edit],\n      [updatePadSchema, { ...edit, padId: id, label: 'New', color: 'red' }],\n      [reorderPadsSchema, { ...edit, padIds: [id] }],\n      [deletePadSchema, { ...edit, padId: id }],\n    ] as const;\n    for (const [schema, value] of cases) {\n      expect(schema.parse(value)).toEqual(value);\n      for (const patch of [\n        { lease: { ...lease, kind: 'playback' } },\n        { expectedRevision: -1 },\n        { extra: true },\n      ])\n        expect(schema.safeParse({ ...value, ...patch }).success).toBe(false);\n    }\n    for (const patch of [{ padId: '' }, { label: '' }, { color: 'pink' }])\n      expect(\n        updatePadSchema.safeParse({\n          ...edit,\n          padId: id,\n          label: 'New',\n          color: 'red',\n          ...patch,\n        }).success,\n      ).toBe(false);\n    expect(\n      reorderPadsSchema.safeParse({ ...edit, padIds: ['bad'] }).success,\n    ).toBe(false);\n    expect(deletePadSchema.safeParse({ ...edit, padId: '' }).success).toBe(\n      false,\n    );\n  });\n  it('correlates playback requests without accepting paths', () => {\n    const request = { sessionId: id, attemptId: 1, padId: id };\n    expect(playbackRequestSchema.parse(request)).toEqual(request);\n    for (const patch of [\n      { sessionId: '' },\n      { attemptId: 0 },\n      { padId: '../audio' },\n      { path: '/tmp/audio' },\n    ])\n      expect(\n        playbackRequestSchema.safeParse({ ...request, ...patch }).success,\n      ).toBe(false);\n  });\n});\n"
+    },
+    "tests/domain/playback.test.ts": {
+      "tests": [
+        {
+          "id": "6",
+          "name": "playback contract starts a chosen pad from zero with its attempt",
+          "location": { "start": { "column": 3, "line": 23 } }
+        },
+        {
+          "id": "7",
+          "name": "playback contract ignores every pad while 'starting'",
+          "location": { "start": { "column": 31, "line": 38 } }
+        },
+        {
+          "id": "8",
+          "name": "playback contract ignores every pad while 'playing'",
+          "location": { "start": { "column": 31, "line": 38 } }
+        },
+        {
+          "id": "9",
+          "name": "playback contract STOP cancels the current attempt while 'starting'",
+          "location": { "start": { "column": 31, "line": 55 } }
+        },
+        {
+          "id": "10",
+          "name": "playback contract STOP cancels the current attempt while 'playing'",
+          "location": { "start": { "column": 31, "line": 55 } }
+        },
+        {
+          "id": "11",
+          "name": "playback contract STOP is idempotent",
+          "location": { "start": { "column": 3, "line": 65 } }
+        },
+        {
+          "id": "12",
+          "name": "playback contract promotes only the current starting attempt",
+          "location": { "start": { "column": 3, "line": 72 } }
+        },
+        {
+          "id": "13",
+          "name": "playback contract ended cleans up only the current attempt",
+          "location": { "start": { "column": 72, "line": 95 } }
+        },
+        {
+          "id": "14",
+          "name": "playback contract failed cleans up only the current attempt",
+          "location": { "start": { "column": 72, "line": 95 } }
+        },
+        {
+          "id": "15",
+          "name": "playback contract ignores callbacks from a stopped attempt after a new pad is requested",
+          "location": { "start": { "column": 3, "line": 115 } }
+        },
+        {
+          "id": "16",
+          "name": "playback contract does not mutate the input snapshot",
+          "location": { "start": { "column": 3, "line": 137 } }
+        },
+        {
+          "id": "17",
+          "name": "keeps the serialized playback vocabulary stable for adapters",
+          "location": { "start": { "column": 1, "line": 148 } }
+        }
+      ],
+      "source": "import { describe, expect, it } from 'vitest';\nimport {\n  transition,\n  PlaybackStatus,\n  PlaybackInputType,\n  PlaybackEffectType,\n  type PlaybackState,\n} from '../../src/domain/playback';\n\nconst stopped: PlaybackState = { status: PlaybackStatus.Stopped };\nconst starting: PlaybackState = {\n  status: PlaybackStatus.Starting,\n  padId: 'A',\n  attempt: 7,\n};\nconst playing: PlaybackState = {\n  status: PlaybackStatus.Playing,\n  padId: 'A',\n  attempt: 7,\n};\n\ndescribe('playback contract', () => {\n  it('starts a chosen pad from zero with its attempt', () => {\n    expect(\n      transition(stopped, {\n        type: PlaybackInputType.Play,\n        padId: 'B',\n        attempt: 8,\n      }),\n    ).toEqual({\n      state: { status: PlaybackStatus.Starting, padId: 'B', attempt: 8 },\n      effects: [\n        { type: PlaybackEffectType.Start, padId: 'B', attempt: 8, offset: 0 },\n      ],\n    });\n  });\n\n  it.each([starting, playing])('ignores every pad while $status', (state) => {\n    expect(\n      transition(state, {\n        type: PlaybackInputType.Play,\n        padId: 'A',\n        attempt: 8,\n      }),\n    ).toEqual({ state, effects: [] });\n    expect(\n      transition(state, {\n        type: PlaybackInputType.Play,\n        padId: 'B',\n        attempt: 9,\n      }),\n    ).toEqual({ state, effects: [] });\n  });\n\n  it.each([starting, playing])(\n    'STOP cancels the current attempt while $status',\n    (state) => {\n      expect(transition(state, { type: PlaybackInputType.Stop })).toEqual({\n        state: stopped,\n        effects: [{ type: PlaybackEffectType.Stop, attempt: 7 }],\n      });\n    },\n  );\n\n  it('STOP is idempotent', () => {\n    expect(transition(stopped, { type: PlaybackInputType.Stop })).toEqual({\n      state: stopped,\n      effects: [],\n    });\n  });\n\n  it('promotes only the current starting attempt', () => {\n    expect(\n      transition(starting, { type: PlaybackInputType.Started, attempt: 7 }),\n    ).toEqual({\n      state: playing,\n      effects: [],\n    });\n    for (const state of [stopped, playing]) {\n      expect(\n        transition(state, { type: PlaybackInputType.Started, attempt: 7 }),\n      ).toEqual({\n        state,\n        effects: [],\n      });\n    }\n    expect(\n      transition(starting, { type: PlaybackInputType.Started, attempt: 6 }),\n    ).toEqual({\n      state: starting,\n      effects: [],\n    });\n  });\n\n  it.each([PlaybackInputType.Ended, PlaybackInputType.Failed] as const)(\n    '%s cleans up only the current attempt',\n    (type) => {\n      for (const state of [starting, playing]) {\n        expect(transition(state, { type, attempt: 7 })).toEqual({\n          state: stopped,\n          effects: [{ type: PlaybackEffectType.Stop, attempt: 7 }],\n        });\n        expect(transition(state, { type, attempt: 6 })).toEqual({\n          state,\n          effects: [],\n        });\n      }\n      expect(transition(stopped, { type, attempt: 7 })).toEqual({\n        state: stopped,\n        effects: [],\n      });\n    },\n  );\n\n  it('ignores callbacks from a stopped attempt after a new pad is requested', () => {\n    const cancelled = transition(starting, { type: PlaybackInputType.Stop });\n    const next = transition(cancelled.state, {\n      type: PlaybackInputType.Play,\n      padId: 'B',\n      attempt: 8,\n    });\n    for (const type of [\n      PlaybackInputType.Started,\n      PlaybackInputType.Ended,\n      PlaybackInputType.Failed,\n    ] as const) {\n      expect(transition(next.state, { type, attempt: 7 })).toEqual({\n        state: next.state,\n        effects: [],\n      });\n    }\n    expect(next.effects).toEqual([\n      { type: PlaybackEffectType.Start, padId: 'B', attempt: 8, offset: 0 },\n    ]);\n  });\n\n  it('does not mutate the input snapshot', () => {\n    const state = Object.freeze({\n      status: PlaybackStatus.Starting,\n      padId: 'A',\n      attempt: 7,\n    } as const);\n    transition(state, { type: PlaybackInputType.Started, attempt: 7 });\n    expect(state).toEqual(starting);\n  });\n});\n\nit('keeps the serialized playback vocabulary stable for adapters', () => {\n  expect(PlaybackStatus).toEqual({\n    Stopped: 'stopped',\n    Starting: 'starting',\n    Playing: 'playing',\n  });\n  expect(PlaybackInputType).toEqual({\n    Play: 'play',\n    Stop: 'stop',\n    Started: 'started',\n    Ended: 'ended',\n    Failed: 'failed',\n  });\n  expect(PlaybackEffectType).toEqual({ Start: 'start', Stop: 'stop' });\n});\n"
+    },
+    "tests/contracts/lease.test.ts": {
+      "tests": [
+        {
+          "id": "18",
+          "name": "keeps authorization exclusive until the matching cleanup acknowledgement",
+          "location": { "start": { "column": 1, "line": 9 } }
+        },
+        {
+          "id": "19",
+          "name": "ignores stale sessions, wrong leases and idle acknowledgements",
+          "location": { "start": { "column": 1, "line": 29 } }
+        }
+      ],
+      "source": "import { expect, it } from 'vitest';\nimport {\n  LeaseAction,\n  LeasePhase,\n  transitionLease,\n} from '../../src/domain/lease';\nconst first = { sessionId: 'session-a', leaseId: 'lease-a' };\nconst second = { sessionId: 'session-b', leaseId: 'lease-b' };\nit('keeps authorization exclusive until the matching cleanup acknowledgement', () => {\n  const held = transitionLease(null, LeaseAction.Acquire, first);\n  expect(held).toEqual({ owner: first, phase: LeasePhase.Held });\n  expect(transitionLease(held, LeaseAction.Acquire, second)).toEqual(held);\n  expect(transitionLease(held, LeaseAction.AcknowledgeCleanup, first)).toEqual(\n    held,\n  );\n  const stopping = transitionLease(held, LeaseAction.Stop, first);\n  expect(stopping).toEqual({ owner: first, phase: LeasePhase.Cleaning });\n  expect(transitionLease(stopping, LeaseAction.Acquire, second)).toEqual(\n    stopping,\n  );\n  expect(\n    transitionLease(stopping, LeaseAction.AcknowledgeCleanup, first),\n  ).toBeNull();\n  expect(transitionLease(null, LeaseAction.Acquire, second)).toEqual({\n    owner: second,\n    phase: LeasePhase.Held,\n  });\n});\nit('ignores stale sessions, wrong leases and idle acknowledgements', () => {\n  for (const action of [LeaseAction.Stop, LeaseAction.AcknowledgeCleanup]) {\n    expect(transitionLease(null, action, first)).toBeNull();\n    for (const phase of [LeasePhase.Held, LeasePhase.Cleaning]) {\n      const state = { owner: first, phase };\n      for (const owner of [\n        second,\n        { ...first, sessionId: 'old' },\n        { ...first, leaseId: 'old' },\n      ])\n        expect(transitionLease(state, action, owner)).toEqual(state);\n    }\n  }\n});\n"
+    }
+  },
+  "projectRoot": "/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-bc4946ab-1ea5000907adbd94",
+  "config": {
+    "testRunner": "vitest",
+    "vitest": {
+      "configFile": "vitest.config.mjs",
+      "related": false,
+      "pool": "threads"
+    },
+    "mutate": [
+      "src/domain/**/*.ts",
+      "src/contracts/{catalog,operations}.ts",
+      "src/main/{storage,library}/**/*.ts",
+      "src/renderer/playback/**/*.ts"
+    ],
+    "reporters": ["clear-text", "html", "json"],
+    "thresholds": { "high": 100, "low": 100, "break": 100 },
+    "concurrency": 2,
+    "incremental": false,
+    "allowConsoleColors": true,
+    "checkers": [],
+    "checkerNodeArgs": [],
+    "commandRunner": { "command": "npm test" },
+    "coverageAnalysis": "perTest",
+    "clearTextReporter": {
+      "allowColor": true,
+      "allowEmojis": false,
+      "logTests": true,
+      "maxTestsToLog": 3,
+      "reportTests": true,
+      "reportMutants": true,
+      "reportScoreTable": true,
+      "skipFull": false
+    },
+    "dashboard": {
+      "baseUrl": "https://dashboard.stryker-mutator.io/api/reports",
+      "reportType": "full"
+    },
+    "dryRunOnly": false,
+    "eventReporter": { "baseDir": "reports/mutation/events" },
+    "ignorePatterns": [],
+    "ignoreStatic": false,
+    "incrementalFile": "reports/stryker-incremental.json",
+    "force": false,
+    "fileLogLevel": "off",
+    "inPlace": false,
+    "logLevel": "info",
+    "maxConcurrentTestRunners": 9007199254740991,
+    "maxTestRunnerReuse": 0,
+    "mutator": { "plugins": null, "excludedMutations": [] },
+    "plugins": ["@stryker-mutator/*"],
+    "appendPlugins": [],
+    "htmlReporter": { "fileName": "reports/mutation/mutation.html" },
+    "jsonReporter": { "fileName": "reports/mutation/mutation.json" },
+    "disableTypeChecks": true,
+    "symlinkNodeModules": true,
+    "tempDirName": ".stryker-tmp",
+    "cleanTempDir": true,
+    "testRunnerNodeArgs": [],
+    "timeoutFactor": 1.5,
+    "timeoutMS": 5000,
+    "dryRunTimeoutMinutes": 5,
+    "tsconfigFile": "tsconfig.json",
+    "warnings": true,
+    "disableBail": false,
+    "allowEmpty": false,
+    "ignorers": [],
+    "testFiles": []
+  },
+  "framework": {
+    "name": "StrykerJS",
+    "version": "10.1.1",
+    "branding": {
+      "homepageUrl": "https://stryker-mutator.io",
+      "imageUrl": "data:image/svg+xml;utf8,%3Csvg viewBox='0 0 1458 1458' xmlns='http://www.w3.org/2000/svg' fill-rule='evenodd' clip-rule='evenodd' stroke-linejoin='round' stroke-miterlimit='2'%3E%3Cpath fill='none' d='M0 0h1458v1458H0z'/%3E%3CclipPath id='a'%3E%3Cpath d='M0 0h1458v1458H0z'/%3E%3C/clipPath%3E%3Cg clip-path='url(%23a)'%3E%3Cpath d='M1458 729c0 402.655-326.345 729-729 729S0 1131.655 0 729C0 326.445 326.345 0 729 0s729 326.345 729 729' fill='%23e74c3c' fill-rule='nonzero'/%3E%3Cpath d='M778.349 1456.15L576.6 1254.401l233-105 85-78.668v-64.332l-257-257-44-187-50-208 251.806-82.793L1076.6 389.401l380.14 379.15c-19.681 367.728-311.914 663.049-678.391 687.599z' fill-opacity='.3'/%3E%3Cpath d='M753.4 329.503c41.79 0 74.579 7.83 97.925 25.444 23.571 18.015 41.69 43.956 55.167 77.097l11.662 28.679 165.733-58.183-14.137-32.13c-26.688-60.655-64.896-108.61-114.191-144.011-49.329-35.423-117.458-54.302-204.859-54.302-50.78 0-95.646 7.376-134.767 21.542-40.093 14.671-74.09 34.79-102.239 60.259-28.84 26.207-50.646 57.06-65.496 92.701-14.718 35.052-22.101 72.538-22.101 112.401 0 72.536 20.667 133.294 61.165 182.704 38.624 47.255 98.346 88.037 179.861 121.291 42.257 17.475 78.715 33.125 109.227 46.994 27.193 12.361 49.294 26.124 66.157 41.751 15.309 14.186 26.497 30.584 33.63 49.258 7.721 20.214 11.16 45.69 11.16 76.402 0 28.021-4.251 51.787-13.591 71.219-8.832 18.374-20.171 33.178-34.523 44.219-14.787 11.374-31.193 19.591-49.393 24.466-19.68 5.359-39.14 7.993-58.69 7.993-29.359 0-54.387-3.407-75.182-10.747-20.112-7.013-37.144-16.144-51.259-27.486-13.618-11.009-24.971-23.766-33.744-38.279-9.64-15.8-17.272-31.924-23.032-48.408l-10.965-31.376-161.669 60.585 10.734 30.124c10.191 28.601 24.197 56.228 42.059 82.748 18.208 27.144 41.322 51.369 69.525 72.745 27.695 21.075 60.904 38.218 99.481 51.041 37.777 12.664 82.004 19.159 132.552 19.159 49.998 0 95.818-8.321 137.611-24.622 42.228-16.471 78.436-38.992 108.835-67.291 30.719-28.597 54.631-62.103 71.834-100.642 17.263-38.56 25.923-79.392 25.923-122.248 0-54.339-8.368-100.37-24.208-138.32-16.29-38.759-38.252-71.661-65.948-98.797-26.965-26.418-58.269-48.835-93.858-67.175-33.655-17.241-69.196-33.11-106.593-47.533-35.934-13.429-65.822-26.601-89.948-39.525-22.153-11.868-40.009-24.21-53.547-37.309-11.429-11.13-19.83-23.678-24.718-37.664-5.413-15.49-7.98-33.423-7.98-53.577 0-40.883 11.293-71.522 37.086-90.539 28.443-20.825 64.985-30.658 109.311-30.658z' fill='%23f1c40f' fill-rule='nonzero'/%3E%3Cpath d='M720 0h18v113h-18zM1458 738v-18h-113v18h113zM720 1345h18v113h-18zM113 738v-18H0v18h113z'/%3E%3C/g%3E%3C/svg%3E"
+    },
+    "dependencies": { "typescript": "6.0.3" }
+  }
+}

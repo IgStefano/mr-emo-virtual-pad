@@ -1,0 +1,14 @@
+--- a/package.json
++++ b/package.json
+@@ -31,7 +31,10 @@
+     "pstack:scope": "node scripts/pstack/cli.mjs scope",
+     "prepare": "husky",
+     "test:hooks": "node --test tests/hooks/*.test.mjs",
+-    "test:runtime": "node --test tests/runtime/*.test.mjs"
++    "test:runtime": "node --test tests/runtime/*.test.mjs",
++    "test:verification": "node --test tests/electron/fixtures.test.mjs",
++    "verification:doctor": "node scripts/verification/run.mjs doctor",
++    "verification:drive": "node scripts/verification/run.mjs drive"
+   },
+   "dependencies": {
+     "react": "19.3.1",

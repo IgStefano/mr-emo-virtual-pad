@@ -1,0 +1,224 @@
+
+> mr-emo-virtual-pad@0.1.0 verify
+> npm run verify:static && npm test && npm run test:mutation
+
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (17 modules, 15 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (775.685404ms)
+✔ graph rejects alias layer crossing (720.952309ms)
+✔ graph rejects type-only crossing (745.19231ms)
+✔ graph rejects node builtin (878.962813ms)
+✔ graph rejects bare builtin (1124.256415ms)
+✔ graph accepts the actual source (1497.236121ms)
+✔ new source folders cannot escape the layer matrix (90.314901ms)
+✔ lint rejects string enum union (7998.961882ms)
+✔ lint rejects native enum (45.058001ms)
+✔ lint rejects inline discriminator (29.5485ms)
+✔ lint rejects unknown in domain (25.1728ms)
+✔ lint rejects dynamic import (132.769101ms)
+✔ lint rejects double assertion (99.567201ms)
+✔ lint rejects ambient clock (44.905401ms)
+✔ lint rejects randomness (35.563ms)
+✔ validated ingress may use unknown (153.181201ms)
+✔ const-object enum and derived type are accepted (38.956501ms)
+✔ UI primitive button belongs to the approved component source (797.063907ms)
+✔ UI primitive input belongs to the approved component source (233.291602ms)
+✔ UI primitive select belongs to the approved component source (215.528502ms)
+✔ UI primitive textarea belongs to the approved component source (144.020701ms)
+✔ UI primitive dialog belongs to the approved component source (187.104802ms)
+✔ named UI components remain composable in feature views (185.846101ms)
+✔ component source can implement raw primitives without disabling other lint rules (12.696401ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17387.828692
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (20.4281ms)
+✔ contract acceptance enables three disjoint implementation lanes (2.6679ms)
+✔ blocked prerequisites cannot be dispatched (2.5927ms)
+✔ cycle is rejected even when no task is active (1.8007ms)
+✔ unknown prerequisites and duplicate IDs are rejected (2.919101ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (3.7895ms)
+✔ active work requires accepted prerequisites (0.9722ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (2.7025ms)
+✔ a parent directory and child file cannot have concurrent writers (4.3284ms)
+✔ active tasks reserve capacity and paths (4.5571ms)
+✔ two conflicting active reservations fail validation (1.634ms)
+✔ planned tasks cannot produce reserved launch requests (1.8794ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (1.1551ms)
+✔ owned paths cannot escape repository (3.0302ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (0.928ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 537.577806
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (176.002102ms)
+✔ push gate rejects staging that would package a different tree from HEAD (181.866002ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (197.601002ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (315.883903ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1073.957411
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (52.823601ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 347.876103
+
+> mr-emo-virtual-pad@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-c284b66e-d5534e676f6a40ac
+
+
+ Test Files  3 passed (3)
+      Tests  20 passed (20)
+   Start at  17:21:49
+   Duration  1.07s (transform 458ms, setup 0ms, import 876ms, tests 142ms, environment 1ms)
+
+
+> mr-emo-virtual-pad@0.1.0 test:mutation
+> stryker run && node scripts/check-mutation.mjs
+
+[33m17:21:55 (101208) WARN ProjectReader[39m Glob pattern "src/main/{storage,library}/**/*.ts" did not result in any files.
+[33m17:21:55 (101208) WARN ProjectReader[39m Glob pattern "src/renderer/playback/**/*.ts" did not result in any files.
+[32m17:21:55 (101208) INFO ProjectReader[39m Found 4 of 771 file(s) to be mutated.
+[32m17:21:55 (101208) INFO Instrumenter[39m Instrumented 4 source file(s) with 81 mutant(s)
+[32m17:21:59 (101208) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m17:22:03 (101208) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m17:22:05 (101208) INFO DryRunExecutor[39m Initial test run succeeded. Ran 20 tests in 2 seconds (net 64.727398 ms, overhead 1999.272602 ms).
+[33m17:22:05 (101208) WARN MutantTestPlanner[39m Detected 16 static mutants (20% of total) that are estimated to take 76% of the time running the tests!
+  You might want to enable "ignoreStatic" to ignore these static mutants for your next run. 
+  For more information about static mutants visit: https://stryker-mutator.io/docs/mutation-testing-elements/static-mutants
+  (disable "warnings.slow" to ignore this warning)
+
+All tests
+  contracts
+    catalog.test.ts
+      ✓ catalog wire contracts accepts a versioned catalog without a thirty pad limit [line 33] (killed 7)
+      ✘ catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions [line 61] (covered 0)
+      ✘ catalog wire contracts validates every catalog record and rejects unknown fields [line 81] (covered 0)
+      ✓ operation ingress validates session-bound leases and finite errors [line 111] (killed 2)
+      ✓ operation ingress requires an edit lease and expected revision for catalog writes [line 143] (killed 6)
+      ✓ operation ingress correlates playback requests without accepting paths [line 176] (killed 1)
+    lease.test.ts
+      ✓ keeps authorization exclusive until the matching cleanup acknowledgement [line 9] (killed 17)
+      ✓ ignores stale sessions, wrong leases and idle acknowledgements [line 29] (killed 7)
+  domain/playback.test.ts
+    ✓ playback contract starts a chosen pad from zero with its attempt [line 23] (killed 10)
+    ✓ playback contract ignores every pad while 'starting' [line 38] (killed 4)
+    ~ playback contract ignores every pad while 'playing' [line 38] (covered 7)
+    ✓ playback contract STOP cancels the current attempt while 'starting' [line 55] (killed 5)
+    ~ playback contract STOP cancels the current attempt while 'playing' [line 55] (covered 9)
+    ✓ playback contract STOP is idempotent [line 65] (killed 3)
+    ✓ playback contract promotes only the current starting attempt [line 72] (killed 9)
+    ✓ playback contract ended cleans up only the current attempt [line 95] (killed 10)
+    ~ playback contract failed cleans up only the current attempt [line 95] (covered 20)
+    ~ playback contract ignores callbacks from a stopped attempt after a new pad is requested [line 115] (covered 29)
+    ~ playback contract does not mutate the input snapshot [line 137] (covered 11)
+    ✘ keeps the serialized playback vocabulary stable for adapters [line 148] (covered 0)
+
+Ran 1.89 tests per mutant on average.
+----------------|------------------|----------|-----------|------------|----------|----------|
+                | % Mutation score |          |           |            |          |          |
+File            |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+----------------|--------|---------|----------|-----------|------------|----------|----------|
+All files       | 100.00 |  100.00 |       81 |         0 |          0 |        0 |        0 |
+ contracts      | 100.00 |  100.00 |       16 |         0 |          0 |        0 |        0 |
+  catalog.ts    | 100.00 |  100.00 |        7 |         0 |          0 |        0 |        0 |
+  operations.ts | 100.00 |  100.00 |        9 |         0 |          0 |        0 |        0 |
+ domain         | 100.00 |  100.00 |       65 |         0 |          0 |        0 |        0 |
+  lease.ts      | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  playback.ts   | 100.00 |  100.00 |       41 |         0 |          0 |        0 |        0 |
+----------------|--------|---------|----------|-----------|------------|----------|----------|
+[32m17:22:24 (101208) INFO MutationTestReportHelper[39m Final mutation score of 100.00 is greater than or equal to break threshold 100
+[32m17:22:24 (101208) INFO JsonReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-c284b66e-d5534e676f6a40ac/reports/mutation/mutation.json
+[32m17:22:24 (101208) INFO HtmlReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-c284b66e-d5534e676f6a40ac/reports/mutation/mutation.html
+[32m17:22:24 (101208) INFO MutationTestExecutor[39m Done in 30 seconds.
+Mutation gate: 81 mutants, 0 detected by timeout.

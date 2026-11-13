@@ -44,6 +44,29 @@ const policy = {
         };
       },
     },
+    'ui-primitives': {
+      meta: {
+        type: 'problem',
+        schema: [],
+        messages: {
+          primitive:
+            'UI001: compose shadcn/ui components from renderer/components/ui instead of raw interactive HTML in feature views.',
+        },
+      },
+      create(context) {
+        return {
+          JSXOpeningElement(node) {
+            if (
+              node.name.type === 'JSXIdentifier' &&
+              ['button', 'input', 'select', 'textarea', 'dialog'].includes(
+                node.name.name,
+              )
+            )
+              context.report({ node, messageId: 'primitive' });
+          },
+        };
+      },
+    },
     'validated-unknown': {
       meta: {
         type: 'problem',
@@ -193,6 +216,11 @@ export default tseslint.config(
         'WebSocket',
       ],
     },
+  },
+  {
+    files: ['src/renderer/**/*.{ts,tsx}'],
+    ignores: ['src/renderer/components/ui/**'],
+    rules: { 'policy/ui-primitives': 'error' },
   },
   { files: ['src/main/main.ts'], rules: { 'no-console': 'off' } },
   {

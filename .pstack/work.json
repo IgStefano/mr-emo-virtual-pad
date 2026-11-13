@@ -130,7 +130,9 @@
         "src/renderer/main.tsx",
         "src/renderer/style.css",
         "tests/ui",
-        ".pstack/evidence/B2"
+        ".pstack/evidence/B2",
+        "src/renderer/components",
+        "src/renderer/lib"
       ],
       "brief": ".pstack/briefs/B2.md",
       "acceptedSha": null,

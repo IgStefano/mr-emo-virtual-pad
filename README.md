@@ -42,3 +42,7 @@ acceptance gates through the Mac release.
 
 The [pstack setup](.pstack/README.md) installs the pinned upstream skills and
 provides ready-task checks and worktree delegation briefs for Codex/T3.
+
+Git hooks run verification on commit and packaging on push. See
+[automation](docs/automation.md) for staging requirements and limits. The
+[UI decision](docs/ui.md) adopts shadcn/ui for the upcoming interface.

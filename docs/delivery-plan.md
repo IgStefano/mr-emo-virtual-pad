@@ -148,7 +148,8 @@ Power-save handling and device failure get explicit cleanup. No automatic resume
 Owner: lane B. Depends on: I1 contracts and integrated snapshots.
 Owned paths: src/renderer/performance, src/renderer/editing, renderer entry/styles.
 
-Grid for 20–30 tracks with scrolling, active/busy states, fixed STOP/name/remaining
+Use shadcn/ui primitives per ui.md, with shared dependencies/build changes owned
+by the integrator. Grid for 20–30 tracks with scrolling, active/busy states, fixed STOP/name/remaining
 /progress. Edit mode only after confirmed stop/release. Batch import, labels, small
 palette, drag reordering and confirmation on deletion; accessible mouse/keyboard
 controls and clear errors. Save state is truthful; no implementation details leak

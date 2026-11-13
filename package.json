@@ -22,13 +22,15 @@
     "test:guardrails": "node --test --test-concurrency=1 tests/guardrails/*.test.mjs",
     "test": "vitest run",
     "test:mutation": "stryker run && node scripts/check-mutation.mjs",
-    "verify:static": "npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack",
+    "verify:static": "npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks",
     "verify": "npm run verify:static && npm test && npm run test:mutation",
     "pstack:doctor": "node scripts/pstack/cli.mjs doctor",
     "pstack:ready": "node scripts/pstack/cli.mjs ready",
     "pstack:brief": "node scripts/pstack/cli.mjs brief",
     "test:pstack": "node --test tests/pstack/*.test.mjs",
-    "pstack:scope": "node scripts/pstack/cli.mjs scope"
+    "pstack:scope": "node scripts/pstack/cli.mjs scope",
+    "prepare": "husky",
+    "test:hooks": "node --test tests/hooks/*.test.mjs"
   },
   "dependencies": {
     "react": "19.3.1",
@@ -54,6 +56,8 @@
     "eslint": "9.39.5",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react-hooks": "7.1.1",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
     "prettier": "3.10.1",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.2",

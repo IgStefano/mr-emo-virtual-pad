@@ -73,3 +73,36 @@ test('const-object enum and derived type are accepted', async () => {
     [],
   );
 });
+
+for (const tag of ['button', 'input', 'select', 'textarea', 'dialog']) {
+  test(`UI primitive ${tag} belongs to the approved component source`, async () => {
+    const results = await eslint.lintText(
+      `export const Example = () => <${tag} />;`,
+      { filePath: 'src/renderer/main.tsx' },
+    );
+    assert.ok(
+      results
+        .flatMap((result) => result.messages)
+        .some((message) => message.ruleId === 'policy/ui-primitives'),
+    );
+  });
+}
+test('named UI components remain composable in feature views', async () => {
+  const results = await eslint.lintText(
+    'const Button = () => <span>Play</span>; export const Example = () => <Button />;',
+    { filePath: 'src/renderer/main.tsx' },
+  );
+  assert.equal(
+    results
+      .flatMap((result) => result.messages)
+      .filter((message) => message.ruleId === 'policy/ui-primitives').length,
+    0,
+  );
+});
+test('component source can implement raw primitives without disabling other lint rules', async () => {
+  const config = await eslint.calculateConfigForFile(
+    'src/renderer/components/ui/button.tsx',
+  );
+  assert.equal(config.rules['policy/ui-primitives'], undefined);
+  assert.equal(config.rules['@typescript-eslint/no-explicit-any'][0], 2);
+});

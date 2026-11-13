@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "mode": "unpackaged",
+  "steps": [
+    "launch",
+    "profile removed"
+  ],
+  "journey": {
+    "empty": true,
+    "stopped": true,
+    "bridge": true,
+    "unauthorizedSenderRejected": true,
+    "navigationRejected": true
+  }
+}

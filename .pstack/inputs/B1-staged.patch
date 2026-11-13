@@ -1,0 +1,643 @@
+diff --git a/src/renderer/playback/controller.ts b/src/renderer/playback/controller.ts
+new file mode 100644
+index 0000000..7c928e9
+--- /dev/null
++++ b/src/renderer/playback/controller.ts
+@@ -0,0 +1,184 @@
++import { attemptIdSchema } from '../../contracts/catalog';
++import type { AssetId, PadId, SessionId } from '../../contracts/catalog';
++import { AudioEventKind, LeaseKind } from '../../contracts/operations';
++import type {
++  AudioEvent,
++  AudioExecutor,
++  Lease,
++  LeaseAuthority,
++  Unsubscribe,
++} from '../../contracts/operations';
++import {
++  PlaybackInputType,
++  PlaybackStatus,
++  transition,
++} from '../../domain/playback';
++import type { PlaybackState } from '../../domain/playback';
++
++export interface PlaybackSnapshot {
++  readonly state: PlaybackState;
++  readonly busy: boolean;
++  readonly positionSeconds: number;
++  readonly durationSeconds: number;
++  readonly failed: boolean;
++}
++interface Attempt {
++  readonly id: ReturnType<typeof attemptIdSchema.parse>;
++  valid: boolean;
++  lease: Lease | null;
++  startup: Promise<void>;
++}
++
++export class PlaybackController {
++  private state: PlaybackState = { status: PlaybackStatus.Stopped };
++  private attempt: Attempt | null = null;
++  private sequence = 0;
++  private disposed = false;
++  private cleanup: Promise<void> | null = null;
++  private positionSeconds = 0;
++  private durationSeconds = 0;
++  private failed = false;
++  private readonly listeners = new Set<() => void>();
++  private readonly unsubscribe: Unsubscribe;
++
++  constructor(
++    private readonly audio: AudioExecutor,
++    private readonly leases: LeaseAuthority,
++    private readonly sessionId: SessionId,
++  ) {
++    this.unsubscribe = audio.subscribe((event) => {
++      this.receive(event);
++    });
++  }
++
++  snapshot(): PlaybackSnapshot {
++    return {
++      state: this.state,
++      busy: this.attempt !== null,
++      positionSeconds: this.positionSeconds,
++      durationSeconds: this.durationSeconds,
++      failed: this.failed,
++    };
++  }
++
++  subscribe(listener: () => void): Unsubscribe {
++    this.listeners.add(listener);
++    return () => {
++      this.listeners.delete(listener);
++    };
++  }
++
++  play(padId: PadId, assetId: AssetId): Promise<void> {
++    if (this.disposed || this.attempt) return Promise.resolve();
++    const attempt: Attempt = {
++      id: attemptIdSchema.parse(++this.sequence),
++      valid: true,
++      lease: null,
++      startup: Promise.resolve(),
++    };
++    this.attempt = attempt;
++    this.failed = false;
++    this.positionSeconds = 0;
++    this.durationSeconds = 0;
++    this.state = transition(this.state, {
++      type: PlaybackInputType.Play,
++      padId,
++      attempt: attempt.id,
++    }).state;
++    attempt.startup = this.start(attempt, assetId);
++    this.notify();
++    return attempt.startup.then(async () => {
++      if (!attempt.valid) await this.stop();
++    });
++  }
++
++  private async start(attempt: Attempt, assetId: AssetId): Promise<void> {
++    try {
++      attempt.lease = await this.leases.acquire({
++        sessionId: this.sessionId,
++        attemptId: attempt.id,
++        kind: LeaseKind.Playback,
++      });
++      if (!attempt.valid) return;
++      await this.audio.start({
++        assetId,
++        leaseId: attempt.lease.leaseId,
++        attemptId: attempt.id,
++        offset: 0,
++      });
++    } catch {
++      attempt.valid = false;
++      this.failed = true;
++    }
++  }
++
++  stop(): Promise<void> {
++    const attempt = this.attempt;
++    if (!attempt) return Promise.resolve();
++    attempt.valid = false;
++    this.state = transition(this.state, { type: PlaybackInputType.Stop }).state;
++    if (this.cleanup) return this.cleanup;
++    this.cleanup = this.finish(attempt).finally(() => {
++      this.cleanup = null;
++      this.notify();
++    });
++    this.notify();
++    return this.cleanup;
++  }
++
++  private async finish(attempt: Attempt): Promise<void> {
++    try {
++      await this.audio.stop(attempt.id);
++      await attempt.startup;
++      await this.audio.stop(attempt.id);
++      if (attempt.lease) await this.leases.release(attempt.lease);
++      this.attempt = null;
++      this.positionSeconds = 0;
++    } catch {
++      this.failed = true;
++    }
++  }
++
++  private receive(event: AudioEvent): void {
++    const attempt = this.attempt;
++    if (!attempt?.valid || event.attemptId !== attempt.id) return;
++    switch (event.kind) {
++      case AudioEventKind.Progress:
++        this.positionSeconds = event.positionSeconds;
++        this.durationSeconds = event.durationSeconds;
++        break;
++      case AudioEventKind.Started:
++        this.state = transition(this.state, {
++          type: PlaybackInputType.Started,
++          attempt: attempt.id,
++        }).state;
++        break;
++      case AudioEventKind.Failed:
++        this.failed = true;
++        this.stop().catch(() => {
++          this.failed = true;
++        });
++        break;
++      case AudioEventKind.Ended:
++        this.stop().catch(() => {
++          this.failed = true;
++        });
++        break;
++    }
++    this.notify();
++  }
++
++  async dispose(): Promise<void> {
++    this.disposed = true;
++    this.unsubscribe();
++    await this.stop();
++    if (this.attempt) return;
++    await this.audio.dispose();
++    await this.leases.disposeSession(this.sessionId);
++    this.listeners.clear();
++  }
++
++  private notify(): void {
++    for (const listener of this.listeners) listener();
++  }
++}
+diff --git a/src/renderer/playback/dom-audio.ts b/src/renderer/playback/dom-audio.ts
+new file mode 100644
+index 0000000..6eaf428
+--- /dev/null
++++ b/src/renderer/playback/dom-audio.ts
+@@ -0,0 +1,107 @@
++import type { AssetId, LeaseId } from '../../contracts/catalog';
++import { AudioEventKind } from '../../contracts/operations';
++import type { AudioEvent, AudioExecutor } from '../../contracts/operations';
++
++export interface AudioElement extends EventTarget {
++  autoplay: boolean;
++  loop: boolean;
++  src: string;
++  currentTime: number;
++  readonly duration: number;
++  play: () => Promise<void>;
++  pause: () => void;
++  load: () => void;
++  removeAttribute: (name: string) => void;
++}
++
++type Start = Parameters<AudioExecutor['start']>[0];
++interface Resource {
++  readonly request: Start;
++  readonly element: AudioElement;
++  readonly detach: () => void;
++}
++
++export class DomAudioExecutor implements AudioExecutor {
++  private resource: Resource | null = null;
++  private disposed = false;
++  private readonly listeners = new Set<(event: AudioEvent) => void>();
++
++  constructor(
++    private readonly resolve: (assetId: AssetId, leaseId: LeaseId) => string,
++    private readonly createElement: () => AudioElement = () =>
++      document.createElement('audio'),
++  ) {}
++
++  async start(request: Start): Promise<void> {
++    if (this.disposed || this.resource) throw new Error('Audio unavailable');
++    const element = this.createElement();
++    const emit = (kind: AudioEvent['kind']) => {
++      if (this.resource?.element !== element) return;
++      for (const listener of this.listeners)
++        listener({
++          kind,
++          attemptId: request.attemptId,
++          positionSeconds: element.currentTime,
++          durationSeconds: Number.isFinite(element.duration)
++            ? element.duration
++            : 0,
++        });
++    };
++    const playing = () => {
++      emit(AudioEventKind.Started);
++    };
++    const ended = () => {
++      emit(AudioEventKind.Ended);
++    };
++    const failed = () => {
++      emit(AudioEventKind.Failed);
++    };
++    const progress = () => {
++      emit(AudioEventKind.Progress);
++    };
++    element.addEventListener('playing', playing);
++    element.addEventListener('ended', ended);
++    element.addEventListener('error', failed);
++    element.addEventListener('timeupdate', progress);
++    this.resource = {
++      request,
++      element,
++      detach: () => {
++        element.removeEventListener('playing', playing);
++        element.removeEventListener('ended', ended);
++        element.removeEventListener('error', failed);
++        element.removeEventListener('timeupdate', progress);
++      },
++    };
++    element.autoplay = false;
++    element.loop = false;
++    element.src = this.resolve(request.assetId, request.leaseId);
++    element.currentTime = request.offset;
++    await element.play();
++  }
++
++  stop(attemptId: Start['attemptId']): Promise<void> {
++    const resource = this.resource;
++    if (resource?.request.attemptId === attemptId) {
++      resource.element.pause();
++      resource.detach();
++      resource.element.removeAttribute('src');
++      resource.element.load();
++      this.resource = null;
++    }
++    return Promise.resolve();
++  }
++
++  subscribe(listener: (event: AudioEvent) => void): () => void {
++    this.listeners.add(listener);
++    return () => {
++      this.listeners.delete(listener);
++    };
++  }
++
++  async dispose(): Promise<void> {
++    this.disposed = true;
++    if (this.resource) await this.stop(this.resource.request.attemptId);
++    this.listeners.clear();
++  }
++}
+diff --git a/tests/playback/controller.test.ts b/tests/playback/controller.test.ts
+new file mode 100644
+index 0000000..16e47f1
+--- /dev/null
++++ b/tests/playback/controller.test.ts
+@@ -0,0 +1,219 @@
++import { expect, it } from 'vitest';
++import { PlaybackController } from '../../src/renderer/playback/controller';
++import {
++  assetIdSchema,
++  padIdSchema,
++  sessionIdSchema,
++  leaseIdSchema,
++} from '../../src/contracts/catalog';
++import { AudioEventKind } from '../../src/contracts/operations';
++import type {
++  AudioEvent,
++  AudioExecutor,
++  Lease,
++  LeaseAuthority,
++} from '../../src/contracts/operations';
++
++function deferred<T>() {
++  let resolve: (value: T) => void = () => {
++    throw new Error('uninitialized');
++  };
++  const promise = new Promise<T>((done) => {
++    resolve = done;
++  });
++  return { promise, resolve };
++}
++const sessionId = sessionIdSchema.parse('00000000-0000-4000-8000-000000000001');
++const pad = padIdSchema.parse('00000000-0000-4000-8000-000000000002');
++const asset = assetIdSchema.parse('00000000-0000-4000-8000-000000000003');
++function setup(failAcquire = false, failStart = false) {
++  const grant = deferred<Lease>();
++  const started = deferred<undefined>();
++  const released = deferred<undefined>();
++  let listener: (event: AudioEvent) => void = () => {};
++  const active = new Set<number>();
++  const requests: Parameters<AudioExecutor['start']>[0][] = [];
++  let lease: Lease | null = null;
++  let failRelease = false;
++  let acquisitions = 0;
++  let disposed = false;
++  const audio: AudioExecutor = {
++    start: async (request) => {
++      if (failStart) throw new Error('start');
++      requests.push(request);
++      active.add(request.attemptId);
++      await started.promise;
++    },
++    stop: (id) => {
++      active.delete(id);
++      return Promise.resolve();
++    },
++    subscribe: (callback) => {
++      listener = callback;
++      return () => {
++        listener = () => {};
++      };
++    },
++    dispose: () => {
++      disposed = true;
++      return Promise.resolve();
++    },
++  };
++  const leases: LeaseAuthority = {
++    acquire: async (request) => {
++      acquisitions++;
++      if (failAcquire) throw new Error('acquire');
++      lease = {
++        ...request,
++        leaseId: leaseIdSchema.parse('00000000-0000-4000-8000-000000000004'),
++      };
++      return grant.promise;
++    },
++    release: async () => {
++      if (failRelease) throw new Error('release');
++      await released.promise;
++      lease = null;
++    },
++    disposeSession: () => Promise.resolve(),
++  };
++  const controller = new PlaybackController(audio, leases, sessionId);
++  return {
++    controller,
++    active,
++    requests,
++    started,
++    released,
++    grant,
++    grantNow: () => {
++      if (!lease) throw new Error('no lease');
++      grant.resolve(lease);
++    },
++    emit: (kind: AudioEvent['kind'], attemptId = requests[0]?.attemptId) => {
++      if (!attemptId) throw new Error('no attempt');
++      listener({ kind, attemptId, positionSeconds: 3, durationSeconds: 10 });
++    },
++    failRelease: () => {
++      failRelease = true;
++    },
++    repair: () => {
++      failRelease = false;
++    },
++    acquisitions: () => acquisitions,
++    disposed: () => disposed,
++    lease: () => lease,
++  };
++}
++
++it('reserves synchronously, ignores busy clicks, stops pending play and waits for release', async () => {
++  const s = setup();
++  const play = s.controller.play(pad, asset);
++  await s.controller.play(pad, asset);
++  expect(s.acquisitions()).toBe(1);
++  s.grantNow();
++  await Promise.resolve();
++  await Promise.resolve();
++  expect(s.active.size).toBe(1);
++  const stop = s.controller.stop();
++  expect(s.active.size).toBe(0);
++  s.emit(AudioEventKind.Started);
++  expect(s.controller.snapshot().state.status).toBe('stopped');
++  s.started.resolve(undefined);
++  await Promise.resolve();
++  expect(s.controller.snapshot().busy).toBe(true);
++  s.released.resolve(undefined);
++  await Promise.all([play, stop]);
++  expect(s.controller.snapshot().busy).toBe(false);
++  expect(s.lease()).toBeNull();
++  await s.controller.play(pad, asset);
++  expect(s.requests.map((r) => r.offset)).toEqual([0, 0]);
++  expect(s.active.size).toBe(1);
++  await s.controller.stop();
++});
++
++it('releases a late grant without starting and retains the gate after failed release', async () => {
++  const s = setup();
++  const play = s.controller.play(pad, asset);
++  const stop = s.controller.stop();
++  s.failRelease();
++  s.grantNow();
++  await Promise.all([play, stop]);
++  expect(s.requests).toEqual([]);
++  expect(s.controller.snapshot()).toMatchObject({ busy: true, failed: true });
++  await s.controller.play(pad, asset);
++  expect(s.acquisitions()).toBe(1);
++  s.repair();
++  s.released.resolve(undefined);
++  await s.controller.stop();
++  expect(s.controller.snapshot().busy).toBe(false);
++});
++
++it('publishes progress, cleans up natural end and cannot restart after disposal', async () => {
++  const s = setup();
++  let updates = 0;
++  const unsubscribe = s.controller.subscribe(() => {
++    updates++;
++  });
++  const play = s.controller.play(pad, asset);
++  s.grantNow();
++  s.started.resolve(undefined);
++  s.released.resolve(undefined);
++  await play;
++  s.emit(AudioEventKind.Started);
++  s.emit(AudioEventKind.Progress);
++  expect(s.controller.snapshot()).toMatchObject({
++    state: { status: 'playing' },
++    positionSeconds: 3,
++    durationSeconds: 10,
++  });
++  s.emit(AudioEventKind.Ended);
++  await s.controller.stop();
++  expect(s.active.size).toBe(0);
++  expect(updates).toBeGreaterThan(0);
++  unsubscribe();
++  await s.controller.dispose();
++  await s.controller.play(pad, asset);
++  expect(s.acquisitions()).toBe(1);
++  expect(s.disposed()).toBe(true);
++  expect(s.controller.snapshot().busy).toBe(false);
++});
++
++it('cleans up rejected acquisition and start without advancing playback', async () => {
++  const denied = setup(true);
++  await denied.controller.play(pad, asset);
++  expect(denied.controller.snapshot()).toMatchObject({
++    busy: false,
++    failed: true,
++    state: { status: 'stopped' },
++  });
++  const broken = setup(false, true);
++  const play = broken.controller.play(pad, asset);
++  broken.grantNow();
++  broken.released.resolve(undefined);
++  await play;
++  expect(broken.controller.snapshot()).toMatchObject({
++    busy: false,
++    failed: true,
++  });
++  expect(broken.lease()).toBeNull();
++});
++
++it('ignores old callbacks during a new attempt and treats current failure as STOP', async () => {
++  const s = setup();
++  const first = s.controller.play(pad, asset);
++  s.grantNow();
++  s.started.resolve(undefined);
++  s.released.resolve(undefined);
++  await first;
++  const old = s.requests[0];
++  if (!old) throw new Error('no request');
++  await s.controller.stop();
++  await s.controller.play(pad, asset);
++  s.emit(AudioEventKind.Ended, old.attemptId);
++  expect(s.controller.snapshot().busy).toBe(true);
++  const current = s.requests[1];
++  if (!current) throw new Error('no request');
++  s.emit(AudioEventKind.Failed, current.attemptId);
++  await s.controller.stop();
++  expect(s.controller.snapshot()).toMatchObject({ busy: false, failed: true });
++  expect(s.active.size).toBe(0);
++});
+diff --git a/tests/playback/dom-audio.test.ts b/tests/playback/dom-audio.test.ts
+new file mode 100644
+index 0000000..0593ef5
+--- /dev/null
++++ b/tests/playback/dom-audio.test.ts
+@@ -0,0 +1,109 @@
++import { expect, it } from 'vitest';
++import { DomAudioExecutor } from '../../src/renderer/playback/dom-audio';
++import {
++  assetIdSchema,
++  attemptIdSchema,
++  leaseIdSchema,
++} from '../../src/contracts/catalog';
++import type { AudioEvent } from '../../src/contracts/operations';
++
++class Element extends EventTarget {
++  autoplay = true;
++  loop = true;
++  src = '';
++  currentTime = 9;
++  duration = Number.NaN;
++  active = false;
++  play(): Promise<void> {
++    this.active = true;
++    return Promise.resolve();
++  }
++  pause(): void {
++    this.active = false;
++  }
++  load(): void {
++    this.currentTime = 0;
++  }
++  removeAttribute(name: string): void {
++    if (name === 'src') this.src = '';
++  }
++}
++const request = {
++  assetId: assetIdSchema.parse('00000000-0000-4000-8000-000000000001'),
++  leaseId: leaseIdSchema.parse('00000000-0000-4000-8000-000000000002'),
++  attemptId: attemptIdSchema.parse(1),
++  offset: 0,
++} as const;
++
++it('plays exclusively from zero, correlates media events and clears the source on STOP', async () => {
++  const element = new Element();
++  const audio = new DomAudioExecutor(
++    (asset, lease) => `media://${asset}/${lease}`,
++    () => element,
++  );
++  const events: AudioEvent[] = [];
++  const unsubscribe = audio.subscribe((event) => {
++    events.push(event);
++  });
++  await audio.start(request);
++  expect(element).toMatchObject({
++    active: true,
++    currentTime: 0,
++    autoplay: false,
++    loop: false,
++    src: `media://${request.assetId}/${request.leaseId}`,
++  });
++  await expect(audio.start(request)).rejects.toThrow();
++  element.dispatchEvent(new Event('playing'));
++  element.dispatchEvent(new Event('timeupdate'));
++  element.duration = 10;
++  element.currentTime = 3;
++  element.dispatchEvent(new Event('timeupdate'));
++  element.dispatchEvent(new Event('ended'));
++  element.dispatchEvent(new Event('error'));
++  expect(events).toEqual([
++    {
++      kind: 'started',
++      attemptId: request.attemptId,
++      positionSeconds: 0,
++      durationSeconds: 0,
++    },
++    {
++      kind: 'progress',
++      attemptId: request.attemptId,
++      positionSeconds: 0,
++      durationSeconds: 0,
++    },
++    {
++      kind: 'progress',
++      attemptId: request.attemptId,
++      positionSeconds: 3,
++      durationSeconds: 10,
++    },
++    {
++      kind: 'ended',
++      attemptId: request.attemptId,
++      positionSeconds: 3,
++      durationSeconds: 10,
++    },
++    {
++      kind: 'failed',
++      attemptId: request.attemptId,
++      positionSeconds: 3,
++      durationSeconds: 10,
++    },
++  ]);
++  await audio.stop(attemptIdSchema.parse(2));
++  expect(element.active).toBe(true);
++  await audio.stop(request.attemptId);
++  expect(element).toMatchObject({ active: false, src: '', currentTime: 0 });
++  element.dispatchEvent(new Event('playing'));
++  expect(events).toHaveLength(5);
++  unsubscribe();
++  await audio.start({ ...request, attemptId: attemptIdSchema.parse(2) });
++  element.dispatchEvent(new Event('playing'));
++  expect(events).toHaveLength(5);
++  await audio.dispose();
++  expect(element.active).toBe(false);
++  await expect(audio.start(request)).rejects.toThrow();
++});

@@ -17,3 +17,15 @@ component serves a musician's task still require review.
 
 Runtime assets remain local. Component tooling runs during development, not at
 show time. Installation follows the [existing Vite project guide](https://ui.shadcn.com/docs/installation/vite).
+
+[Impeccable](https://impeccable.style/) supplies design guidance and critique for
+UI tasks, alongside shadcn/ui primitives. The operator prefers few headings and
+no decorative subtitles, repeated eyebrows or explanatory copy below every
+control. Labels serve the drummer's next action; the pad names, playback state
+and STOP have priority. Readability and useful hierarchy are review judgments,
+not an arbitrary heading-count lint rule.
+
+The project-local skill is `.agents/skills/impeccable/SKILL.md`, pinned in
+`.pstack/impeccable-lock.json`. Its context/design/critique playbooks guide UI
+work; shadcn/ui remains the component source. This installation does not run the
+native design detector on app startup or require network access at shows.

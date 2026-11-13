@@ -1,0 +1,12 @@
+{
+  "file": "stereo.wav",
+  "license": "CC0-1.0",
+  "format": "PCM signed 16-bit little-endian stereo",
+  "rate": 48000,
+  "frames": 48000,
+  "channels": [
+    "Left only 1 kHz square wave, first half second",
+    "Right only 2 kHz square wave, second half second"
+  ],
+  "sha256": "bd725ff03ccd2adfc3c961e80312582d7893fe2705634c45bc41586a8705ac21"
+}

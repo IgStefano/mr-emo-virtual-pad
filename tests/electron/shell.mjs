@@ -1,5 +1,6 @@
-/* global window, document */
+/* global window */
 import assert from 'node:assert/strict';
+import { fileURLToPath } from 'node:url';
 
 export async function drive(application, profile, version, evidence) {
   const runtime = await application.evaluate(({ app, BrowserWindow }) => ({
@@ -42,44 +43,66 @@ export async function drive(application, profile, version, evidence) {
   assert.equal(await page.evaluate(() => typeof window.require), 'undefined');
   await page.screenshot({ path: evidence.directory + '/shell.png' });
   await evidence('accessibility.html', await page.content());
-  const unauthorized = await application.evaluate(async ({ BrowserWindow }) => {
-    const primary = BrowserWindow.getAllWindows()[0];
-    const probe = new BrowserWindow({
-      show: false,
-      webPreferences: {
-        preload: primary.webContents.getLastWebPreferences().preload,
-        sandbox: true,
-        contextIsolation: true,
-        nodeIntegration: false,
-      },
-    });
-    try {
-      await probe.loadURL('data:text/html,<h1>Unauthorized sender</h1>');
-      return await probe.webContents.executeJavaScript(
-        `window.pad.getAppInfo().then(() => false, error => error.message.includes('Unauthorized IPC sender'))`,
-      );
-    } finally {
-      probe.destroy();
-    }
-  });
-  assert.equal(unauthorized, true, 'bridge must reject another window');
-  const original = page.url();
-  const navigation = application.evaluate(
-    ({ BrowserWindow }) =>
-      new Promise((resolve) => {
-        BrowserWindow.getAllWindows()[0].webContents.once(
-          'will-navigate',
-          (event) => resolve(event.defaultPrevented),
+  const unauthorized = await application.evaluate(
+    async ({ BrowserWindow }, preload) => {
+      const primary = BrowserWindow.getAllWindows()[0];
+      const probe = new BrowserWindow({
+        show: false,
+        webPreferences: {
+          preload,
+          sandbox: true,
+          contextIsolation: true,
+          nodeIntegration: false,
+        },
+      });
+      try {
+        await probe.loadURL(primary.webContents.getURL());
+        return await probe.webContents.executeJavaScript(
+          `typeof window.pad === 'undefined'
+          ? { bridge: false, denied: false }
+          : window.pad.getAppInfo().then(
+              () => ({ bridge: true, denied: false }),
+              error => ({ bridge: true, denied: error.message.includes('Unauthorized IPC sender'), error: error.message })
+            )`,
         );
-      }),
+      } finally {
+        probe.destroy();
+      }
+    },
+    fileURLToPath(new URL('../../.vite/build/preload.cjs', import.meta.url)),
   );
-  await page.evaluate(() => {
-    const link = document.createElement('a');
-    link.href = 'https://example.invalid/';
-    document.body.append(link);
-    link.click();
+  await evidence('unauthorized-sender.json', unauthorized);
+  assert.equal(
+    unauthorized.bridge,
+    true,
+    'probe window must load the real preload',
+  );
+  assert.equal(unauthorized.denied, true, 'bridge must reject another window');
+  const original = page.url();
+  const navigation = await application.evaluate(async ({ BrowserWindow }) => {
+    const contents = BrowserWindow.getAllWindows()[0].webContents;
+    return new Promise((resolve, reject) => {
+      const timeout = globalThis.setTimeout(
+        () => reject(new Error('Navigation event timeout')),
+        10000,
+      );
+      contents.once('will-navigate', (event) => {
+        globalThis.clearTimeout(timeout);
+        resolve(event.defaultPrevented);
+      });
+      contents
+        .executeJavaScript(
+          `(() => {
+        const link = document.createElement('a');
+        link.href = 'https://example.invalid/';
+        document.body.append(link);
+        link.click();
+      })()`,
+        )
+        .catch(reject);
+    });
   });
-  assert.equal(await navigation, true, 'navigation must be prevented');
+  assert.equal(navigation, true, 'navigation must be prevented');
   assert.equal(page.url(), original);
   assert.equal(
     await page.evaluate(() => window.open('https://example.invalid/')),

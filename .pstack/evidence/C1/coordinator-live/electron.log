@@ -1,0 +1,2 @@
+Error occurred in handler for 'app:info': Error: Unauthorized IPC sender
+    at /home/igstefano/.t3/projects/mr-emo-virtual-pad/.vite/build/main.cjs:55:23499

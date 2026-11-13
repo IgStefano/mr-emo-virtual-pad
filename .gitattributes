@@ -1,3 +1,6 @@
 * text=auto eol=lf
 # Preserve the exact pinned upstream bytes on every platform.
 .agents/skills/pstack/** -text -whitespace
+.agents/skills/impeccable/** -text -whitespace
+
+.pstack/evidence/** -text -whitespace

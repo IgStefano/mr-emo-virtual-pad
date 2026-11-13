@@ -78,3 +78,8 @@ The standalone MJS journey is intentionally outside the Node Vitest mutation
 runner. It currently proves only the empty shell. Packaged release automation,
 SQLite probe integration, import/play/STOP/delete and physical output remain
 separate gates. No latency or throughput is measured by this harness.
+
+The coordinator completed an unpackaged WSLg shell journey with GTK and epoxy
+extracted into a user-local cache and supplied through LD_LIBRARY_PATH. The
+committed evidence is in `.pstack/evidence/C1/coordinator-live`. This host setup
+is not shipped with the app and does not establish Windows/Mac release behavior.

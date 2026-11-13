@@ -27,8 +27,7 @@ async function filesUnder(directory) {
   }
   return files;
 }
-async function doctor(work) {
-  const lock = await json('.pstack/upstream-lock.json');
+async function checkVendor(lock) {
   const vendor = resolve(root, lock.root);
   const actual = await filesUnder(vendor);
   if (actual.length !== Object.keys(lock.files).length)
@@ -43,6 +42,13 @@ async function doctor(work) {
   const skills = actual.filter((path) => path.endsWith(`${sep}SKILL.md`));
   if (skills.length !== lock.skillCount)
     throw new Error('Upstream skill count changed.');
+  return { version: lock.version, commit: lock.commit, skills: skills.length };
+}
+async function doctor(work) {
+  const upstream = await checkVendor(await json('.pstack/upstream-lock.json'));
+  const impeccable = await checkVendor(
+    await json('.pstack/impeccable-lock.json'),
+  );
   const models = await json('.pstack/models.json');
   if (models.budget !== 'small' || models.reasoningEffort !== 'medium')
     throw new Error('Model budget changed; revise the T3 settings mapping.');
@@ -61,9 +67,10 @@ async function doctor(work) {
       git('merge-base', '--is-ancestor', task.acceptedSha, 'HEAD');
   }
   return {
-    upstream: lock.version,
-    commit: lock.commit,
-    skills: skills.length,
+    upstream: upstream.version,
+    commit: upstream.commit,
+    skills: upstream.skills,
+    impeccable,
     budget: models.budget,
     roles: models.roles,
     ready: readyTasks(work).map((task) => task.id),

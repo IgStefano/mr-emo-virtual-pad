@@ -90,6 +90,7 @@ export default tseslint.config(
   {
     ignores: [
       '.agents/skills/pstack/**',
+      '.agents/skills/impeccable/**',
       'node_modules/**',
       '.vite/**',
       'out/**',

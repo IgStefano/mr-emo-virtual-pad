@@ -1,0 +1,7 @@
+{
+  "originalBase": "75dadde044f4c12e1ca45382bee4e87f9badd100",
+  "sourceWorktree": "/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-665603fd-195f88e767a307c3",
+  "paths": ["src/renderer/playback", "tests/playback"],
+  "sha256": "0ed67a792131b6791088bf93d368b47dd0d46f1b87ec23cefc6364aa3956a6eb",
+  "status": "unaccepted repair input; not production code"
+}

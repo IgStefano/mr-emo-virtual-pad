@@ -8,3 +8,7 @@ package-lock.json
 docs/research
 
 .agents/skills/pstack
+
+.agents/skills/impeccable
+
+.pstack/evidence

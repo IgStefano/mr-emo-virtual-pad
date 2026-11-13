@@ -1,0 +1,8 @@
+node_modules
+.vite
+out
+reports
+coverage
+.stryker-tmp
+package-lock.json
+docs/research

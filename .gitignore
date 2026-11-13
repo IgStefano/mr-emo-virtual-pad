@@ -1,0 +1,12 @@
+node_modules/
+.vite/
+out/
+coverage/
+reports/
+.stryker-tmp/
+*.log
+.DS_Store
+
+.env
+.env.*
+!.env.example

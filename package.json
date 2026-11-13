@@ -1,0 +1,58 @@
+{
+  "name": "mr-emo-virtual-pad",
+  "productName": "Mr. Emo Virtual Pad",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pad virtual offline para reprodução de tracks em shows.",
+  "license": "UNLICENSED",
+  "author": "Mr. Emo",
+  "main": ".vite/build/main.cjs",
+  "engines": {
+    "node": ">=24.15 <25"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json",
+    "architecture": "node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs",
+    "test:guardrails": "node --test --test-concurrency=1 tests/guardrails/*.test.mjs",
+    "test": "vitest run",
+    "test:mutation": "stryker run && node scripts/check-mutation.mjs",
+    "verify:static": "npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails",
+    "verify": "npm run verify:static && npm test && npm run test:mutation"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "8.0.1",
+    "@electron-forge/maker-zip": "8.0.1",
+    "@electron-forge/plugin-fuses": "8.0.1",
+    "@electron-forge/plugin-vite": "8.0.1",
+    "@electron/fuses": "2.1.3",
+    "@eslint/js": "9.39.5",
+    "@stryker-mutator/core": "10.1.1",
+    "@stryker-mutator/vitest-runner": "10.1.1",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "@vitest/eslint-plugin": "1.6.28",
+    "dependency-cruiser": "18.7.2",
+    "electron": "45.3.2",
+    "eslint": "9.39.5",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "prettier": "3.10.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
+    "vite": "8.3.8",
+    "vitest": "4.1.12"
+  }
+}

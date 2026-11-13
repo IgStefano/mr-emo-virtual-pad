@@ -48,6 +48,7 @@ export async function probeSqlite() {
       'BEGIN; ALTER TABLE asset ADD COLUMN label TEXT; PRAGMA user_version = 2; COMMIT;',
     );
     db.close();
+    db = undefined;
     db = new DatabaseSync(path);
     db.exec('PRAGMA foreign_keys = ON');
     assert.equal(db.prepare('PRAGMA user_version').get().user_version, 2);
@@ -71,8 +72,11 @@ export async function probeSqlite() {
       status: 'PASS',
     };
   } finally {
-    db?.close();
-    rmSync(directory, { recursive: true, force: true });
+    try {
+      db?.close();
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
   }
 }
 

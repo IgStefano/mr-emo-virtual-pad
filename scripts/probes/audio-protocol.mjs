@@ -9,6 +9,7 @@ export async function probeAudioProtocol(url, mime, expectedPrefix) {
   };
   const response = await globalThis.fetch(url, {
     headers: { Range: 'bytes=0-15' },
+    signal: globalThis.AbortSignal.timeout(15000),
   });
   const bytes = new Uint8Array(await response.arrayBuffer());
   report.range = {
@@ -49,6 +50,8 @@ export async function probeAudioProtocol(url, mime, expectedPrefix) {
     report.status = 'METADATA_AND_RANGE_ONLY';
     return report;
   } finally {
+    audio.onloadedmetadata = null;
+    audio.onerror = null;
     audio.pause();
     audio.removeAttribute('src');
     audio.load();

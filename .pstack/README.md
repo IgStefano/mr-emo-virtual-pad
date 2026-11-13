@@ -31,7 +31,7 @@ the integrator to accept, reject or leave blocked. Accepted statuses require
 existing evidence and an accepted commit contained in the current base.
 
 P0 and S1 are initially ready. A1/B1/C1 wait for accepted P0. I1 waits for all three;
-A2/B2/C2 then parallelize, and R1 waits for these plus actual target-hardware S1.
+A2/B2/C2 then parallelize, and R1 builds the complete candidate before final physical Mac validation in S1.
 S1 may prepare scripts now but cannot be accepted without real platform results.
 No product task was dispatched during setup.
 
@@ -55,4 +55,4 @@ changes or external side effects; review those separately.
 
 When S1 finishes probe preparation but lacks target hardware, record it blocked
 with its evidence and free its active worker slot. A1/B1/C1 can then all run after
-P0 acceptance. Missing S1 evidence still blocks R1.
+P0 acceptance. Missing physical S1 evidence blocks show readiness, not R1 candidate construction.

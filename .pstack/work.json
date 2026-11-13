@@ -26,7 +26,7 @@
     {
       "id": "S1",
       "title": "Prepare packaged runtime feasibility probes",
-      "status": "active",
+      "status": "blocked",
       "dependsOn": [],
       "ownedPaths": [
         "scripts/probes",
@@ -36,7 +36,11 @@
       ],
       "brief": ".pstack/briefs/S1.md",
       "acceptedSha": null,
-      "evidence": []
+      "evidence": [
+        ".pstack/evidence/S1/README.md",
+        ".pstack/evidence/S1/host-sqlite.json",
+        ".pstack/evidence/S1/integration.md"
+      ]
     },
     {
       "id": "A1",
@@ -157,9 +161,9 @@
     },
     {
       "id": "R1",
-      "title": "Validate and deliver Mac release candidate",
+      "title": "Prepare automatically verified release candidate for final Mac validation",
       "status": "planned",
-      "dependsOn": ["A2", "B2", "C2", "S1"],
+      "dependsOn": ["A2", "B2", "C2"],
       "ownedPaths": [
         "docs/release",
         ".github/workflows",

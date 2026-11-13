@@ -56,7 +56,7 @@ codec acceptance and device behavior; agree acceptable latency with the drummer.
 Choose node:sqlite only after checking the pinned runtime/API status; document any
 driver change. No driver fallback silently changes the chosen architecture.
 
-Gate: SQLite must pass before its adapter is accepted. Audio engine/protocol must
+Gate: host SQLite checks support provisional adapter integration; packaged runtime checks gate the candidate. Physical Mac checks occur after the complete candidate is delivered. Audio engine/protocol must
 pass before show readiness; deterministic controller work can proceed behind the
 agreed interface while physical output is pending. Do not restrict accepted formats
 to WAV by assumption or promise untested codec compatibility.
@@ -66,7 +66,7 @@ to WAV by assumption or promise untested codec compatibility.
 ### A1 — Catalog and managed storage
 
 Owned paths: src/main/storage, src/main/library and tests/storage.
-Depends on: P0; driver acceptance from S1 before final approval.
+Depends on: P0; host SQLite tests support provisional integration. Packaged compatibility is verified automatically when available; physical Mac validation stays at final acceptance.
 
 Implement SQLite schema/migrations and one writer; separate audio assets, pads and
 one default repertoire. Persist stable IDs, labels/colors and ordering without a
@@ -177,7 +177,7 @@ No CI event is labeled proof of physical audio output.
 
 ### R1 — Integrator release gate
 
-Depends on: A2, B2, C2 and S1 target-hardware evidence.
+Depends on: A2, B2 and C2. Build and deliver the complete candidate before requesting S1 target-hardware validation.
 
 Run verify from clean lockfile install; full mutation with reviewed inventory and
 zero unexplained survivors/NoCoverage; governance fixtures and security checks;
@@ -206,3 +206,12 @@ changes with integrator to avoid three competing pipelines or overlapping edits.
 External inputs still needed before hardware acceptance: target Mac/architecture,
 audio interface, representative prepared files and latency expectation. These do
 not block contract/test work and must not be silently replaced with assumptions.
+
+## Operator delegation
+
+The operator delegates code review and integration to the coordinator. Integrate
+verified changes without awaiting operator approval. Build the complete candidate
+first; the operator validates the Mac only at the end. R1 can produce that
+candidate while S1 physical acceptance is blocked. Automated integration evidence
+does not claim the missing physical checks passed; show readiness still requires
+them.

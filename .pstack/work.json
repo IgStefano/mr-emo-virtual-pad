@@ -5,7 +5,7 @@
     {
       "id": "P0",
       "title": "Freeze operation contracts and test seams",
-      "status": "active",
+      "status": "accepted",
       "dependsOn": [],
       "ownedPaths": [
         "src/contracts",
@@ -20,8 +20,12 @@
         "tsconfig.json"
       ],
       "brief": ".pstack/briefs/P0.md",
-      "acceptedSha": null,
-      "evidence": []
+      "acceptedSha": "ce5990865f972f80784e71cecc87eb48cc511c73",
+      "evidence": [
+        ".pstack/evidence/P0/result.md",
+        ".pstack/evidence/P0/contracts.md",
+        ".pstack/evidence/P0/integration.md"
+      ]
     },
     {
       "id": "S1",
@@ -45,7 +49,7 @@
     {
       "id": "A1",
       "title": "Implement catalog and recoverable managed storage",
-      "status": "planned",
+      "status": "active",
       "dependsOn": ["P0"],
       "ownedPaths": [
         "src/main/storage",
@@ -60,7 +64,7 @@
     {
       "id": "B1",
       "title": "Implement exclusive playback controller and DOM adapter",
-      "status": "planned",
+      "status": "active",
       "dependsOn": ["P0"],
       "ownedPaths": [
         "src/renderer/playback",
@@ -74,7 +78,7 @@
     {
       "id": "C1",
       "title": "Build isolated verification harness",
-      "status": "planned",
+      "status": "active",
       "dependsOn": ["P0"],
       "ownedPaths": [
         "tests/electron",

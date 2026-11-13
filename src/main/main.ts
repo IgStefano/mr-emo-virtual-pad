@@ -3,6 +3,16 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { appInfoChannel, appInfoSchema } from '../contracts/app-info';
 
+const verificationDirectory = process.env.PAD_VERIFICATION_DATA_DIR;
+if (verificationDirectory !== undefined) {
+  if (!path.isAbsolute(verificationDirectory)) {
+    throw new Error(
+      'PAD_VERIFICATION_DATA_DIR must be an existing absolute directory',
+    );
+  }
+  app.setPath('userData', verificationDirectory);
+}
+
 async function openWindow(): Promise<void> {
   const entry = path.join(
     __dirname,

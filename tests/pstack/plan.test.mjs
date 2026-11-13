@@ -12,7 +12,13 @@ const fixture = JSON.parse(
   await readFile(new URL('../../.pstack/work.json', import.meta.url), 'utf8'),
 );
 function fresh() {
-  return structuredClone(fixture);
+  const work = structuredClone(fixture);
+  for (const task of work.tasks) {
+    task.status = 'planned';
+    task.acceptedSha = null;
+    task.evidence = [];
+  }
+  return work;
 }
 function accept(work, id) {
   const task = work.tasks.find((candidate) => candidate.id === id);

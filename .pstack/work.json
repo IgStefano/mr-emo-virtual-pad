@@ -5,7 +5,7 @@
     {
       "id": "P0",
       "title": "Freeze operation contracts and test seams",
-      "status": "planned",
+      "status": "active",
       "dependsOn": [],
       "ownedPaths": [
         "src/contracts",
@@ -25,7 +25,7 @@
     {
       "id": "S1",
       "title": "Prepare packaged runtime feasibility probes",
-      "status": "planned",
+      "status": "active",
       "dependsOn": [],
       "ownedPaths": [
         "scripts/probes",

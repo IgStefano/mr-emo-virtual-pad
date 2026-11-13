@@ -6,3 +6,5 @@ coverage
 .stryker-tmp
 package-lock.json
 docs/research
+
+.agents/skills/pstack

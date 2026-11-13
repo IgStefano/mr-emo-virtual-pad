@@ -39,3 +39,6 @@ See [specification](docs/spec.md), [architecture](docs/architecture.md),
 
 The [delivery plan](docs/delivery-plan.md) defines parallel lanes, dependencies and
 acceptance gates through the Mac release.
+
+The [pstack setup](.pstack/README.md) installs the pinned upstream skills and
+provides ready-task checks and worktree delegation briefs for Codex/T3.

@@ -66,6 +66,7 @@ const policy = {
 export default tseslint.config(
   {
     ignores: [
+      '.agents/skills/pstack/**',
       'node_modules/**',
       '.vite/**',
       'out/**',
@@ -84,7 +85,12 @@ export default tseslint.config(
     files: ['**/*.mjs', '**/*.cjs'],
     extends: [js.configs.recommended],
     languageOptions: {
-      globals: { console: 'readonly', process: 'readonly', URL: 'readonly' },
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        URL: 'readonly',
+        structuredClone: 'readonly',
+      },
     },
   },
   {

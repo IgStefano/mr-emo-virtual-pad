@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "maxWorkers": 3,
+  "tasks": [
+    {
+      "id": "P0",
+      "title": "Freeze operation contracts and test seams",
+      "status": "planned",
+      "dependsOn": [],
+      "ownedPaths": [
+        "src/contracts",
+        "src/domain",
+        "tests/contracts",
+        "package.json",
+        "package-lock.json",
+        "tsconfig.test.json",
+        "vitest.config.mjs",
+        "stryker.config.mjs",
+        ".pstack/evidence/P0"
+      ],
+      "brief": ".pstack/briefs/P0.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "S1",
+      "title": "Prepare packaged runtime feasibility probes",
+      "status": "planned",
+      "dependsOn": [],
+      "ownedPaths": [
+        "scripts/probes",
+        "tests/runtime",
+        "docs/runtime-probes.md",
+        ".pstack/evidence/S1"
+      ],
+      "brief": ".pstack/briefs/S1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "A1",
+      "title": "Implement catalog and recoverable managed storage",
+      "status": "planned",
+      "dependsOn": ["P0"],
+      "ownedPaths": [
+        "src/main/storage",
+        "src/main/library",
+        "tests/storage",
+        ".pstack/evidence/A1"
+      ],
+      "brief": ".pstack/briefs/A1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "B1",
+      "title": "Implement exclusive playback controller and DOM adapter",
+      "status": "planned",
+      "dependsOn": ["P0"],
+      "ownedPaths": [
+        "src/renderer/playback",
+        "tests/playback",
+        ".pstack/evidence/B1"
+      ],
+      "brief": ".pstack/briefs/B1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "C1",
+      "title": "Build isolated verification harness",
+      "status": "planned",
+      "dependsOn": ["P0"],
+      "ownedPaths": [
+        "tests/electron",
+        "scripts/verification",
+        "docs/verification.md",
+        ".pstack/evidence/C1"
+      ],
+      "brief": ".pstack/briefs/C1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "I1",
+      "title": "Integrate catalog, audio, leases, protocols and IPC",
+      "status": "planned",
+      "dependsOn": ["A1", "B1", "C1"],
+      "ownedPaths": [
+        "src/main",
+        "src/preload",
+        "src/contracts",
+        "tests/ipc",
+        "tests/media",
+        "package.json",
+        "package-lock.json",
+        ".dependency-cruiser.cjs",
+        "eslint.config.mjs",
+        ".pstack/evidence/I1"
+      ],
+      "brief": ".pstack/briefs/I1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "A2",
+      "title": "Harden recovery and lifecycle",
+      "status": "planned",
+      "dependsOn": ["I1"],
+      "ownedPaths": [
+        "src/main/storage",
+        "src/main/library",
+        "src/main/lifecycle",
+        "tests/storage",
+        "tests/lifecycle",
+        ".pstack/evidence/A2"
+      ],
+      "brief": ".pstack/briefs/A2.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "B2",
+      "title": "Build performance grid and editing interface",
+      "status": "planned",
+      "dependsOn": ["I1"],
+      "ownedPaths": [
+        "src/renderer/performance",
+        "src/renderer/editing",
+        "src/renderer/main.tsx",
+        "src/renderer/style.css",
+        "tests/ui",
+        ".pstack/evidence/B2"
+      ],
+      "brief": ".pstack/briefs/B2.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "C2",
+      "title": "Expand model/property and native regression verification",
+      "status": "planned",
+      "dependsOn": ["I1"],
+      "ownedPaths": [
+        "tests/electron",
+        "tests/model",
+        "scripts/verification",
+        "docs/verification.md",
+        ".pstack/evidence/C2"
+      ],
+      "brief": ".pstack/briefs/C2.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R1",
+      "title": "Validate and deliver Mac release candidate",
+      "status": "planned",
+      "dependsOn": ["A2", "B2", "C2", "S1"],
+      "ownedPaths": [
+        "docs/release",
+        ".github/workflows",
+        "forge.config.mjs",
+        "package.json",
+        "package-lock.json",
+        ".pstack/evidence/R1"
+      ],
+      "brief": ".pstack/briefs/R1.md",
+      "acceptedSha": null,
+      "evidence": []
+    }
+  ]
+}

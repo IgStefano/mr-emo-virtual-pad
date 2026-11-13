@@ -23,3 +23,9 @@ of their effect on verification. Preserve the checks while fixing the code.
 For runtime verification and evidence, follow [verification](docs/verification.md).
 Research notes are decision history; docs/architecture.md describes the current
 implementation and its remaining work.
+
+For pstack setup, delegation or parallel work, read [.pstack/codex-t3.md](.pstack/codex-t3.md)
+first, then the installed [poteto-mode](.agents/skills/pstack/skills/poteto-mode/SKILL.md)
+and [swarm](.agents/skills/pstack/skills/swarm/SKILL.md) skills. Role settings live in
+.pstack/models.json. The work graph and owned paths are in .pstack/work.json.
+Run npm run pstack:doctor before dispatch; handoffs require base/head and evidence.

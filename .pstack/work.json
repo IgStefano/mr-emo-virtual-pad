@@ -16,7 +16,8 @@
         "tsconfig.test.json",
         "vitest.config.mjs",
         "stryker.config.mjs",
-        ".pstack/evidence/P0"
+        ".pstack/evidence/P0",
+        "tsconfig.json"
       ],
       "brief": ".pstack/briefs/P0.md",
       "acceptedSha": null,

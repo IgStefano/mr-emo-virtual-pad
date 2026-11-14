@@ -1,0 +1,1 @@
+{"directory":"/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-c47be3d3-18708cdffdf9dff7/reports/verification/packaged-oJJVc9","profile":"/tmp/pad-packaged-uuUeXx","childExited":true}

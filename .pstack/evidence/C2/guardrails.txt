@@ -1,0 +1,11 @@
+✔ aliased audio remains owned by the adapter: const make = window.Audio; export const sound = new make(); (12339.081342ms)
+✔ aliased audio remains owned by the adapter: const make = document.createElement.bind(document); export const sound = make("audio"); (203.091698ms)
+✔ aliased audio remains owned by the adapter: const element = document.createElement; export const sound = element.call(document, "audio"); (94.960999ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13759.465635

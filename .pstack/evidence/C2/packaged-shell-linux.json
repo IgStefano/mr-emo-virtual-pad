@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "scope": "packaged shell",
+  "executable": "/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-c47be3d3-18708cdffdf9dff7/out/Mr. Emo Virtual Pad-linux-x64/Mr. Emo Virtual Pad",
+  "platform": "linux",
+  "media": [],
+  "route": "renderer CDP; release main inspection fuse unchanged",
+  "info": {
+    "version": "0.1.0"
+  },
+  "profile": "/tmp/pad-packaged-uuUeXx",
+  "url": "pad-app://app/index.html",
+  "stderr": "\nDevTools listening on ws://127.0.0.1:35047/devtools/browser/df3c0ede-b14c-405f-9fa9-e4cf821c36a9\n"
+}

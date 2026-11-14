@@ -1,0 +1,39 @@
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-c47be3d3-18708cdffdf9dff7/reports/verification/regressions-1h4y64/late-grant-starts-canceled-audio
+
+ ❯ tests/model/orderings.test.ts (1 test | 1 failed) 51ms
+   × replays seeded command/result orderings against the exclusive-resource model 48ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 1 passed (2)
+   Start at  03:34:20
+   Duration  1.12s (transform 349ms, setup 0ms, import 1.10s, tests 109ms, environment 1ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/model/orderings.test.ts > replays seeded command/result orderings against the exclusive-resource model
+Error: {"seed":1,"index":1,"trace":[true,true,false],"shrunk":[true,false,false],"replay":"stopBeforeGrant,stopBeforeStart,failRelease"}
+ ❯ tests/model/orderings.test.ts:157:15
+    155|           }
+    156|         }
+    157|         throw new Error(
+       |               ^
+    158|           JSON.stringify({
+    159|             seed,
+
+Caused by: AssertionError: promise rejected "AssertionError: expected 1 to be +0 // Ob… { …(4) }" instead of resolving
+ ❯ tests/model/orderings.test.ts:141:10
+
+Caused by: AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ ordering tests/model/orderings.test.ts:86:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

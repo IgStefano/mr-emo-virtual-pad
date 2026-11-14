@@ -1,0 +1,30 @@
+{
+  "counts": {
+    "Killed": 974,
+    "Timeout": 1
+  },
+  "scope": [
+    "src/domain/lease.ts",
+    "src/domain/playback.ts",
+    "src/main/ipc/authority.ts",
+    "src/main/ipc/catalog-session.ts",
+    "src/main/ipc/desktop.ts",
+    "src/main/ipc/renderer-lifetime.ts",
+    "src/main/library/managed-catalog.ts",
+    "src/main/storage/application-protocol.ts",
+    "src/main/storage/audio-metadata.ts",
+    "src/main/storage/catalog-store.ts",
+    "src/main/storage/managed-files.ts",
+    "src/main/storage/media-protocol.ts",
+    "src/preload/desktop-bridge.ts",
+    "src/renderer/lib/utils.ts",
+    "src/renderer/playback/controller.ts",
+    "src/renderer/playback/dom-audio.ts",
+    "src/renderer/runtime/desktop.ts",
+    "src/contracts/catalog.ts",
+    "src/contracts/desktop.ts",
+    "src/contracts/operations.ts"
+  ],
+  "report": "reports/mutation/mutation.json",
+  "note": "Timeout mutant 804 replaces the zero-byte-read error check at media-protocol.ts line 147 with false; Stryker hit limit 1501/1500 reached."
+}

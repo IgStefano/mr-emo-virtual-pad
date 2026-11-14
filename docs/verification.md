@@ -107,3 +107,37 @@ On this host these commands need
 The full target Mac/interface journey, physical stereo output, latency and
 representative codec acceptance remain unverified. No performance result is
 inferred from native timeupdate events. Evidence is under `.pstack/evidence/I1`.
+
+## C2 generated regressions and packaged playback
+
+`tests/model` is included in Vitest and TypeScript discovery. It drives the actual
+PlaybackController with controlled grant/start/release completion and a reduced
+exclusive-resource oracle, independent of the domain reducer. Four fixed seeds
+exercise 128 schedules. Failures print the seed, schedule index, original flags
+and greedily shrunk flags. Flags represent STOP before grant, STOP before start
+completion, and release failure. Main SessionAuthority additionally runs 400
+seeded edit/play/release/stale-release commands against a single-token oracle.
+These are bounded models, not an exhaustive proof of concurrency.
+
+Run `node scripts/verification/regressions.mjs` for a baseline and two deliberately
+broken controller variants in isolated copies. Logs preserve shrunk reproducers.
+The variants remove late-grant cancellation and release acknowledgment. They must
+fail because canceled audio starts or another pad becomes eligible while cleanup
+has failed. This count is separate from Stryker mutations. Copies and logs remain
+under the printed `reports/verification/regressions-*` directory.
+
+Run `node scripts/verification/packaged-shell.mjs --playback` after packaging.
+It seeds an isolated profile through a real **unpackaged** import with only the
+native picker boundary controlled, compares managed bytes, removes the source,
+then opens the catalog in the fused package. Renderer CDP observes the finite
+bridge, SQLite catalog reopening, restricted 206 media response, native decode
+progress and STOP. This does not prove packaged native-picker import. No release
+inspection or sandbox fuse is weakened. `PAD_PACKAGED_EXECUTABLE` selects a package
+path, including a different Mac architecture. The default follows host platform.
+Reports and the isolated profile persist for reruns and diagnosis; the owned child
+must exit before teardown completes. Routine shell runs no longer write tracked
+I1 evidence. Windows and Mac execution still require those actual hosts.
+
+No decode event or synthetic fixture establishes physical output, supported real
+codecs, device behavior or latency. Physical Mac/interface acceptance remains a
+final-candidate gate. These checks measure no performance metric.

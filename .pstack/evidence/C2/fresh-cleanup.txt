@@ -1,0 +1,40 @@
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-b83def8d-8cd31999361daae6/reports/verification/regressions-3nxWDr/cleanup-unlocks-before-release
+
+ ❯ tests/model/orderings.test.ts (1 test | 1 failed) 66ms
+   × replays seeded command/result orderings against the exclusive-resource model 63ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 1 passed (2)
+   Start at  09:12:02
+   Duration  1.77s (transform 252ms, setup 0ms, import 788ms, tests 101ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/model/orderings.test.ts > replays seeded command/result orderings against the exclusive-resource model
+Error: {"seed":1,"index":0,"trace":[false,false,true],"shrunk":[false,false,true],"replay":"stopBeforeGrant,stopBeforeStart,failRelease"}
+ ❯ tests/model/orderings.test.ts:157:15
+    155|           }
+    156|         }
+    157|         throw new Error(
+       |               ^
+    158|           JSON.stringify({
+    159|             seed,
+
+Caused by: AssertionError: promise rejected "AssertionError: expected false to be true… { …(4) }" instead of resolving
+ ❯ tests/model/orderings.test.ts:141:10
+
+Caused by: AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ordering tests/model/orderings.test.ts:109:38
+ ❯ tests/model/orderings.test.ts:139:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

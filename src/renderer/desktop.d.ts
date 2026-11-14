@@ -1,4 +1,4 @@
-import type { DesktopApi } from '../contracts/app-info';
+import type { DesktopApi } from '../contracts/desktop';
 declare global {
   interface Window {
     readonly pad: DesktopApi;

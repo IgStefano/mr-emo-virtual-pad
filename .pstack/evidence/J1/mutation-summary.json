@@ -1,0 +1,47 @@
+{
+  "src/domain/lease.ts": {
+    "Killed": 24
+  },
+  "src/domain/playback.ts": {
+    "Killed": 41
+  },
+  "src/main/ipc/authority.ts": {
+    "Killed": 47
+  },
+  "src/main/ipc/catalog-session.ts": {
+    "Killed": 90
+  },
+  "src/main/ipc/desktop.ts": {
+    "Killed": 31
+  },
+  "src/main/library/managed-catalog.ts": {
+    "Killed": 118
+  },
+  "src/main/storage/audio-metadata.ts": {
+    "Killed": 8
+  },
+  "src/main/storage/catalog-store.ts": {
+    "Killed": 69
+  },
+  "src/main/storage/managed-files.ts": {
+    "Killed": 42
+  },
+  "src/preload/desktop-bridge.ts": {
+    "Killed": 5
+  },
+  "src/renderer/playback/controller.ts": {
+    "Killed": 86
+  },
+  "src/renderer/playback/dom-audio.ts": {
+    "Killed": 57
+  },
+  "src/contracts/catalog.ts": {
+    "Killed": 7
+  },
+  "src/contracts/desktop.ts": {
+    "Killed": 10
+  },
+  "src/contracts/operations.ts": {
+    "Killed": 9
+  }
+}

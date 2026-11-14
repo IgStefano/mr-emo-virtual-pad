@@ -1,0 +1,13 @@
+command	exit	result
+ git rev-parse HEAD	0	e7d10898e94b857470ab34b5241cb9e18723932f before edits
+npm ci	0	619 packages installed; normal prepare hook ran
+npx vitest run tests/ipc tests/contracts	0	22 tests passed in focused.log
+npm run typecheck	0	Types passed after schema-derived request migration
+npm run pstack:ready	0	Readiness discovery only; no manifest edits
+npm run test:mutation (initial snapshot)	1	95.99%; behavioral tests added and redundant checks removed
+npm run verify (earlier snapshot)	1	Static and tests passed; 97.08% mutation; superseded by final run
+npm run verify (timing assertion snapshot)	1	99.84%; strengthened immediate disposal oracle
+npm run verify (all detected snapshot)	1	100% score but report checker rejected 3 schema runtime errors; simplified envelope union
+npx stryker run --mutate src/contracts/desktop.ts	0	10 mutants killed; no errors or survivors
+node scripts/check-mutation.mjs (focused report)	0	10 mutants accepted without timeouts
+npm run verify (final)	0	82 tests; all 644 mutants killed; report checker passed

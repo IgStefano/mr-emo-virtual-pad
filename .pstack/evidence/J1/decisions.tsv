@@ -1,0 +1,6 @@
+decision	reason	evidence
+Keep raw app:info response	Existing bootstrap remains compatible until I1	app-info schema and bridge test
+Require an acquired edit lease before import	ManagedCatalog opens dialog only inside leased action	pending dialog public service test
+Inject media release callback	M1 owns streaming and cancellation	No M1 imports in owned code
+Track privileged pending work	Termination drains before replacement session	controlled dialog test
+Use registration port	Electron playback is outside J1	bridge to real SQLite service test

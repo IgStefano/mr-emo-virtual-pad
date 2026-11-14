@@ -1,8 +1,3 @@
-import { z } from 'zod';
-
-export const appInfoSchema = z.strictObject({ version: z.string() });
-export type AppInfo = z.infer<typeof appInfoSchema>;
-export interface DesktopApi {
-  getAppInfo: () => Promise<AppInfo>;
-}
+export { appInfoSchema } from './desktop';
+export type { AppInfo, DesktopApi } from './desktop';
 export const appInfoChannel = 'app:info';

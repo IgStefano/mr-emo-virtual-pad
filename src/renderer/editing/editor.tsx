@@ -1,3 +1,4 @@
+import { editorActions } from './editor-actions';
 import { PadColor } from '../../contracts/catalog';
 import type { Pad } from '../../contracts/catalog';
 import { Button } from '../components/ui/button';
@@ -18,6 +19,7 @@ export function Editor({
   remove: (control: HTMLButtonElement) => void;
 }) {
   const color = pad.color;
+  const { rename, recolor } = editorActions(pad, label, save);
   return (
     <section className="pad-editor" aria-label={`Editar ${pad.label}`}>
       <label htmlFor={`label-${pad.id}`}>
@@ -36,9 +38,7 @@ export function Editor({
       {!label.trim() && <p role="alert">Informe um nome para salvar.</p>}
       <Button
         disabled={busy || !label.trim() || label === pad.label}
-        onClick={() => {
-          save({ ...pad, label: label.trim() }).catch(() => {});
-        }}
+        onClick={rename}
       >
         Salvar nome
       </Button>
@@ -51,11 +51,7 @@ export function Editor({
             aria-pressed={color === value}
             disabled={busy}
             onClick={() => {
-              save({
-                ...pad,
-                label: label.trim() || pad.label,
-                color: value,
-              }).catch(() => {});
+              recolor(value);
             }}
           />
         ))}

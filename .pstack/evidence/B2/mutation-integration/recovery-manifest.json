@@ -1,0 +1,28 @@
+{
+  "base": "f33af795cdbadda96230a873e8583e43161a3700",
+  "source": "/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-59b547da-430614d0df59bf3d",
+  "files": {
+    "src/renderer/editing/editor.tsx": {
+      "sha256": "fdebb8f1f701f8edfc17cb36015855e84ad54828b42afcc9f9644ec18ec0b900"
+    },
+    "package-lock.json": {
+      "sha256": "91570aa1a124c296c31203fea48d84714de487d60c167f9df5f3f0149cac11f8"
+    },
+    "src/renderer/editing/editor-actions.ts": {
+      "sha256": "da1fb173e9765e974b5a9f7e1fda0b3bc3411850893b7a1eee60516ce1a4c47f"
+    },
+    "package.json": {
+      "sha256": "6a9536f3dc4fad1eaf5debe71d616e6a453df066884e058e838375bc83bc878c"
+    },
+    "src/renderer/performance/use-pad.ts": {
+      "sha256": "514a7e08c54e0b2f0734c05e76910a156d1cbc260c863c9c347d6bf58d4be93c"
+    },
+    "src/renderer/performance/pad.tsx": {
+      "sha256": "061b4073b4d6a7969ad308fcfa7c8cdb3655be1cf1db5c96ffc662381a086819"
+    },
+    "tests/ui/editing.test.ts": {
+      "sha256": "782e77f3e73cde4f6c8c4c5eba2f28b4d11f01add585e363f7a527f0296a9718"
+    }
+  },
+  "restored": 7
+}

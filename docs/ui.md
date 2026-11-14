@@ -42,3 +42,15 @@ draft for retry. Color and order save immediately. Failed saves stay visible and
 refresh the current catalog, including deletions committed before cleanup failed;
 cleanup errors explain that reopening retries internal-file cleanup. The deletion
 dialog restores focus to its originating control, or the edit control if removed.
+
+Feature TSX now binds events and renders the view. `performance/use-pad.ts`
+owns draft lifetime, save sequencing, catalog reconciliation, playback bindings
+and deletion focus; `editing/editor-actions.ts` owns rename/color commands.
+Both are inside the existing TypeScript mutation scope. DOM Vitest tests mount
+React/Radix through the public view; their storage/failure and media ports are
+controlled, while native Electron probes remain the evidence for real playback.
+The proposed shared ESLint boundary and negative fixtures are in
+`.pstack/evidence/B2/mutation-integration/shared-governance.patch` for coordinator
+application. It preserves render expressions and excludes component primitives.
+Finite service error codes stay at adapter boundaries; musician-facing errors
+explain retry or reopen recovery in Portuguese.

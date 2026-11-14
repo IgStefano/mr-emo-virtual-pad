@@ -1,67 +1,41 @@
-import { useEffect, useRef, useState } from 'react';
+import { usePad } from './use-pad';
 import type { DesktopRuntime } from '../runtime/desktop';
-import type { Pad as CatalogPad, PadId } from '../../contracts/catalog';
 import { transport } from './transport';
 import { Button } from '../components/ui/button';
 import { Dialog } from '../components/ui/dialog';
 import { Progress } from '../components/ui/progress';
 import { ScrollArea } from '../components/ui/scroll-area';
 import { Editor } from '../editing/editor';
-import { movePad } from '../editing/order';
 export function Pad({ runtime }: { runtime: DesktopRuntime }) {
-  const [catalog, setCatalog] = useState(runtime.catalog);
-  const [snapshot, setSnapshot] = useState(runtime.playback.snapshot());
-  const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState<CatalogPad | null>(null);
-  const [dragged, setDragged] = useState<PadId | null>(null);
-  const [drafts, setDrafts] = useState<Partial<Record<PadId, string>>>({});
-  const deleteOrigin = useRef<HTMLElement | null>(null);
-  const editControl = useRef<HTMLButtonElement>(null);
-  const [error, setError] = useState('');
-  const [cleanupError, setCleanupError] = useState('');
-  useEffect(
-    () =>
-      runtime.playback.subscribe(() => {
-        setSnapshot(runtime.playback.snapshot());
-      }),
-    [runtime],
-  );
-  async function save(operation: () => Promise<typeof catalog>) {
-    setSaving(true);
-    setError('');
-    try {
-      for (const pad of runtime.catalog.pads) {
-        const label = drafts[pad.id];
-        if (label === undefined || label === pad.label) continue;
-        if (!label.trim())
-          throw new Error('Nome vazio. Informe um nome para salvar.');
-        await runtime.update({ ...pad, label: label.trim() });
-        setDrafts((current) => {
-          const next = { ...current };
-          next[pad.id] = undefined;
-          return next;
-        });
-      }
-      setCatalog(await operation());
-      return true;
-    } catch (failure) {
-      setCatalog(runtime.catalog);
-      const code =
-        failure instanceof Error ? failure.message : 'storage-failure';
-      if (code === 'cleanup-required')
-        setCleanupError(
-          'Catálogo atualizado. A limpeza da cópia interna falhou (cleanup-required). Feche e reabra o aplicativo para tentar a limpeza novamente.',
-        );
-      else
-        setError(
-          `Não foi possível salvar (${code}). Os nomes pendentes foram mantidos. Tente salvar novamente.`,
-        );
-      return false;
-    } finally {
-      setSaving(false);
-    }
-  }
+  const {
+    catalog,
+    orderedPads,
+    snapshot,
+    editing,
+    saving,
+    deleting,
+    drafts,
+    editControl,
+    error,
+    cleanupError,
+    toggleEditing,
+    importAudio,
+    play,
+    startDrag,
+    allowDrop,
+    drop,
+    moveUp,
+    moveDown,
+    changeLabel,
+    update,
+    requestDelete,
+    importIntoEmpty,
+    stop,
+    restoreFocus,
+    changeDialog,
+    cancelDelete,
+    confirmDelete,
+  } = usePad(runtime);
   const { active, status, remaining, progress } = transport(snapshot);
   return (
     <main>
@@ -72,25 +46,12 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
             ref={editControl}
             disabled={snapshot.busy || saving}
             aria-pressed={editing}
-            onClick={() => {
-              if (!editing) setEditing(true);
-              else
-                void save(() => Promise.resolve(runtime.catalog))
-                  .then((saved) => {
-                    if (saved) setEditing(false);
-                  })
-                  .catch(() => {});
-            }}
+            onClick={toggleEditing}
           >
             {editing ? 'Concluir edição' : 'Editar repertório'}
           </Button>
           {editing && (
-            <Button
-              disabled={saving || snapshot.busy}
-              onClick={() => {
-                save(() => runtime.edit()).catch(() => {});
-              }}
-            >
+            <Button disabled={saving || snapshot.busy} onClick={importAudio}>
               Importar áudio
             </Button>
           )}
@@ -106,9 +67,8 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
       {saving && <p role="status">Salvando…</p>}
       <ScrollArea>
         <ul className="pad-grid">
-          {catalog.repertoire.padIds.map((id, index) => {
-            const pad = catalog.pads.find((item) => item.id === id);
-            if (!pad) return null;
+          {orderedPads.map((pad, index) => {
+            const id = pad.id;
             return (
               <li key={id} className={`pad-item color-${pad.color}`}>
                 <Button
@@ -116,9 +76,7 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
                   aria-pressed={active === id}
                   disabled={snapshot.busy || saving || editing}
                   onClick={() => {
-                    runtime.playback.play(id, pad.assetId).catch(() => {
-                      setError('Falha na reprodução. Pressione STOP.');
-                    });
+                    play(pad, id);
                   }}
                 >
                   <span className="pad-number">{index + 1}</span>
@@ -133,22 +91,13 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
                       disabled={saving}
                       aria-label={`Mover ${pad.label}`}
                       onDragStart={() => {
-                        setDragged(id);
+                        startDrag(id);
                       }}
                       onDragOver={(event) => {
-                        event.preventDefault();
+                        allowDrop(event);
                       }}
                       onDrop={(event) => {
-                        event.preventDefault();
-                        if (dragged && dragged !== id) {
-                          const order = movePad(
-                            catalog.repertoire.padIds,
-                            dragged,
-                            id,
-                          );
-                          save(() => runtime.reorder(order)).catch(() => {});
-                        }
-                        setDragged(null);
+                        drop(id, event);
                       }}
                     >
                       Arrastar para reordenar
@@ -158,10 +107,7 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
                         disabled={saving || index === 0}
                         aria-label={`Mover ${pad.label} para cima`}
                         onClick={() => {
-                          const order = [...catalog.repertoire.padIds];
-                          order.splice(index, 1);
-                          order.splice(index - 1, 0, id);
-                          save(() => runtime.reorder(order)).catch(() => {});
+                          moveUp(id, index);
                         }}
                       >
                         Subir
@@ -173,10 +119,7 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
                         }
                         aria-label={`Mover ${pad.label} para baixo`}
                         onClick={() => {
-                          const order = [...catalog.repertoire.padIds];
-                          order.splice(index, 1);
-                          order.splice(index + 1, 0, id);
-                          save(() => runtime.reorder(order)).catch(() => {});
+                          moveDown(id, index);
                         }}
                       >
                         Descer
@@ -187,23 +130,11 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
                       busy={saving}
                       label={drafts[id] ?? pad.label}
                       changeLabel={(label) => {
-                        setDrafts((current) => ({ ...current, [id]: label }));
+                        changeLabel(id, label);
                       }}
-                      save={async (updated) => {
-                        await save(() => runtime.update(updated));
-                      }}
+                      save={(updated) => update(updated)}
                       remove={(control) => {
-                        deleteOrigin.current = control;
-                        void save(() => Promise.resolve(runtime.catalog))
-                          .then((saved) => {
-                            if (saved)
-                              setDeleting(
-                                runtime.catalog.pads.find(
-                                  (item) => item.id === id,
-                                ) ?? null,
-                              );
-                          })
-                          .catch(() => {});
+                        requestDelete(id, control);
                       }}
                     />
                   </>
@@ -217,10 +148,7 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
             <h2>Seu repertório está vazio</h2>
             <Button
               disabled={snapshot.busy || saving}
-              onClick={() => {
-                setEditing(true);
-                save(() => runtime.edit()).catch(() => {});
-              }}
+              onClick={importIntoEmpty}
             >
               Importar áudio
             </Button>
@@ -228,14 +156,7 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
         )}
       </ScrollArea>
       <footer className="transport">
-        <Button
-          className="stop"
-          onClick={() => {
-            runtime.playback.stop().catch(() => {
-              setError('Falha ao parar. Tente STOP novamente.');
-            });
-          }}
-        >
+        <Button className="stop" onClick={stop}>
           STOP
         </Button>
         <div className="playback-info">
@@ -252,15 +173,9 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
         </output>
       </footer>
       <Dialog
-        restoreFocus={() => {
-          const target = deleteOrigin.current;
-          if (target?.isConnected) target.focus();
-          else editControl.current?.focus();
-        }}
-        open={deleting !== null}
-        onOpenChange={(open) => {
-          if (!open && !saving) setDeleting(null);
-        }}
+        restoreFocus={restoreFocus}
+        open={deleting !== undefined}
+        onOpenChange={changeDialog}
         title={`Excluir ${deleting?.label || 'pad'}?`}
       >
         <p>O pad e sua cópia interna de áudio serão excluídos.</p>
@@ -270,31 +185,18 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
           </p>
         )}
         <div className="dialog-actions">
-          <Button
-            disabled={saving}
-            onClick={() => {
-              setDeleting(null);
-            }}
-          >
+          <Button disabled={saving} onClick={cancelDelete}>
             Cancelar
           </Button>
           <Button
             disabled={saving}
-            onClick={() => {
-              if (deleting)
-                save(() => runtime.edit(deleting.id))
-                  .catch(() => {})
-                  .then((saved) => {
-                    if (
-                      saved ||
-                      !runtime.catalog.pads.some(
-                        (pad) => pad.id === deleting.id,
-                      )
-                    )
-                      setDeleting(null);
-                  })
-                  .catch(() => {});
-            }}
+            onClick={
+              deleting
+                ? () => {
+                    confirmDelete(deleting);
+                  }
+                : undefined
+            }
           >
             Confirmar exclusão
           </Button>

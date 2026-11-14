@@ -197,7 +197,7 @@ try {
   assert.equal(await page.locator('.pad-item').count(), 30);
   await page
     .getByRole('alert')
-    .filter({ hasText: 'cleanup-required' })
+    .filter({ hasText: 'Feche e reabra' })
     .waitFor();
   await page
     .locator('.pad-editor')
@@ -205,7 +205,7 @@ try {
     .getByRole('button', { name: 'Cor blue' })
     .click();
   await page.locator('.pad-item.color-blue').first().waitFor();
-  assert.match(await page.getByRole('alert').innerText(), /cleanup-required/);
+  assert.match(await page.getByRole('alert').innerText(), /Feche e reabra/);
   observations.push({
     case: 'committed cleanup failure',
     remainingPads: 30,

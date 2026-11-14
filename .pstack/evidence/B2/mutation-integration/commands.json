@@ -1,0 +1,68 @@
+[
+  {
+    "command": "python3 /home/igstefano/.t3/projects/mr-emo-virtual-pad/reports/recovery/restore.py /home/igstefano/.t3/projects/mr-emo-virtual-pad/reports/recovery/B2-mutation-continuation.json",
+    "exit": 0,
+    "result": "7 files restored; exact clean base verified"
+  },
+  {
+    "command": "npm ci",
+    "exit": 0
+  },
+  {
+    "command": "VITEST_MAX_WORKERS=1 npm run verify:static",
+    "exit": 0,
+    "log": "static-pass.log.gz"
+  },
+  {
+    "command": "TMPDIR=$PWD/reports/b2-mutation/tmp npm run package",
+    "exit": 0,
+    "log": "package-candidate.log.gz"
+  },
+  {
+    "command": "LD_LIBRARY_PATH=/home/igstefano/.cache/mr-emo/electron-runtime/root/usr/lib/x86_64-linux-gnu node .pstack/evidence/B2/repair/recovery.mjs",
+    "exit": 0,
+    "log": "recovery-candidate.log.gz"
+  },
+  {
+    "command": "LD_LIBRARY_PATH=/home/igstefano/.cache/mr-emo/electron-runtime/root/usr/lib/x86_64-linux-gnu node .pstack/evidence/B2/repair/native-flows.mjs",
+    "exit": 0,
+    "log": "native-candidate.log.gz"
+  },
+  {
+    "command": "LD_LIBRARY_PATH=/home/igstefano/.cache/mr-emo/electron-runtime/root/usr/lib/x86_64-linux-gnu node .pstack/evidence/B2/repair/journey.mjs",
+    "exit": 0,
+    "log": "journey-candidate.log.gz"
+  },
+  {
+    "command": "PAD_CHROMIUM_EXECUTABLE=/home/igstefano/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell node .pstack/evidence/B2/repair/drafts-focus.mjs",
+    "exit": 0,
+    "log": "focus-candidate.log.gz"
+  },
+  {
+    "command": "node .pstack/evidence/B2/mutation-integration/check-boundary.mjs",
+    "exit": 0,
+    "result": "eleven negative fixtures rejected; render expression fixture and current views accepted"
+  },
+  {
+    "command": "git apply --check .pstack/evidence/B2/mutation-integration/shared-governance.patch",
+    "exit": 0
+  },
+  {
+    "command": "VITEST_MAX_WORKERS=1 npm run verify",
+    "exit": 0,
+    "log": "verify-final.log.gz",
+    "tests": 208,
+    "mutants": {
+      "Killed": 1203,
+      "Timeout": 1
+    },
+    "newModules": {
+      "use-pad.ts": {
+        "Killed": 122
+      },
+      "editor-actions.ts": {
+        "Killed": 11
+      }
+    }
+  }
+]

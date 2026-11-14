@@ -1,0 +1,74 @@
+[
+  {
+    "run": "first",
+    "exit": 1,
+    "mutants": {
+      "NoCoverage": 49,
+      "Killed": 77,
+      "Survived": 20
+    }
+  },
+  {
+    "run": "second",
+    "exit": 1,
+    "mutants": {
+      "NoCoverage": 12,
+      "Killed": 117,
+      "Survived": 21,
+      "RuntimeError": 2
+    }
+  },
+  {
+    "run": "third",
+    "result": "interrupted after source/test supersession; no final inventory or pass claimed",
+    "exit": 143
+  },
+  {
+    "run": "fourth",
+    "result": "interrupted after source/test supersession; no final inventory or pass claimed",
+    "exit": 143
+  },
+  {
+    "run": "fifth",
+    "result": "interrupted after source/test supersession; no final inventory or pass claimed",
+    "exit": 143
+  },
+  {
+    "run": "sixth",
+    "exit": 1,
+    "mutants": {
+      "Killed": 134,
+      "Survived": 4
+    },
+    "resolution": "Removed duplicate blank-name guard; assert drag-source reset through no additional reorder commit."
+  },
+  {
+    "run": "full-first",
+    "command": "VITEST_MAX_WORKERS=1 npm run verify",
+    "exit": 1,
+    "mutants": {
+      "Killed": 1201,
+      "Timeout": 1,
+      "Survived": 2
+    },
+    "resolution": "Wait for no-source drop completion and assert no alert; prior order-only assertion missed a rejected asynchronous write."
+  },
+  {
+    "run": "drop-line",
+    "command": "VITEST_MAX_WORKERS=1 npx stryker run --mutate 'src/renderer/performance/use-pad.ts:83-83'",
+    "exit": 0,
+    "mutants": {
+      "Killed": 5
+    },
+    "scope": "Targeted five mutants only; full acceptance requires the default-scope rerun."
+  },
+  {
+    "run": "full-final",
+    "exit": 0,
+    "mutants": {
+      "Killed": 1203,
+      "Timeout": 1
+    },
+    "scope": "Unchanged complete default scope; no survivors, uncovered, ignored or invalid mutants."
+  }
+]

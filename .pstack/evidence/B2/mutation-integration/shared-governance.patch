@@ -1,0 +1,157 @@
+--- a/eslint.config.mjs
++++ b/eslint.config.mjs
+@@ -1,4 +1,5 @@
+ import js from '@eslint/js';
++import featureViews from './scripts/eslint-feature-views.mjs';
+ import tseslint from 'typescript-eslint';
+ import hooks from 'eslint-plugin-react-hooks';
+ import a11y from 'eslint-plugin-jsx-a11y';
+@@ -249,6 +250,11 @@
+     ignores: ['src/renderer/playback/dom-audio.ts'],
+     rules: { 'policy/audio-owner': 'error' },
+   },
++  {
++    files: ['src/renderer/{performance,editing}/**/*.tsx'],
++    plugins: { feature: { rules: { views: featureViews } } },
++    rules: { 'feature/views': 'error' },
++  },
+   { files: ['src/main/main.ts'], rules: { 'no-console': 'off' } },
+   {
+     files: ['tests/**/*.ts'],
+--- /dev/null
++++ b/scripts/eslint-feature-views.mjs
+@@ -0,0 +1,78 @@
++export default {
++  meta: {
++    type: 'problem',
++    schema: [],
++    messages: {
++      boundary:
++        'UI002: move behavioral control flow, asynchronous work and state into mutation-covered renderer .ts modules; keep TSX to rendering and event binding.',
++    },
++  },
++  create(context) {
++    const report = (node) => context.report({ node, messageId: 'boundary' });
++    return {
++      ImportDeclaration(node) {
++        if (
++          node.source.value === 'react' &&
++          node.importKind !== 'type' &&
++          node.specifiers.some((specifier) => specifier.importKind !== 'type')
++        )
++          report(node);
++      },
++      'ConditionalExpression, LogicalExpression'(node) {
++        const ancestors = context.sourceCode.getAncestors(node);
++        const attribute = ancestors.findLastIndex(
++          (ancestor) =>
++            ancestor.type === 'JSXAttribute' &&
++            ancestor.name.type === 'JSXIdentifier' &&
++            /^on[A-Z]/u.test(ancestor.name.name),
++        );
++        const callback = ancestors
++          .slice(attribute + 1)
++          .some((ancestor) =>
++            ['ArrowFunctionExpression', 'FunctionExpression'].includes(
++              ancestor.type,
++            ),
++          );
++        if (attribute >= 0 && callback) report(node);
++      },
++      ':function'(node) {
++        if (node.async || node.generator) report(node);
++      },
++      'AwaitExpression, IfStatement, SwitchStatement, TryStatement, ThrowStatement, ForStatement, ForOfStatement, ForInStatement, WhileStatement, DoWhileStatement, AssignmentExpression, UpdateExpression':
++        report,
++      NewExpression(node) {
++        if (node.callee.type === 'Identifier' && node.callee.name === 'Promise')
++          report(node);
++      },
++      YieldExpression: report,
++      CallExpression(node) {
++        const callee = node.callee;
++        if (
++          callee.type === 'Identifier' &&
++          [
++            'useState',
++            'useReducer',
++            'useEffect',
++            'useLayoutEffect',
++            'setTimeout',
++            'setInterval',
++            'queueMicrotask',
++            'requestAnimationFrame',
++          ].includes(callee.name)
++        )
++          report(node);
++        if (
++          callee.type === 'MemberExpression' &&
++          ['then', 'catch', 'finally'].includes(
++            callee.property.type === 'Identifier'
++              ? callee.property.name
++              : callee.property.type === 'Literal'
++                ? callee.property.value
++                : '',
++          )
++        )
++          report(node);
++      },
++    };
++  },
++};
+--- /dev/null
++++ b/tests/guardrails/feature-views.test.mjs
+@@ -0,0 +1,53 @@
++import { ESLint } from 'eslint';
++import tseslint from 'typescript-eslint';
++import assert from 'node:assert/strict';
++import rule from '../../scripts/eslint-feature-views.mjs';
++const eslint = new ESLint({
++  overrideConfigFile: true,
++  overrideConfig: [
++    {
++      files: ['**/*.tsx'],
++      languageOptions: {
++        parser: tseslint.parser,
++        parserOptions: { ecmaFeatures: { jsx: true } },
++      },
++      plugins: { boundary: { rules: { views: rule } } },
++      rules: { 'boundary/views': 'error' },
++    },
++  ],
++});
++const filePath = 'src/renderer/performance/negative.tsx';
++for (const source of [
++  'export const View = () => { new Promise(resolve => resolve()); return <div/>; };',
++  'export const View = () => { setTimeout(save); return <div/>; };',
++  "export const View = () => { save()['then'](done); return <div/>; };",
++  "import { useState as state } from 'react'; export const View = () => <div/>;",
++  'export const View = () => <Button onClick={() => ok && save()}/>;',
++  'export const View = () => <Button onClick={() => ok ? save() : cancel()}/>;',
++  'export async function View() { await save(); return <div/>; }',
++  'export function View() { if (saving) save(); return <div/>; }',
++  'export function View() { save().then(done); return <div/>; }',
++  'export function View() { const [x, setX] = useState(0); return <div/>; }',
++  'export function View() { return <Button onClick={() => { count++; }}/ >; }',
++]) {
++  const [result] = await eslint.lintText(source, { filePath });
++  assert(
++    result.messages.some((message) => message.ruleId === 'boundary/views'),
++  );
++}
++const [renderExpressions] = await eslint.lintText(
++  'export const View = () => items.map(item => <Button disabled={busy || !item} onClick={item ? () => save(item) : undefined}>{item && <span/>}</Button>);',
++  { filePath },
++);
++assert.equal(renderExpressions.errorCount, 0);
++const results = await eslint.lintFiles([
++  'src/renderer/{performance,editing}/**/*.tsx',
++]);
++assert.equal(
++  results.reduce((count, result) => count + result.errorCount, 0),
++  0,
++  JSON.stringify(results),
++);
++console.log(
++  'Boundary: eleven negative fixtures rejected; current feature views accepted.',
++);

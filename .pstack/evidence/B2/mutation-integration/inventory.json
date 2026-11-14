@@ -1,0 +1,111 @@
+{
+  "base": "f33af795cdbadda96230a873e8583e43161a3700",
+  "sourceGitBlobs": {
+    "package-lock.json": "06617ebc69ea3c2fcc180f8e0f8072f06c250845",
+    "package.json": "a861f092a8e85e75168454f87f7e22f098effb01",
+    "src/renderer/components/ui/button.tsx": "961fbf74b87ceeb2eb0c83385a3a4c89d8c10392",
+    "src/renderer/components/ui/dialog.tsx": "abb8d9c4d5c40f8f47105eb64a06dd17272e9da7",
+    "src/renderer/components/ui/input.tsx": "b6bbf0e34cd839b87e2b1092b08bb77b0dae8028",
+    "src/renderer/components/ui/progress.tsx": "903c8efdfb94e95eadae958d86263fde3669b00c",
+    "src/renderer/components/ui/scroll-area.tsx": "beedbccd72bd414bf809999bf07a0d7275abf29c",
+    "src/renderer/desktop.d.ts": "ba1366b3f63363ab63999c535b9954f65991276b",
+    "src/renderer/editing/editor-actions.ts": "6498f7696e453c1d3e03ccf14df47294d115fdf0",
+    "src/renderer/editing/editor.tsx": "387bbe82f68c03b18096686039fc6d8ac77f9597",
+    "src/renderer/editing/order.ts": "bd9ea197ee09e6ff21aead52c0f068064ed55789",
+    "src/renderer/lib/utils.ts": "04ec7b9bf20e198f8f1fb360de9f2440772231a6",
+    "src/renderer/main.tsx": "14e357dcb77d78eae9f6400f21ed2ef574f6654c",
+    "src/renderer/performance/pad.tsx": "d303c1880ed9b464006643951cfa90f264ab5dc3",
+    "src/renderer/performance/transport.ts": "10dbd245d99dd0d3c1012e4ca1c73b8cc7543c80",
+    "src/renderer/performance/use-pad.ts": "973c1a659293a7b1ebf67ea8a104193b07550ef4",
+    "src/renderer/playback/controller.ts": "50f0f710a23f3cae2a8c40bcc2e3c011acab7b70",
+    "src/renderer/playback/dom-audio.ts": "bc6355f121ab70399d2d1db0702bbb600bb15dbc",
+    "src/renderer/runtime/desktop.ts": "40657aa7230dd3404f54713541ef7fc4f3409825",
+    "tests/ui/editing.test.ts": "499deef128566c17ad4497e6c0e4fef30e59e4d1"
+  },
+  "reportSha256": "ec3ad45c4a891c091724bc66f8728ecaa30cc643fe5b7dc46a8faec71be34a39",
+  "files": {
+    "src/domain/lease.ts": {
+      "Killed": 24
+    },
+    "src/domain/playback.ts": {
+      "Killed": 41
+    },
+    "src/main/ipc/authority.ts": {
+      "Killed": 47
+    },
+    "src/main/ipc/catalog-session.ts": {
+      "Killed": 110
+    },
+    "src/main/ipc/desktop.ts": {
+      "Killed": 31
+    },
+    "src/main/ipc/renderer-lifetime.ts": {
+      "Killed": 46
+    },
+    "src/main/library/managed-catalog.ts": {
+      "Killed": 118
+    },
+    "src/main/lifecycle/shutdown.ts": {
+      "Killed": 27
+    },
+    "src/main/lifecycle/window.ts": {
+      "Killed": 7
+    },
+    "src/main/storage/application-protocol.ts": {
+      "Killed": 76
+    },
+    "src/main/storage/audio-metadata.ts": {
+      "Killed": 8
+    },
+    "src/main/storage/catalog-store.ts": {
+      "Killed": 69
+    },
+    "src/main/storage/managed-files.ts": {
+      "Killed": 42
+    },
+    "src/main/storage/media-protocol.ts": {
+      "Killed": 172,
+      "Timeout": 1
+    },
+    "src/preload/desktop-bridge.ts": {
+      "Killed": 5
+    },
+    "src/renderer/editing/editor-actions.ts": {
+      "Killed": 11
+    },
+    "src/renderer/editing/order.ts": {
+      "Killed": 7
+    },
+    "src/renderer/performance/transport.ts": {
+      "Killed": 19
+    },
+    "src/renderer/lib/utils.ts": {
+      "Killed": 1
+    },
+    "src/renderer/performance/use-pad.ts": {
+      "Killed": 122
+    },
+    "src/renderer/playback/controller.ts": {
+      "Killed": 86
+    },
+    "src/renderer/playback/dom-audio.ts": {
+      "Killed": 57
+    },
+    "src/renderer/runtime/desktop.ts": {
+      "Killed": 51
+    },
+    "src/contracts/catalog.ts": {
+      "Killed": 7
+    },
+    "src/contracts/desktop.ts": {
+      "Killed": 10
+    },
+    "src/contracts/operations.ts": {
+      "Killed": 9
+    }
+  },
+  "totals": {
+    "Killed": 1203,
+    "Timeout": 1
+  }
+}

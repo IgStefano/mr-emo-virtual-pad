@@ -102,10 +102,43 @@
       ]
     },
     {
-      "id": "I1",
-      "title": "Integrate catalog, audio, leases, protocols and IPC",
+      "id": "M1",
+      "title": "Implement restricted local UI and media protocol adapters",
       "status": "active",
       "dependsOn": ["A1", "B1", "C1"],
+      "ownedPaths": [
+        "src/main/storage/media-protocol.ts",
+        "src/main/storage/application-protocol.ts",
+        "tests/media",
+        ".pstack/evidence/M1"
+      ],
+      "brief": ".pstack/briefs/M1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "J1",
+      "title": "Implement finite desktop bridge and catalog session service",
+      "status": "active",
+      "dependsOn": ["A1", "B1", "C1"],
+      "ownedPaths": [
+        "src/main/ipc",
+        "src/contracts",
+        "src/preload",
+        "src/renderer/desktop.d.ts",
+        "tests/ipc",
+        "tests/contracts/desktop.test.ts",
+        ".pstack/evidence/J1"
+      ],
+      "brief": ".pstack/briefs/J1.md",
+      "acceptedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "I1",
+      "title": "Integrate catalog, audio, leases, protocols and IPC",
+      "status": "planned",
+      "dependsOn": ["A1", "B1", "C1", "M1", "J1"],
       "ownedPaths": [
         "src/main",
         "src/preload",

@@ -1,5 +1,11 @@
 # V1 delivery and parallel work plan
 
+The remaining I1 work is partitioned into M1 (local protocols) and J1 (finite
+bridge/catalog service). Their interfaces and ownership are in integration-seams.md.
+I1 now follows both modules and owns composition and the real application journey.
+Two previous broad delegations returned foundations without an external blocker;
+the smaller partitions make acceptance specific to each complete module.
+
 Status: contracts, storage, playback and shell harness are integrated and verified
 within their module scopes. Runtime integration and the editing UI remain.
 The dispatch state and acceptance evidence are recorded in .pstack/work.json.

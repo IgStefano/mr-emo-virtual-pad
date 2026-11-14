@@ -22,13 +22,21 @@ export class CatalogSessionService {
   private lease: Lease | null = null;
   private closing = false;
   private readonly pending = new Set<Promise<unknown>>();
+  private exclusive = false;
   constructor(private readonly dependencies: Dependencies) {}
   private check(sessionId: SessionId): void {
     if (this.session !== sessionId || this.closing)
       throw new CatalogFault(ErrorCode.Unauthorized);
   }
-  private track<T>(action: () => Promise<T>): Promise<T> {
-    if (this.pending.size) throw new CatalogFault(ErrorCode.Busy);
+  private track<T>(action: () => Promise<T>, allowReads = false): Promise<T> {
+    if (this.exclusive || (!allowReads && this.pending.size))
+      throw new CatalogFault(ErrorCode.Busy);
+    this.exclusive = true;
+    return this.read(action).finally(() => {
+      this.exclusive = false;
+    });
+  }
+  private read<T>(action: () => Promise<T>): Promise<T> {
     const work = Promise.resolve().then(action);
     this.pending.add(work);
     return work.finally(() => {
@@ -46,7 +54,12 @@ export class CatalogSessionService {
   };
   getCatalog = async (request: Request<'getCatalog'>) => {
     this.check(request.sessionId);
-    return this.track(() => this.dependencies.catalog.getCatalog());
+    if (this.exclusive) throw new CatalogFault(ErrorCode.Busy);
+    return this.read(async () => {
+      const catalog = await this.dependencies.catalog.getCatalog();
+      this.check(request.sessionId);
+      return catalog;
+    });
   };
   acquire = async (request: Request<'acquire'>) => {
     this.check(request.sessionId);
@@ -67,7 +80,7 @@ export class CatalogSessionService {
         await this.dependencies.onPlaybackReleased(lease.leaseId);
       this.dependencies.authority.release(lease);
       this.lease = null;
-    });
+    }, true);
     return null;
   };
   disposeSession = async ({ sessionId }: Request<'disposeSession'>) => {
@@ -106,10 +119,15 @@ export class CatalogSessionService {
       lease.leaseId !== leaseId
     )
       throw new CatalogFault(ErrorCode.Unauthorized);
-    const catalog = await this.getCatalog({ sessionId: lease.sessionId });
     this.check(lease.sessionId);
-    if (!catalog.assets.some((asset) => asset.id === assetId))
-      throw new CatalogFault(ErrorCode.NotFound);
+    if (this.exclusive) throw new CatalogFault(ErrorCode.Busy);
+    await this.read(async () => {
+      const catalog = await this.dependencies.catalog.getCatalog();
+      this.check(lease.sessionId);
+      if (!catalog.assets.some((asset) => asset.id === assetId))
+        throw new CatalogFault(ErrorCode.NotFound);
+      this.dependencies.authority.assert(lease);
+    });
   }
   async closeAfterRendererTermination(sessionId: SessionId): Promise<void> {
     if (sessionId !== this.session)

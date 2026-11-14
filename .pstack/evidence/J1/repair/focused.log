@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-3aa6cb05-a1956839b4f8c9d1
+
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  02:10:59
+   Duration  2.32s (transform 344ms, setup 0ms, import 895ms, tests 1.58s, environment 1ms)
+

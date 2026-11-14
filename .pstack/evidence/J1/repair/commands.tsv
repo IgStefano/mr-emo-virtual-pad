@@ -1,0 +1,10 @@
+command	exit	result
+npm ci	0	619 packages installed
+npx vitest run tests/ipc tests/contracts/desktop.test.ts	0	15 tests passed
+node .pstack/evidence/J1/repair/probe.cjs	0	corrected outcomes asserted against process.cwd()
+npm run verify (attempt 1)	1	lint found unused copied probe bindings and test style errors; corrected
+npm run verify (attempt 2)	2	controlled callback inferred never; explicit void annotation added
+npm run verify (attempt 3)	1	160 tests passed; mutation 904 Killed, 1 Timeout, 6 Survived, 2 NoCoverage; added public-method oracles
+npx vitest run tests/ipc tests/contracts/desktop.test.ts (expanded)	0	16 tests passed
+npm run verify (attempt 4)	0	161 tests; full static and mutation gates passed
+node .pstack/evidence/J1/repair/probe.cjs (corrected final)	0	both authorizations and STOP succeed; expired lease rejects

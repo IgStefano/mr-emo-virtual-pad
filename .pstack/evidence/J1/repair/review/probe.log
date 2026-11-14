@@ -1,0 +1,5 @@
+REAL_SQLITE_CONCURRENT_AUTH [{"ok":true},{"ok":false,"error":"busy"}]
+REAL_SQLITE_READ_RELEASE {"read":{"ok":true,"value":{"schemaVersion":1,"revision":1,"assets":[{"id":"8b11d195-21c5-48cb-8732-a673bf0fef9a","name":"input.wav","durationSeconds":1}],"pads":[{"id":"25bd6575-a511-41e6-a9d4-a092d3431bd6","assetId":"8b11d195-21c5-48cb-8732-a673bf0fef9a","label":"input.wav","color":"slate"}],"repertoire":{"id":"f7a2cd58-e1aa-4711-84e8-b8395282cfef","name":"Repertoire","padIds":["25bd6575-a511-41e6-a9d4-a092d3431bd6"]}}},"release":{"ok":false,"error":{"code":"busy"}},"cleanups":0}
+ASYNC_LEASE_RECHECK {"released":{"r":{"ok":true,"value":null},"authDone":true,"cleanup":1},"authorization":{"ok":true},"cleanup":1,"heldAtMembership":false}
+PENDING_OPEN_CLOSE_WITH_PREVIOUS_ID {"ok":false,"error":"unauthorized"}
+LOST_OPEN_RESPONSE_REPLACEMENT {"ok":false,"error":"busy"}

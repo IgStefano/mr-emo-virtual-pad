@@ -136,6 +136,13 @@ it('runs a real copied catalog through the finite registered bridge and retains 
     await expect(
       service.authorizeMedia(asset.id, playing.value.leaseId),
     ).resolves.toBeUndefined();
+    await expect(
+      Promise.all([
+        service.authorizeMedia(asset.id, playing.value.leaseId),
+        service.authorizeMedia(asset.id, playing.value.leaseId),
+      ]),
+    ).resolves.toEqual([undefined, undefined]);
+    const refresh = api.getCatalog({ sessionId });
     expect(await api.release(playing.value)).toMatchObject({
       error: { code: 'storage-failure' },
     });
@@ -154,11 +161,14 @@ it('runs a real copied catalog through the finite registered bridge and retains 
         playing.value.leaseId,
       ),
     ).rejects.toThrow('not-found');
+    await refresh;
     cleanupFails = false;
+    const finalRefresh = api.getCatalog({ sessionId });
     expect(await api.release(playing.value)).toEqual({ ok: true, value: null });
     await expect(
       service.authorizeMedia(asset.id, playing.value.leaseId),
     ).rejects.toThrow('unauthorized');
+    await finalRefresh;
     const read = handlers.get('catalog:read');
     if (!read) throw new Error('missing handler');
     expect(
@@ -248,6 +258,7 @@ it('reserves before dialog and drains terminated pending import before replaceme
     });
     await Promise.resolve();
     expect(dialogOpened).toBe(true);
+    await expect(service.getCatalog({ sessionId })).rejects.toThrow('busy');
     await expect(service.release(lease)).rejects.toThrow('busy');
     await expect(service.disposeSession({ sessionId })).rejects.toThrow('busy');
     const closing = service.closeAfterRendererTermination(sessionId);
@@ -469,6 +480,14 @@ it('rejects privileged catalog calls before invoking ports and gates acquisition
       service.release({ ...forged, kind: LeaseKind.Playback }),
     ).rejects.toThrow('unauthorized');
     expect(cleanupCalls).toBe(0);
+    delayRead = true;
+    const editRead = service.getCatalog({ sessionId });
+    await Promise.resolve();
+    expect(() =>
+      service.importAudio({ lease: edit, expectedRevision: 0 }),
+    ).toThrow('busy');
+    finishRead();
+    await editRead;
     await service.release(edit);
     delayRead = true;
     const read = service.getCatalog({ sessionId });
@@ -518,6 +537,187 @@ it('rejects privileged catalog calls before invoking ports and gates acquisition
     await termination;
     expect(cleanupCalls).toBe(1);
     expect(editCalls).toBe(0);
+  } finally {
+    catalog.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+it('rejects read completion under released and replaced playback leases and drains reads on termination', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'j1-stale-'));
+  const authority = new SessionAuthority();
+  const catalog = new ManagedCatalog(root, {
+    assertEditLease: (lease) => {
+      authority.assert(lease);
+    },
+    selectFiles: () => Promise.resolve([]),
+    validateAudio: () => Promise.resolve({ durationSeconds: 1 }),
+  });
+  const assetId = assetIdSchema.parse('00000000-0000-4000-8000-000000000001');
+  let finish: () => void = () => {
+    throw new Error('read not started');
+  };
+  let membershipHeld = true;
+  let reads = 0;
+  let cleanupCalls = 0;
+  const service = new CatalogSessionService({
+    authority,
+    catalog: {
+      recover: (lease) => {
+        catalog.recover(lease);
+      },
+      getCatalog: async () => {
+        reads++;
+        const snapshot = await catalog.getCatalog();
+        await new Promise<void>((resolve) => {
+          finish = resolve;
+        });
+        return {
+          ...snapshot,
+          get assets() {
+            try {
+              authority.assert(playing);
+            } catch {
+              membershipHeld = false;
+            }
+            return [{ id: assetId, name: 'track', durationSeconds: 1 }];
+          },
+        };
+      },
+      importAudio: catalog.importAudio,
+      updatePad: catalog.updatePad,
+      reorderPads: catalog.reorderPads,
+      deletePad: catalog.deletePad,
+    },
+    onPlaybackReleased: () => {
+      cleanupCalls++;
+      return Promise.resolve();
+    },
+  });
+  const sessionId = await service.openSession();
+  const playing = await service.acquire({
+    sessionId,
+    kind: LeaseKind.Playback,
+    attemptId: attemptIdSchema.parse(1),
+  });
+  try {
+    const authorization = service.authorizeMedia(assetId, playing.leaseId);
+    const rejected = authorization.catch((error: unknown) => error);
+    await Promise.resolve();
+    await Promise.resolve();
+    await service.release(playing);
+    expect(() => {
+      authority.assert(playing);
+    }).toThrow('unauthorized');
+    finish();
+    expect(await rejected).toMatchObject({ message: 'unauthorized' });
+    expect(membershipHeld).toBe(false);
+    const replacement = await service.acquire({
+      sessionId,
+      kind: LeaseKind.Playback,
+      attemptId: attemptIdSchema.parse(2),
+    });
+    await expect(
+      service.authorizeMedia(assetId, playing.leaseId),
+    ).rejects.toThrow('unauthorized');
+    const pending = service.authorizeMedia(assetId, replacement.leaseId);
+    const stale = pending.catch((error: unknown) => error);
+    await Promise.resolve();
+    await Promise.resolve();
+    const closing = service.closeAfterRendererTermination(sessionId);
+    const readsBefore = reads;
+    await expect(
+      service.authorizeMedia(assetId, replacement.leaseId),
+    ).rejects.toThrow('unauthorized');
+    expect(reads).toBe(readsBefore);
+    await expect(service.openSession()).rejects.toThrow('busy');
+    expect(cleanupCalls).toBe(1);
+    finish();
+    expect(await stale).toMatchObject({ message: 'unauthorized' });
+    await closing;
+    expect(cleanupCalls).toBe(2);
+    const next = await service.openSession();
+    await expect(service.getCatalog({ sessionId })).rejects.toThrow(
+      'unauthorized',
+    );
+    await service.disposeSession({ sessionId: next });
+  } finally {
+    catalog.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+it('keeps cleanup exclusive while draining ordinary reads after termination', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'j1-exclusive-'));
+  const authority = new SessionAuthority();
+  const catalog = new ManagedCatalog(root, {
+    assertEditLease: (lease) => {
+      authority.assert(lease);
+    },
+    selectFiles: () => Promise.resolve([]),
+    validateAudio: () => Promise.resolve({ durationSeconds: 1 }),
+  });
+  let finishCleanup: () => void = () => {
+    throw new Error('not cleaning');
+  };
+  let finishRead: () => void = () => {
+    throw new Error('not reading');
+  };
+  let delayed = false;
+  const service = new CatalogSessionService({
+    authority,
+    catalog: {
+      recover: (lease) => {
+        catalog.recover(lease);
+      },
+      getCatalog: async () => {
+        if (delayed)
+          await new Promise<void>((resolve) => {
+            finishRead = resolve;
+          });
+        return catalog.getCatalog();
+      },
+      importAudio: catalog.importAudio,
+      updatePad: catalog.updatePad,
+      reorderPads: catalog.reorderPads,
+      deletePad: catalog.deletePad,
+    },
+    onPlaybackReleased: () =>
+      new Promise<void>((resolve) => {
+        finishCleanup = resolve;
+      }),
+  });
+  try {
+    const sessionId = await service.openSession();
+    const lease = await service.acquire({
+      sessionId,
+      kind: LeaseKind.Playback,
+      attemptId: attemptIdSchema.parse(1),
+    });
+    const release = service.release(lease);
+    await Promise.resolve();
+    await expect(service.release(lease)).rejects.toThrow('busy');
+    await expect(service.getCatalog({ sessionId })).rejects.toThrow('busy');
+    await expect(
+      service.authorizeMedia(
+        assetIdSchema.parse('00000000-0000-4000-8000-000000000001'),
+        lease.leaseId,
+      ),
+    ).rejects.toThrow('busy');
+    finishCleanup();
+    await release;
+    delayed = true;
+    const read = service
+      .getCatalog({ sessionId })
+      .catch((error: unknown) => error);
+    await Promise.resolve();
+    const close = service.closeAfterRendererTermination(sessionId);
+    await expect(service.openSession()).rejects.toThrow('busy');
+    finishRead();
+    expect(await read).toMatchObject({ message: 'unauthorized' });
+    await close;
+    const next = await service.openSession();
+    await service.disposeSession({ sessionId: next });
   } finally {
     catalog.close();
     await rm(root, { recursive: true, force: true });

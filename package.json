@@ -37,6 +37,7 @@
     "verification:drive": "node scripts/verification/run.mjs drive"
   },
   "dependencies": {
+    "music-metadata": "12.5.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "zod": "4.6.7"

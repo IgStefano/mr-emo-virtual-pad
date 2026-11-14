@@ -226,3 +226,8 @@ restricted UI/media protocols, dialog reservation, staged metadata inspection,
 privileged-boundary negative guardrails and the import/persist/play/STOP/delete
 journey remain pending. No playback, packaged-media or physical-performance
 acceptance follows from this checkpoint.
+
+The I1 continuation adds the staged-file metadata adapter and media/integration
+TypeScript discovery. Bootstrap, protocol and renderer integration are still
+pending. The current real Electron harness continues to exercise only the empty
+shell. No import/persist/play/STOP/delete acceptance has been established.

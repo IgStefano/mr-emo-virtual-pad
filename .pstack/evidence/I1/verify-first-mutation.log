@@ -1,0 +1,322 @@
+
+> mr-emo-virtual-pad@0.1.0 verify
+> npm run verify:static && npm test && npm run test:mutation
+
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (29 modules, 53 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (677.255862ms)
+✔ graph rejects alias layer crossing (666.779242ms)
+✔ graph rejects type-only crossing (677.796263ms)
+✔ graph rejects node builtin (688.377369ms)
+✔ graph rejects bare builtin (682.954765ms)
+✔ graph accepts the actual source (658.94577ms)
+✔ new source folders cannot escape the layer matrix (44.640691ms)
+✔ lint rejects string enum union (3011.432574ms)
+✔ lint rejects native enum (26.094803ms)
+✔ lint rejects inline discriminator (16.911767ms)
+✔ lint rejects unknown in domain (27.202307ms)
+✔ lint rejects dynamic import (59.598035ms)
+✔ lint rejects double assertion (35.858742ms)
+✔ lint rejects ambient clock (21.734186ms)
+✔ lint rejects randomness (15.647562ms)
+✔ validated ingress may use unknown (65.377658ms)
+✔ const-object enum and derived type are accepted (17.564069ms)
+✔ UI primitive button belongs to the approved component source (294.364764ms)
+✔ UI primitive input belongs to the approved component source (83.937132ms)
+✔ UI primitive select belongs to the approved component source (58.681332ms)
+✔ UI primitive textarea belongs to the approved component source (56.857425ms)
+✔ UI primitive dialog belongs to the approved component source (66.473463ms)
+✔ named UI components remain composable in feature views (66.247262ms)
+✔ component source can implement raw primitives without disabling other lint rules (5.697723ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8434.437125
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "impeccable": {
+    "version": "4.9.0",
+    "commit": "c4cd1924c389f68d37c687d9c2bbf13f12547c41",
+    "skills": 1
+  },
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (10.661202ms)
+✔ contract acceptance enables three disjoint implementation lanes (1.5499ms)
+✔ blocked prerequisites cannot be dispatched (1.680501ms)
+✔ cycle is rejected even when no task is active (1.3694ms)
+✔ unknown prerequisites and duplicate IDs are rejected (1.781801ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (1.3448ms)
+✔ active work requires accepted prerequisites (0.955ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (3.228601ms)
+✔ a parent directory and child file cannot have concurrent writers (1.0851ms)
+✔ active tasks reserve capacity and paths (0.908ms)
+✔ two conflicting active reservations fail validation (1.401601ms)
+✔ planned tasks cannot produce reserved launch requests (1.1649ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (0.7564ms)
+✔ owned paths cannot escape repository (2.454901ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (0.6999ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 240.434352
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (97.411821ms)
+✔ push gate rejects staging that would package a different tree from HEAD (92.08092ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (95.048721ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (109.150024ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 478.397605
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (25.577305ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.327923
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/fixtures.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (24.697706ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.602122
+
+> mr-emo-virtual-pad@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-ee541ddc-8e76a5ebaaa13e60
+
+(node:127175) ExperimentalWarning: v8.queryObjects() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  9 passed (9)
+      Tests  73 passed (73)
+   Start at  21:54:40
+   Duration  1.40s (transform 982ms, setup 0ms, import 2.49s, tests 1.22s, environment 2ms)
+
+
+> mr-emo-virtual-pad@0.1.0 test:mutation
+> stryker run && node scripts/check-mutation.mjs
+
+[32m21:54:43 (127206) INFO ProjectReader[39m Found 11 of 932 file(s) to be mutated.
+[32m21:54:43 (127206) INFO Instrumenter[39m Instrumented 11 source file(s) with 516 mutant(s)
+[32m21:54:45 (127206) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m21:54:47 (127206) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m21:54:50 (127206) INFO DryRunExecutor[39m Initial test run succeeded. Ran 73 tests in 3 seconds (net 1091.7495050000018 ms, overhead 2503.2504949999984 ms).
+
+All tests
+  contracts
+    catalog.test.ts
+      ✘ catalog wire contracts accepts a versioned catalog without a thirty pad limit [line 33] (covered 0)
+      ✘ catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions [line 61] (covered 0)
+      ✘ catalog wire contracts validates every catalog record and rejects unknown fields [line 81] (covered 0)
+      ✓ operation ingress validates session-bound leases and finite errors [line 111] (killed 1)
+      ✓ operation ingress requires an edit lease and expected revision for catalog writes [line 143] (killed 5)
+      ✓ operation ingress correlates playback requests without accepting paths [line 176] (killed 1)
+    lease.test.ts
+      ✓ keeps authorization exclusive until the matching cleanup acknowledgement [line 9] (killed 17)
+      ✓ ignores stale sessions, wrong leases and idle acknowledgements [line 29] (killed 7)
+  domain/playback.test.ts
+    ✓ playback contract starts a chosen pad from zero with its attempt [line 23] (killed 4)
+    ✓ playback contract ignores every pad while 'starting' [line 38] (killed 3)
+    ~ playback contract ignores every pad while 'playing' [line 38] (covered 7)
+    ✓ playback contract STOP cancels the current attempt while 'starting' [line 55] (killed 5)
+    ~ playback contract STOP cancels the current attempt while 'playing' [line 55] (covered 9)
+    ✓ playback contract STOP is idempotent [line 65] (killed 3)
+    ✓ playback contract promotes only the current starting attempt [line 72] (killed 9)
+    ✓ playback contract ended cleans up only the current attempt [line 95] (killed 10)
+    ~ playback contract failed cleans up only the current attempt [line 95] (covered 20)
+    ~ playback contract ignores callbacks from a stopped attempt after a new pad is requested [line 115] (covered 29)
+    ~ playback contract does not mutate the input snapshot [line 137] (covered 11)
+    ✘ keeps the serialized playback vocabulary stable for adapters [line 148] (covered 0)
+  ipc/authority.test.ts
+    ✓ reserves recovery before granting a session and excludes simultaneous acquisition [line 12] (killed 26)
+    ✓ rejects forged lease fields and revoked sessions [line 37] (killed 16)
+    ✓ keeps recovery failures closed and permits a later recovery retry [line 66] (killed 1)
+    ✓ prevents replacement authority until pending recovery completes [line 74] (killed 2)
+    ✓ rejects a released lease with an authorization fault and closes an idle session [line 86] (killed 2)
+  media/audio-metadata.test.ts
+    ✓ reads duration from an extensionless copied stereo staging file [line 15] (killed 8)
+    ✓ rejects unusable metadata duration undefined [line 48] (killed 4)
+    ✓ rejects unusable metadata duration NaN [line 48] (killed 1)
+    ~ rejects unusable metadata duration Infinity [line 48] (covered 10)
+    ~ rejects unusable metadata duration -Infinity [line 48] (covered 10)
+    ✓ rejects unusable metadata duration 0 [line 48] (killed 2)
+    ~ rejects unusable metadata duration -1 [line 48] (covered 13)
+  playback
+    controller.test.ts
+      ✓ reserves synchronously, ignores busy clicks, stops pending play and waits for release [line 122] (killed 31)
+      ✓ releases a late grant without starting and retains the gate after failed release [line 151] (killed 5)
+      ✓ publishes progress, cleans up natural end and cannot restart after disposal [line 168] (killed 26)
+      ✓ cleans up rejected acquisition and start without advancing playback [line 198] (killed 6)
+      ✓ ignores old callbacks during a new attempt and treats current failure as STOP [line 218] (killed 4)
+      ✓ rejects disposal with a held lease, then releases it on retry [line 241] (killed 2)
+      ~ retains ownership after failed stop and retries before allowing a new pad [line 260] (covered 67)
+      ✓ disposes while start is pending and ignores callbacks without an attempt [line 278] (killed 4)
+      ✓ notifies progress and completion independently and removes failing observers [line 296] (killed 10)
+      ✓ starts healthy, authorizes its session and publishes STOP before release acknowledgment [line 341] (killed 4)
+    dom-audio.test.ts
+      ✓ plays exclusively from zero, correlates media events and clears the source on STOP [line 53] (killed 52)
+      ✓ creates the default audio element and releases it without playback [line 137] (killed 4)
+    subscriptions.test.ts
+      ✓ releases subscriber resources on disposal while both owners remain reachable [line 25] (killed 2)
+  storage/catalog.test.ts
+    ✓ persists 31 pads, labels, colors, ordering and managed bytes across restart [line 48] (killed 121)
+    ✓ keeps deletion cleanup durable when unlink fails and retries on restart [line 83] (killed 37)
+    ✓ never publishes failed copies or invalid audio and recovers staged files [line 110] (killed 7)
+    ✓ reports missing media, corruption and future versions without reset [line 127] (killed 12)
+    ✓ rolls back publication on SQL failure and removes promoted orphans on recovery [line 149] (killed 2)
+    ✓ reserves edits across selection and rejects stale revisions and revoked leases [line 165] (killed 11)
+    ✓ leaves a cancelled selection unchanged [line 198] (killed 1)
+    ✓ atomically rejects publication from an outdated second connection [line 209] (killed 2)
+    ✓ quarantines unknown and staged files without following symlinks [line 223] (killed 4)
+    ✓ rejects managed directory symlinks and referenced symlinks [line 238] (killed 3)
+    ✓ rejects unknown pads and invalid reorder without saving [line 259] (killed 9)
+    ✓ keeps the last commit after a relational constraint fails [line 289] (killed 1)
+    ~ preserves metadata and quarantine bytes after a failed batch [line 305] (covered 111)
+    ✓ detects broken foreign keys without resetting existing bytes [line 325] (killed 5)
+    ✓ retries a completed deletion without touching the original [line 338] (killed 3)
+    ~ rejects invalid duration NaN without publication [line 361] (covered 79)
+    ~ rejects invalid duration Infinity without publication [line 361] (covered 79)
+    ~ rejects invalid duration -1 without publication [line 361] (covered 82)
+    ~ does not publish when validation or promotion fails [line 375] (covered 86)
+    ✓ retains shared assets until their last pad is removed [line 394] (killed 12)
+    ✓ rejects a lease before selection and after asynchronous validation [line 430] (killed 1)
+    ~ rejects duplicate and foreign pad orders [line 454] (covered 114)
+    ✓ reports inaccessible database paths and failed migrations without resetting [line 476] (killed 3)
+    ~ reports corruption introduced after open [line 500] (covered 37)
+    ~ persists cleanup intent with deletion and acknowledges only completed work [line 513] (covered 52)
+    ✓ deletes one asset while retaining another [line 528] (killed 3)
+    ✓ refuses recovery with a revoked lease [line 552] (killed 1)
+    ~ releases the database descriptor after initialization failure [line 566] (covered 14)
+
+[Survived] ConditionalExpression
+src/main/storage/audio-metadata.ts:13:5
+-       durationSeconds === undefined ||
++       false ||
+Tests ran:
+    reads duration from an extensionless copied stereo staging file
+    rejects unusable metadata duration undefined
+    rejects unusable metadata duration NaN
+  and 4 more tests!
+
+
+Ran 2.09 tests per mutant on average.
+----------------------|------------------|----------|-----------|------------|----------|----------|
+                      | % Mutation score |          |           |            |          |          |
+File                  |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+----------------------|--------|---------|----------|-----------|------------|----------|----------|
+All files             |  99.81 |   99.81 |      515 |         0 |          1 |        0 |        0 |
+ contracts            | 100.00 |  100.00 |       16 |         0 |          0 |        0 |        0 |
+  catalog.ts          | 100.00 |  100.00 |        7 |         0 |          0 |        0 |        0 |
+  operations.ts       | 100.00 |  100.00 |        9 |         0 |          0 |        0 |        0 |
+ domain               | 100.00 |  100.00 |       65 |         0 |          0 |        0 |        0 |
+  lease.ts            | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  playback.ts         | 100.00 |  100.00 |       41 |         0 |          0 |        0 |        0 |
+ main                 |  99.66 |   99.66 |      291 |         0 |          1 |        0 |        0 |
+  ipc                 | 100.00 |  100.00 |       47 |         0 |          0 |        0 |        0 |
+   authority.ts       | 100.00 |  100.00 |       47 |         0 |          0 |        0 |        0 |
+  library             | 100.00 |  100.00 |      118 |         0 |          0 |        0 |        0 |
+   managed-catalog.ts | 100.00 |  100.00 |      118 |         0 |          0 |        0 |        0 |
+  storage             |  99.21 |   99.21 |      126 |         0 |          1 |        0 |        0 |
+   audio-metadata.ts  |  93.75 |   93.75 |       15 |         0 |          1 |        0 |        0 |
+   catalog-store.ts   | 100.00 |  100.00 |       69 |         0 |          0 |        0 |        0 |
+   managed-files.ts   | 100.00 |  100.00 |       42 |         0 |          0 |        0 |        0 |
+ renderer             | 100.00 |  100.00 |      143 |         0 |          0 |        0 |        0 |
+  playback            | 100.00 |  100.00 |      143 |         0 |          0 |        0 |        0 |
+   controller.ts      | 100.00 |  100.00 |       86 |         0 |          0 |        0 |        0 |
+   dom-audio.ts       | 100.00 |  100.00 |       57 |         0 |          0 |        0 |        0 |
+----------------------|--------|---------|----------|-----------|------------|----------|----------|
+[91m21:57:03 (127206) ERROR MutationTestReportHelper[39m Final mutation score 99.81 under breaking threshold 100, setting exit code to 1 (failure).
+[32m21:57:03 (127206) INFO MutationTestReportHelper[39m (improve mutation score or set `thresholds.break = null` to prevent this error in the future)
+[32m21:57:03 (127206) INFO JsonReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-ee541ddc-8e76a5ebaaa13e60/reports/mutation/mutation.json
+[32m21:57:03 (127206) INFO HtmlReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-ee541ddc-8e76a5ebaaa13e60/reports/mutation/mutation.html
+[32m21:57:03 (127206) INFO MutationTestExecutor[39m Done in 2 minutes and 20 seconds.

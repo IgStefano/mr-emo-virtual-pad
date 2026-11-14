@@ -55,6 +55,12 @@ module.exports = {
       to: { path: '^node_modules/electron/' },
     },
     {
+      name: 'architecture/storage-owns-metadata',
+      severity: 'error',
+      from: { path: '^src/', pathNot: '^src/main/storage/' },
+      to: { path: '^node_modules/music-metadata/' },
+    },
+    {
       name: 'architecture/storage-owns-disk',
       severity: 'error',
       from: { path: '^src/', pathNot: '^src/main/storage/' },
@@ -68,6 +74,7 @@ module.exports = {
     enhancedResolveOptions: {
       extensions: ['.ts', '.tsx', '.js', '.json'],
       conditionNames: ['import', 'node', 'default'],
+      exportsFields: ['exports'],
     },
     reporterOptions: { dot: { collapsePattern: 'node_modules/[^/]+' } },
   },

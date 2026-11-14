@@ -1,0 +1,37 @@
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (1348.429208ms)
+✔ graph rejects alias layer crossing (1258.334907ms)
+✔ graph rejects type-only crossing (1398.345708ms)
+✔ graph rejects node builtin (1297.746708ms)
+✔ graph rejects bare builtin (1121.123918ms)
+✔ graph accepts the actual source (1131.310482ms)
+✔ graph rejects metadata filesystem access outside storage (1077.034978ms)
+✔ new source folders cannot escape the layer matrix (62.053504ms)
+✔ lint rejects string enum union (4981.76056ms)
+✔ lint rejects native enum (45.683903ms)
+✔ lint rejects inline discriminator (24.408802ms)
+✔ lint rejects unknown in domain (22.149602ms)
+✔ lint rejects dynamic import (101.434006ms)
+✔ lint rejects double assertion (70.395101ms)
+✔ lint rejects ambient clock (39.374301ms)
+✔ lint rejects randomness (42.914601ms)
+✔ validated ingress may use unknown (110.278301ms)
+✔ const-object enum and derived type are accepted (27.430401ms)
+✔ UI primitive button belongs to the approved component source (402.252206ms)
+✔ UI primitive input belongs to the approved component source (79.229502ms)
+✔ UI primitive select belongs to the approved component source (66.188201ms)
+✔ UI primitive textarea belongs to the approved component source (81.354301ms)
+✔ UI primitive dialog belongs to the approved component source (61.725101ms)
+✔ named UI components remain composable in feature views (71.134601ms)
+✔ component source can implement raw primitives without disabling other lint rules (6.2348ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15541.469235

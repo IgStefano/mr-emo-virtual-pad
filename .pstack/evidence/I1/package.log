@@ -18,8 +18,8 @@
 ❯ Building src/main/main.ts
 ❯ Building src/preload/preload.ts
 ❯ Building main_window
-✔ Built target src/preload/preload.ts
 ✔ Built target src/main/main.ts
+✔ Built target src/preload/preload.ts
 ✔ Building main and preload targets...
 ✔ Built target main_window
 ✔ Building renderer targets...

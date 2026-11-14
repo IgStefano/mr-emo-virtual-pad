@@ -45,3 +45,18 @@ test('graph accepts the actual source', () => {
   const result = checkGraph();
   assert.equal(result.status, 0, result.stderr + result.stdout);
 });
+
+test('graph rejects metadata filesystem access outside storage', async () => {
+  const adapter = 'src/main/__metadata_guardrail_fixture.ts';
+  try {
+    await writeFile(adapter, "export { parseFile } from 'music-metadata';");
+    const result = checkGraph();
+    assert.ok(
+      result.status !== null && result.status > 0,
+      result.stderr + result.stdout,
+    );
+    assert.match(result.stdout, /architecture\/storage-owns-metadata/);
+  } finally {
+    await rm(adapter, { force: true });
+  }
+});

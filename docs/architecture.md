@@ -85,3 +85,10 @@ fields. Callers must terminate renderer audio before closing a playback session.
 This authority is not yet wired into bootstrap or IPC. The existing shell remains
 app-info only. Restricted protocols, staged audio metadata validation and the
 renderer composition are still pending I1 work.
+
+The storage boundary now provides `storage/audio-metadata.ts`, using
+music-metadata to inspect an extensionless copied staging file and reject absent,
+nonfinite or nonpositive durations. Parser failures become UnsupportedFormat
+faults. This adapter is tested with real PCM stereo bytes and invalid metadata,
+but bootstrap does not yet supply it to ManagedCatalog. Its existence does not
+prove decoder compatibility or playback through a restricted protocol.

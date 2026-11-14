@@ -11,6 +11,8 @@
     "tests/contracts/**/*.ts",
     "tests/storage/**/*.ts",
     "tests/playback/**/*.ts",
-    "tests/electron/**/*.ts"
+    "tests/electron/**/*.ts",
+    "tests/media/**/*.ts",
+    "tests/integration/**/*.ts"
   ]
 }

@@ -1,0 +1,166 @@
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (29 modules, 53 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (1120.377513ms)
+✔ graph rejects alias layer crossing (1133.779812ms)
+✔ graph rejects type-only crossing (1408.182598ms)
+✔ graph rejects node builtin (1332.332241ms)
+✔ graph rejects bare builtin (1165.385261ms)
+✔ graph accepts the actual source (1118.558968ms)
+✔ graph rejects metadata filesystem access outside storage (1167.195061ms)
+✔ new source folders cannot escape the layer matrix (79.007991ms)
+✔ lint rejects string enum union (5354.236201ms)
+✔ lint rejects native enum (67.254788ms)
+✔ lint rejects inline discriminator (30.685694ms)
+✔ lint rejects unknown in domain (20.619197ms)
+✔ lint rejects dynamic import (88.575384ms)
+✔ lint rejects double assertion (69.127188ms)
+✔ lint rejects ambient clock (40.673593ms)
+✔ lint rejects randomness (28.274095ms)
+✔ validated ingress may use unknown (142.539075ms)
+✔ const-object enum and derived type are accepted (34.723994ms)
+✔ UI primitive button belongs to the approved component source (530.392906ms)
+✔ UI primitive input belongs to the approved component source (151.005273ms)
+✔ UI primitive select belongs to the approved component source (142.940175ms)
+✔ UI primitive textarea belongs to the approved component source (157.858372ms)
+✔ UI primitive dialog belongs to the approved component source (124.939378ms)
+✔ named UI components remain composable in feature views (160.110671ms)
+✔ component source can implement raw primitives without disabling other lint rules (12.735998ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16429.450041
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "impeccable": {
+    "version": "4.9.0",
+    "commit": "c4cd1924c389f68d37c687d9c2bbf13f12547c41",
+    "skills": 1
+  },
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (21.466996ms)
+✔ contract acceptance enables three disjoint implementation lanes (3.009099ms)
+✔ blocked prerequisites cannot be dispatched (2.5677ms)
+✔ cycle is rejected even when no task is active (3.232299ms)
+✔ unknown prerequisites and duplicate IDs are rejected (6.145199ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (2.205199ms)
+✔ active work requires accepted prerequisites (1.5399ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (2.4911ms)
+✔ a parent directory and child file cannot have concurrent writers (3.133299ms)
+✔ active tasks reserve capacity and paths (1.73ms)
+✔ two conflicting active reservations fail validation (1.535699ms)
+✔ planned tasks cannot produce reserved launch requests (1.8143ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (1.3088ms)
+✔ owned paths cannot escape repository (3.585599ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (1.4213ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 482.505814
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (185.453961ms)
+✔ push gate rejects staging that would package a different tree from HEAD (185.440358ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (260.892642ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (275.971338ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1129.951657
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (39.271991ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 320.543828
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/fixtures.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (49.063389ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 222.02145

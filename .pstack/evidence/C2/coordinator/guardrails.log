@@ -1,0 +1,16 @@
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/*.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (37.736003ms)
+✔ aliased audio remains owned by the adapter: const make = window.Audio; export const sound = new make(); (4470.79607ms)
+✔ aliased audio remains owned by the adapter: const make = document.createElement.bind(document); export const sound = make("audio"); (97.931363ms)
+✔ aliased audio remains owned by the adapter: const element = document.createElement; export const sound = element.call(document, "audio"); (71.443488ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5033.169508

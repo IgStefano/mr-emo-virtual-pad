@@ -6,6 +6,21 @@ export interface ShutdownPorts {
   report: (error: unknown) => void;
 }
 
+export function retryableCleanup(
+  action: () => Promise<void>,
+): () => Promise<void> {
+  let pending: Promise<void> | null = null;
+  return () => {
+    pending ??= Promise.resolve()
+      .then(action)
+      .catch((error: unknown) => {
+        pending = null;
+        throw error;
+      });
+    return pending;
+  };
+}
+
 export class ApplicationShutdown {
   private ready = false;
   private pending = false;

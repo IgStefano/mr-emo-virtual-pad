@@ -23,7 +23,7 @@ import { desktopOperations } from '../contracts/desktop';
 import { ErrorCode, LeaseKind } from '../contracts/operations';
 import { CatalogFault } from './storage/catalog-store';
 import { WindowLifecycle } from './lifecycle/window';
-import { ApplicationShutdown } from './lifecycle/shutdown';
+import { ApplicationShutdown, retryableCleanup } from './lifecycle/shutdown';
 import { RendererLifetime } from './ipc/renderer-lifetime';
 
 protocol.registerSchemesAsPrivileged([
@@ -52,13 +52,13 @@ if (verificationDirectory !== undefined) {
   app.setPath('userData', verificationDirectory);
 }
 
-let shutdown: Promise<void> = Promise.resolve();
+let shutdown: () => Promise<void> = () => Promise.resolve();
 const applicationShutdown = new ApplicationShutdown({
   closeWindows: () => {
     for (const window of BrowserWindow.getAllWindows()) window.close();
   },
   hasWindows: () => BrowserWindow.getAllWindows().length !== 0,
-  drain: () => shutdown,
+  drain: () => shutdown(),
   quit: () => {
     app.quit();
   },
@@ -143,17 +143,17 @@ async function openWindow(): Promise<void> {
   window.webContents.once('render-process-gone', () => {
     window.destroy();
   });
+  shutdown = retryableCleanup(terminate);
   window.webContents.once('destroyed', () => {
-    shutdown = terminate();
-    void shutdown.catch(console.error);
+    void shutdown().catch(console.error);
   });
   const windowLifecycle = new WindowLifecycle({
     isPlaying: () => lifetime.playing,
     confirmClose: () =>
       dialog.showMessageBoxSync(window, {
         type: 'question',
-        message: 'Stop playback and close?',
-        buttons: ['Keep playing', 'Stop and close'],
+        message: 'Parar a reprodução e fechar?',
+        buttons: ['Continuar tocando', 'Parar e fechar'],
         defaultId: 0,
         cancelId: 0,
       }) === 1,

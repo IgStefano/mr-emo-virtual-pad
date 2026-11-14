@@ -56,7 +56,7 @@ async function launch() {
   assert.ok(roles.includes('editmenu'));
   observations.push(runtime);
   const page = await application.firstWindow();
-  await page.getByRole('button', { name: 'Importar áudio' }).waitFor();
+  await page.getByRole('button', { name: 'Editar repertório' }).waitFor();
   await page.evaluate(() => {
     document.documentElement.dataset.reloadProbe = 'retained';
   });
@@ -86,7 +86,7 @@ try {
   }, source);
   await page.getByRole('button', { name: 'Importar áudio' }).click();
   await page
-    .getByRole('button', { name: manifest.file, exact: true })
+    .getByRole('button', { name: `1 ${manifest.file}`, exact: true })
     .waitFor();
   const files = await readdir(path.join(profile, 'library/media'));
   assert.equal(files.length, 1);
@@ -103,12 +103,21 @@ try {
     if (response.url().startsWith('pad-media:'))
       media.push({ url: response.url(), status: response.status() });
   });
-  await page.getByRole('button', { name: manifest.file, exact: true }).click();
+  await page
+    .getByRole('button', { name: `1 ${manifest.file}`, exact: true })
+    .click();
   await page.waitForFunction(
-    () => Number(document.querySelector('output')?.textContent) > 0,
+    () =>
+      Number(
+        document
+          .querySelector('[role="progressbar"]')
+          ?.getAttribute('aria-valuenow'),
+      ) > 0,
   );
   observations.push({
-    progress: await page.getByLabel('Posição').innerText(),
+    progress: await page
+      .getByRole('progressbar', { name: 'Progresso' })
+      .getAttribute('aria-valuenow'),
     media,
   });
   assert.ok(
@@ -117,18 +126,23 @@ try {
     ),
   );
   assert.equal(
-    await page.getByText('Reproduzindo', { exact: true }).innerText(),
+    await page
+      .getByRole('status')
+      .filter({ hasText: 'Reproduzindo' })
+      .innerText(),
     'Reproduzindo',
   );
   await page.getByRole('button', { name: 'STOP', exact: true }).click();
   await page
-    .getByRole('button', { name: 'Importar áudio' })
-    .waitFor({ state: 'visible' });
+    .getByRole('button', { name: 'Editar repertório' })
+    .click({ trial: true });
   assert.equal(
     await page.getByText('Parado', { exact: true }).innerText(),
     'Parado',
   );
-  await page.getByRole('button', { name: manifest.file, exact: true }).click();
+  await page
+    .getByRole('button', { name: `1 ${manifest.file}`, exact: true })
+    .click();
   const rendererClosed = application.waitForEvent('close');
   await application.evaluate(({ BrowserWindow }) => {
     process.kill(
@@ -144,11 +158,12 @@ try {
     'Parado',
   );
   observations.push({ crashRestartStopped: true });
-  page.on('dialog', (dialog) => dialog.accept());
+  await page.getByRole('button', { name: 'Editar repertório' }).click();
   await page
     .getByRole('button', { name: `Excluir ${manifest.file}`, exact: true })
     .click();
-  await page.getByText('O repertório está vazio.').waitFor();
+  await page.getByRole('button', { name: 'Confirmar exclusão' }).click();
+  await page.getByText('Seu repertório está vazio').waitFor();
   assert.deepEqual(await readdir(path.join(profile, 'library/media')), []);
   await page.screenshot({ path: path.join(directory, 'journey.png') });
   await writeFile(

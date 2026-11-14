@@ -1,5 +1,58 @@
 import { expect, it } from 'vitest';
-import { ApplicationShutdown } from '../../src/main/lifecycle/shutdown';
+import {
+  ApplicationShutdown,
+  retryableCleanup,
+} from '../../src/main/lifecycle/shutdown';
+import { RendererLifetime } from '../../src/main/ipc/renderer-lifetime';
+import { setImmediate } from 'node:timers/promises';
+
+it('shares full cleanup and retries a failed destroyed-renderer cleanup on quit', async () => {
+  let attempts = 0;
+  let fail = true;
+  let closed = 0;
+  let quits = 0;
+  const lifetime = new RendererLifetime(() => {
+    attempts++;
+    return fail
+      ? Promise.reject(new Error('transient cleanup'))
+      : Promise.resolve();
+  });
+  await lifetime.run('catalog:open', () =>
+    Promise.resolve({
+      ok: true,
+      value: '00000000-0000-4000-8000-000000000001',
+    }),
+  );
+  const cleanup = retryableCleanup(async () => {
+    await lifetime.terminate();
+    closed++;
+  });
+  const first = cleanup();
+  expect(cleanup()).toBe(first);
+  await expect(first).rejects.toThrow('transient cleanup');
+  fail = false;
+  const shutdown = new ApplicationShutdown({
+    closeWindows: () => {},
+    hasWindows: () => false,
+    drain: cleanup,
+    quit: () => {
+      quits++;
+    },
+    report: () => {
+      throw new Error('unexpected failure');
+    },
+  });
+  expect(shutdown.request()).toBe(false);
+  expect(shutdown.request()).toBe(false);
+  await setImmediate();
+  expect(shutdown.request()).toBe(true);
+  await cleanup();
+  expect({ attempts, closed, quits }).toEqual({
+    attempts: 2,
+    closed: 1,
+    quits: 1,
+  });
+});
 
 it('holds quit through reentrant window closure and asynchronous cleanup', async () => {
   let finish: () => void = () => {};

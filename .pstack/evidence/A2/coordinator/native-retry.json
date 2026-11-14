@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "mode": "sandboxed unpackaged Linux",
+  "controlledFailure": "SQLite close throws once before closing",
+  "stdout": "BEFORE_QUIT_PREVENTED=true\nCLEANUP_ATTEMPT=1\nCLEANUP_ATTEMPT=2\nBEFORE_QUIT_PREVENTED=true\nBEFORE_QUIT_PREVENTED=false\nAPP_QUIT_CONFIRMED\n",
+  "settings": {
+    "profile": "/tmp/pad-shutdown-retry-gtvm4z",
+    "sandbox": true
+  },
+  "quitObserved": true,
+  "debuggerChildCleanup": "harness terminates its own child after observing app quit"
+}

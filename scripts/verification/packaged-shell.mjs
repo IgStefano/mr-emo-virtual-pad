@@ -53,7 +53,7 @@ if (playback) {
     const page = await seed.firstWindow();
     await page.getByRole('button', { name: 'Importar áudio' }).click();
     await page
-      .getByRole('button', { name: manifest.file, exact: true })
+      .getByRole('button', { name: `1 ${manifest.file}`, exact: true })
       .waitFor();
     const media = await readdir(path.join(profile, 'library/media'));
     assert.equal(media.length, 1);
@@ -92,7 +92,7 @@ try {
   });
   browser = await chromium.connectOverCDP(endpoint);
   const page = browser.contexts()[0].pages()[0];
-  await page.getByRole('button', { name: 'Importar áudio' }).waitFor();
+  await page.getByRole('button', { name: 'Editar repertório' }).waitFor();
   assert.equal(page.url(), 'pad-app://app/index.html');
   assert.equal(
     await page.getByText('Parado', { exact: true }).innerText(),
@@ -107,20 +107,28 @@ try {
         media.push({ url: response.url(), status: response.status() });
     });
     await page
-      .getByRole('button', { name: manifest.file, exact: true })
+      .getByRole('button', { name: `1 ${manifest.file}`, exact: true })
       .click();
     await page.waitForFunction(
-      () => Number(document.querySelector('output')?.textContent) > 0,
+      () =>
+        Number(
+          document
+            .querySelector('[role="progressbar"]')
+            ?.getAttribute('aria-valuenow'),
+        ) > 0,
     );
     assert.equal(
-      await page.getByText('Reproduzindo', { exact: true }).innerText(),
+      await page
+        .getByRole('status')
+        .filter({ hasText: 'Reproduzindo' })
+        .innerText(),
       'Reproduzindo',
     );
     assert.ok(media.some((response) => response.status === 206));
     await page.getByRole('button', { name: 'STOP', exact: true }).click();
     await page.getByText('Parado', { exact: true }).waitFor();
     await page
-      .getByRole('button', { name: 'Importar áudio' })
+      .getByRole('button', { name: 'Editar repertório' })
       .click({ trial: true });
     await page.screenshot({ path: path.join(directory, 'stopped.png') });
   }

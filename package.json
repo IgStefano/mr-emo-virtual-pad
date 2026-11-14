@@ -21,6 +21,8 @@
     "architecture": "node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs",
     "test:guardrails": "node --test --test-concurrency=1 tests/guardrails/*.test.mjs",
     "test": "vitest run",
+    "verification:regressions": "node scripts/verification/regressions.mjs",
+    "verification:packaged-playback": "node scripts/verification/packaged-shell.mjs --playback",
     "test:mutation": "stryker run && node scripts/check-mutation.mjs",
     "verify:static": "npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification",
     "verify": "npm run verify:static && npm test && npm run test:mutation",
@@ -32,7 +34,7 @@
     "prepare": "husky",
     "test:hooks": "node --test tests/hooks/*.test.mjs",
     "test:runtime": "node --test tests/runtime/*.test.mjs",
-    "test:verification": "node --test tests/electron/fixtures.test.mjs",
+    "test:verification": "node --test tests/electron/*.test.mjs",
     "verification:doctor": "node scripts/verification/run.mjs doctor",
     "verification:drive": "node scripts/verification/run.mjs drive"
   },

@@ -1,0 +1,12 @@
+{
+  "platform": "linux",
+  "observations": [
+    "main remains alive with no window while import awaits selection",
+    "shutdown completed only after managed bytes were published",
+    "canceling close retains active window",
+    "synthetic suspend exits and restart is stopped",
+    "confirmed playback close exits and restart is stopped"
+  ],
+  "physicalPowerEvent": false,
+  "physicalAudioOutput": false
+}

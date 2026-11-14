@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /home/igstefano/.t3/projects/mr-emo-virtual-pad
+
+
+ Test Files  4 passed (4)
+      Tests  14 passed (14)
+   Start at  09:54:07
+   Duration  1.76s (transform 227ms, setup 0ms, import 693ms, tests 124ms, environment 1ms)
+

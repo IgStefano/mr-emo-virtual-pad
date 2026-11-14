@@ -1,0 +1,272 @@
+
+> mr-emo-virtual-pad@0.1.0 verify
+> npm run verify:static && npm test && npm run test:mutation
+
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (24 modules, 35 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (1121.873433ms)
+✔ graph rejects alias layer crossing (1070.45323ms)
+✔ graph rejects type-only crossing (836.542824ms)
+✔ graph rejects node builtin (1039.34213ms)
+✔ graph rejects bare builtin (1097.658631ms)
+✔ graph accepts the actual source (839.138024ms)
+✔ new source folders cannot escape the layer matrix (60.247601ms)
+✔ lint rejects string enum union (4082.936935ms)
+✔ lint rejects native enum (30.677802ms)
+✔ lint rejects inline discriminator (20.7847ms)
+✔ lint rejects unknown in domain (36.396802ms)
+✔ lint rejects dynamic import (68.141302ms)
+✔ lint rejects double assertion (42.003602ms)
+✔ lint rejects ambient clock (30.602401ms)
+✔ lint rejects randomness (19.435601ms)
+✔ validated ingress may use unknown (95.449403ms)
+✔ const-object enum and derived type are accepted (23.383401ms)
+✔ UI primitive button belongs to the approved component source (463.177217ms)
+✔ UI primitive input belongs to the approved component source (131.379705ms)
+✔ UI primitive select belongs to the approved component source (83.728603ms)
+✔ UI primitive textarea belongs to the approved component source (94.953204ms)
+✔ UI primitive dialog belongs to the approved component source (111.055404ms)
+✔ named UI components remain composable in feature views (111.535504ms)
+✔ component source can implement raw primitives without disabling other lint rules (12.4065ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12065.424677
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "impeccable": {
+    "version": "4.9.0",
+    "commit": "c4cd1924c389f68d37c687d9c2bbf13f12547c41",
+    "skills": 1
+  },
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (8.6434ms)
+✔ contract acceptance enables three disjoint implementation lanes (1.452901ms)
+✔ blocked prerequisites cannot be dispatched (1.6619ms)
+✔ cycle is rejected even when no task is active (1.0765ms)
+✔ unknown prerequisites and duplicate IDs are rejected (1.3641ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (0.8011ms)
+✔ active work requires accepted prerequisites (0.7041ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (1.6317ms)
+✔ a parent directory and child file cannot have concurrent writers (2.3895ms)
+✔ active tasks reserve capacity and paths (0.8935ms)
+✔ two conflicting active reservations fail validation (0.5843ms)
+✔ planned tasks cannot produce reserved launch requests (1.0494ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (0.7347ms)
+✔ owned paths cannot escape repository (1.7373ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (0.6025ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 264.701009
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (120.827604ms)
+✔ push gate rejects staging that would package a different tree from HEAD (124.311805ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (146.469005ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (159.748306ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 686.935126
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (19.379801ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.057605
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/fixtures.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (40.296401ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 148.912905
+
+> mr-emo-virtual-pad@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-70db4119-b2b2b1e819a85c81
+
+
+ Test Files  4 passed (4)
+      Tests  48 passed (48)
+   Start at  21:12:12
+   Duration  1.58s (transform 586ms, setup 0ms, import 1.12s, tests 956ms, environment 1ms)
+
+
+> mr-emo-virtual-pad@0.1.0 test:mutation
+> stryker run && node scripts/check-mutation.mjs
+
+[33m21:12:16 (88008) WARN ProjectReader[39m Glob pattern "src/renderer/playback/**/*.ts" did not result in any files.
+[32m21:12:16 (88008) INFO ProjectReader[39m Found 7 of 862 file(s) to be mutated.
+[32m21:12:16 (88008) INFO Instrumenter[39m Instrumented 7 source file(s) with 310 mutant(s)
+[32m21:12:18 (88008) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m21:12:20 (88008) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m21:12:24 (88008) INFO DryRunExecutor[39m Initial test run succeeded. Ran 48 tests in 3 seconds (net 1276.1713310000023 ms, overhead 2179.8286689999977 ms).
+
+All tests
+  contracts
+    catalog.test.ts
+      ✘ catalog wire contracts accepts a versioned catalog without a thirty pad limit [line 33] (covered 0)
+      ✘ catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions [line 61] (covered 0)
+      ✘ catalog wire contracts validates every catalog record and rejects unknown fields [line 81] (covered 0)
+      ✓ operation ingress validates session-bound leases and finite errors [line 111] (killed 1)
+      ✓ operation ingress requires an edit lease and expected revision for catalog writes [line 143] (killed 5)
+      ✓ operation ingress correlates playback requests without accepting paths [line 176] (killed 1)
+    lease.test.ts
+      ✓ keeps authorization exclusive until the matching cleanup acknowledgement [line 9] (killed 17)
+      ✓ ignores stale sessions, wrong leases and idle acknowledgements [line 29] (killed 7)
+  domain/playback.test.ts
+    ✓ playback contract starts a chosen pad from zero with its attempt [line 23] (killed 10)
+    ✓ playback contract ignores every pad while 'starting' [line 38] (killed 4)
+    ~ playback contract ignores every pad while 'playing' [line 38] (covered 7)
+    ✓ playback contract STOP cancels the current attempt while 'starting' [line 55] (killed 5)
+    ~ playback contract STOP cancels the current attempt while 'playing' [line 55] (covered 9)
+    ✓ playback contract STOP is idempotent [line 65] (killed 3)
+    ✓ playback contract promotes only the current starting attempt [line 72] (killed 9)
+    ✓ playback contract ended cleans up only the current attempt [line 95] (killed 10)
+    ~ playback contract failed cleans up only the current attempt [line 95] (covered 20)
+    ~ playback contract ignores callbacks from a stopped attempt after a new pad is requested [line 115] (covered 29)
+    ~ playback contract does not mutate the input snapshot [line 137] (covered 11)
+    ✘ keeps the serialized playback vocabulary stable for adapters [line 148] (covered 0)
+  storage/catalog.test.ts
+    ✓ persists 31 pads, labels, colors, ordering and managed bytes across restart [line 48] (killed 121)
+    ✓ keeps deletion cleanup durable when unlink fails and retries on restart [line 83] (killed 37)
+    ✓ never publishes failed copies or invalid audio and recovers staged files [line 110] (killed 7)
+    ✓ reports missing media, corruption and future versions without reset [line 127] (killed 12)
+    ✓ rolls back publication on SQL failure and removes promoted orphans on recovery [line 149] (killed 2)
+    ✓ reserves edits across selection and rejects stale revisions and revoked leases [line 165] (killed 11)
+    ✓ leaves a cancelled selection unchanged [line 198] (killed 1)
+    ✓ atomically rejects publication from an outdated second connection [line 209] (killed 2)
+    ✓ quarantines unknown and staged files without following symlinks [line 223] (killed 4)
+    ✓ rejects managed directory symlinks and referenced symlinks [line 238] (killed 3)
+    ✓ rejects unknown pads and invalid reorder without saving [line 259] (killed 9)
+    ✓ keeps the last commit after a relational constraint fails [line 289] (killed 1)
+    ~ preserves metadata and quarantine bytes after a failed batch [line 305] (covered 111)
+    ✓ detects broken foreign keys without resetting existing bytes [line 325] (killed 5)
+    ✓ retries a completed deletion without touching the original [line 338] (killed 3)
+    ~ rejects invalid duration NaN without publication [line 361] (covered 79)
+    ~ rejects invalid duration Infinity without publication [line 361] (covered 79)
+    ~ rejects invalid duration -1 without publication [line 361] (covered 82)
+    ~ does not publish when validation or promotion fails [line 375] (covered 86)
+    ✓ retains shared assets until their last pad is removed [line 394] (killed 12)
+    ✓ rejects a lease before selection and after asynchronous validation [line 430] (killed 1)
+    ~ rejects duplicate and foreign pad orders [line 454] (covered 114)
+    ✓ reports inaccessible database paths and failed migrations without resetting [line 476] (killed 3)
+    ~ reports corruption introduced after open [line 500] (covered 37)
+    ~ persists cleanup intent with deletion and acknowledges only completed work [line 513] (covered 52)
+    ✓ deletes one asset while retaining another [line 528] (killed 3)
+    ✓ refuses recovery with a revoked lease [line 552] (killed 1)
+    ~ releases the database descriptor after initialization failure [line 566] (covered 14)
+
+Ran 2.11 tests per mutant on average.
+----------------------|------------------|----------|-----------|------------|----------|----------|
+                      | % Mutation score |          |           |            |          |          |
+File                  |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+----------------------|--------|---------|----------|-----------|------------|----------|----------|
+All files             | 100.00 |  100.00 |      310 |         0 |          0 |        0 |        0 |
+ contracts            | 100.00 |  100.00 |       16 |         0 |          0 |        0 |        0 |
+  catalog.ts          | 100.00 |  100.00 |        7 |         0 |          0 |        0 |        0 |
+  operations.ts       | 100.00 |  100.00 |        9 |         0 |          0 |        0 |        0 |
+ domain               | 100.00 |  100.00 |       65 |         0 |          0 |        0 |        0 |
+  lease.ts            | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  playback.ts         | 100.00 |  100.00 |       41 |         0 |          0 |        0 |        0 |
+ main                 | 100.00 |  100.00 |      229 |         0 |          0 |        0 |        0 |
+  library             | 100.00 |  100.00 |      118 |         0 |          0 |        0 |        0 |
+   managed-catalog.ts | 100.00 |  100.00 |      118 |         0 |          0 |        0 |        0 |
+  storage             | 100.00 |  100.00 |      111 |         0 |          0 |        0 |        0 |
+   catalog-store.ts   | 100.00 |  100.00 |       69 |         0 |          0 |        0 |        0 |
+   managed-files.ts   | 100.00 |  100.00 |       42 |         0 |          0 |        0 |        0 |
+----------------------|--------|---------|----------|-----------|------------|----------|----------|
+[32m21:13:50 (88008) INFO MutationTestReportHelper[39m Final mutation score of 100.00 is greater than or equal to break threshold 100
+[32m21:13:50 (88008) INFO JsonReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-70db4119-b2b2b1e819a85c81/reports/mutation/mutation.json
+[32m21:13:50 (88008) INFO HtmlReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-70db4119-b2b2b1e819a85c81/reports/mutation/mutation.html
+[32m21:13:50 (88008) INFO MutationTestExecutor[39m Done in 1 minute and 35 seconds.
+Mutation gate: 310 mutants, 0 detected by timeout.

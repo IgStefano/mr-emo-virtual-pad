@@ -1,0 +1,648 @@
+
+> mr-emo-virtual-pad@0.1.0 verify
+> npm run verify:static && npm test && npm run test:mutation
+
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (24 modules, 35 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (841.627609ms)
+✔ graph rejects alias layer crossing (912.35831ms)
+✔ graph rejects type-only crossing (833.025109ms)
+✔ graph rejects node builtin (826.214208ms)
+✔ graph rejects bare builtin (944.734311ms)
+✔ graph accepts the actual source (914.945809ms)
+✔ new source folders cannot escape the layer matrix (68.405201ms)
+✔ lint rejects string enum union (4403.708444ms)
+✔ lint rejects native enum (32.542401ms)
+✔ lint rejects inline discriminator (27.8956ms)
+✔ lint rejects unknown in domain (18.7621ms)
+✔ lint rejects dynamic import (94.327501ms)
+✔ lint rejects double assertion (74.377901ms)
+✔ lint rejects ambient clock (34.2779ms)
+✔ lint rejects randomness (18.7582ms)
+✔ validated ingress may use unknown (162.878302ms)
+✔ const-object enum and derived type are accepted (32.7883ms)
+✔ UI primitive button belongs to the approved component source (583.956106ms)
+✔ UI primitive input belongs to the approved component source (135.473401ms)
+✔ UI primitive select belongs to the approved component source (141.751502ms)
+✔ UI primitive textarea belongs to the approved component source (113.617701ms)
+✔ UI primitive dialog belongs to the approved component source (111.420801ms)
+✔ named UI components remain composable in feature views (200.178302ms)
+✔ component source can implement raw primitives without disabling other lint rules (12.2691ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12093.068624
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "impeccable": {
+    "version": "4.9.0",
+    "commit": "c4cd1924c389f68d37c687d9c2bbf13f12547c41",
+    "skills": 1
+  },
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (12.367ms)
+✔ contract acceptance enables three disjoint implementation lanes (1.2871ms)
+✔ blocked prerequisites cannot be dispatched (1.496ms)
+✔ cycle is rejected even when no task is active (0.9942ms)
+✔ unknown prerequisites and duplicate IDs are rejected (1.6389ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (1.0401ms)
+✔ active work requires accepted prerequisites (1.0602ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (1.9435ms)
+✔ a parent directory and child file cannot have concurrent writers (0.8728ms)
+✔ active tasks reserve capacity and paths (2.65ms)
+✔ two conflicting active reservations fail validation (0.6408ms)
+✔ planned tasks cannot produce reserved launch requests (1.0895ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (0.658ms)
+✔ owned paths cannot escape repository (1.6627ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (0.5849ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 466.362297
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (139.306599ms)
+✔ push gate rejects staging that would package a different tree from HEAD (116.777599ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (148.1722ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (166.958599ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 685.276097
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (27.8177ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.6573
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/fixtures.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (48.6067ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 170.349899
+
+> mr-emo-virtual-pad@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-70db4119-b2b2b1e819a85c81
+
+
+ Test Files  4 passed (4)
+      Tests  31 passed (31)
+   Start at  21:05:19
+   Duration  1.71s (transform 567ms, setup 0ms, import 1.25s, tests 396ms, environment 5ms)
+
+
+> mr-emo-virtual-pad@0.1.0 test:mutation
+> stryker run && node scripts/check-mutation.mjs
+
+[33m21:05:24 (77931) WARN ProjectReader[39m Glob pattern "src/renderer/playback/**/*.ts" did not result in any files.
+[32m21:05:24 (77931) INFO ProjectReader[39m Found 7 of 779 file(s) to be mutated.
+[32m21:05:25 (77931) INFO Instrumenter[39m Instrumented 7 source file(s) with 317 mutant(s)
+[32m21:05:26 (77931) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m21:05:29 (77931) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m21:05:32 (77931) INFO DryRunExecutor[39m Initial test run succeeded. Ran 31 tests in 3 seconds (net 792.758675999999 ms, overhead 2286.241324000001 ms).
+
+All tests
+  contracts
+    catalog.test.ts
+      ✘ catalog wire contracts accepts a versioned catalog without a thirty pad limit [line 33] (covered 0)
+      ✘ catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions [line 61] (covered 0)
+      ✘ catalog wire contracts validates every catalog record and rejects unknown fields [line 81] (covered 0)
+      ✓ operation ingress validates session-bound leases and finite errors [line 111] (killed 1)
+      ✓ operation ingress requires an edit lease and expected revision for catalog writes [line 143] (killed 3)
+      ✓ operation ingress correlates playback requests without accepting paths [line 176] (killed 1)
+    lease.test.ts
+      ✓ keeps authorization exclusive until the matching cleanup acknowledgement [line 9] (killed 17)
+      ✓ ignores stale sessions, wrong leases and idle acknowledgements [line 29] (killed 7)
+  domain/playback.test.ts
+    ✓ playback contract starts a chosen pad from zero with its attempt [line 23] (killed 10)
+    ✓ playback contract ignores every pad while 'starting' [line 38] (killed 4)
+    ~ playback contract ignores every pad while 'playing' [line 38] (covered 7)
+    ✓ playback contract STOP cancels the current attempt while 'starting' [line 55] (killed 5)
+    ~ playback contract STOP cancels the current attempt while 'playing' [line 55] (covered 9)
+    ✓ playback contract STOP is idempotent [line 65] (killed 3)
+    ✓ playback contract promotes only the current starting attempt [line 72] (killed 9)
+    ✓ playback contract ended cleans up only the current attempt [line 95] (killed 10)
+    ~ playback contract failed cleans up only the current attempt [line 95] (covered 20)
+    ~ playback contract ignores callbacks from a stopped attempt after a new pad is requested [line 115] (covered 29)
+    ~ playback contract does not mutate the input snapshot [line 137] (covered 11)
+    ✘ keeps the serialized playback vocabulary stable for adapters [line 148] (covered 0)
+  storage/catalog.test.ts
+    ✓ persists 31 pads, labels, colors, ordering and managed bytes across restart [line 46] (killed 119)
+    ✓ keeps deletion cleanup durable when unlink fails and retries on restart [line 81] (killed 34)
+    ✓ never publishes failed copies or invalid audio and recovers staged files [line 105] (killed 7)
+    ✓ reports missing media, corruption and future versions without reset [line 122] (killed 13)
+    ✓ rolls back publication on SQL failure and removes promoted orphans on recovery [line 144] (killed 2)
+    ✓ reserves edits across selection and rejects stale revisions and revoked leases [line 160] (killed 5)
+    ✓ leaves a cancelled selection unchanged [line 187] (killed 1)
+    ✓ atomically rejects publication from an outdated second connection [line 198] (killed 2)
+    ✓ quarantines unknown and staged files without following symlinks [line 212] (killed 4)
+    ✓ rejects managed directory symlinks and referenced symlinks [line 227] (killed 3)
+    ✓ rejects unknown pads and invalid reorder without saving [line 248] (killed 11)
+
+[NoCoverage] ConditionalExpression
+src/main/library/managed-catalog.ts:129:51
+-         const unused = !catalog.pads.some((item) => item.assetId === pad.assetId);
++         const unused = !catalog.pads.some((item) => true);
+
+[NoCoverage] ConditionalExpression
+src/main/library/managed-catalog.ts:129:51
+-         const unused = !catalog.pads.some((item) => item.assetId === pad.assetId);
++         const unused = !catalog.pads.some((item) => false);
+
+[NoCoverage] EqualityOperator
+src/main/library/managed-catalog.ts:129:51
+-         const unused = !catalog.pads.some((item) => item.assetId === pad.assetId);
++         const unused = !catalog.pads.some((item) => item.assetId !== pad.assetId);
+
+[NoCoverage] ArrayDeclaration
+src/main/library/managed-catalog.ts:135:59
+-         this.store.commit(catalog, unused ? [pad.assetId] : []);
++         this.store.commit(catalog, unused ? [pad.assetId] : ["Stryker was here"]);
+
+[NoCoverage] CallExpression
+src/main/library/managed-catalog.ts:154:20
+-       if (this.busy) throw new CatalogFault(ErrorCode.Busy);
++       if (this.busy) ;
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:41:5
+-       this.dependencies.assertEditLease(request.lease);
++       ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 6 more tests!
+
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:68:9
+-           this.dependencies.assertEditLease(request.lease);
++           ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    reports missing media, corruption and future versions without reset
+  and 4 more tests!
+
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:84:7
+-         this.dependencies.assertEditLease(request.lease);
++         ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    reports missing media, corruption and future versions without reset
+  and 3 more tests!
+
+
+[Survived] LogicalOperator
+src/main/library/managed-catalog.ts:108:9
+-           request.padIds.length !== catalog.pads.length ||
+-           new Set(request.padIds).size !== catalog.pads.length ||
++           request.padIds.length !== catalog.pads.length && new Set(request.padIds).size !== catalog.pads.length ||
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    rejects unknown pads and invalid reorder without saving
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:108:9
+-           request.padIds.length !== catalog.pads.length ||
++           false ||
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    rejects unknown pads and invalid reorder without saving
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:109:9
+-           new Set(request.padIds).size !== catalog.pads.length ||
++           false ||
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+
+
+[Survived] MethodExpression
+src/main/library/managed-catalog.ts:110:9
+-           request.padIds.some((id) => !catalog.pads.some((pad) => pad.id === id))
++           request.padIds.every(id => !catalog.pads.some(pad => pad.id === id))
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+
+
+[Survived] ArrowFunction
+src/main/library/managed-catalog.ts:110:29
+-           request.padIds.some((id) => !catalog.pads.some((pad) => pad.id === id))
++           request.padIds.some(() => undefined)
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:110:65
+-           request.padIds.some((id) => !catalog.pads.some((pad) => pad.id === id))
++           request.padIds.some((id) => !catalog.pads.some((pad) => true))
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+
+
+[Survived] EqualityOperator
+src/main/library/managed-catalog.ts:110:65
+-           request.padIds.some((id) => !catalog.pads.some((pad) => pad.id === id))
++           request.padIds.some((id) => !catalog.pads.some((pad) => pad.id !== id))
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+
+
+[Survived] ArrowFunction
+src/main/library/managed-catalog.ts:125:42
+-         catalog.pads = catalog.pads.filter((item) => item.id !== pad.id);
++         catalog.pads = catalog.pads.filter(() => undefined);
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:125:52
+-         catalog.pads = catalog.pads.filter((item) => item.id !== pad.id);
++         catalog.pads = catalog.pads.filter((item) => false);
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] MethodExpression
+src/main/library/managed-catalog.ts:126:35
+-         catalog.repertoire.padIds = catalog.repertoire.padIds.filter(
+-           (id) => id !== pad.id,
+-         );
++         catalog.repertoire.padIds = catalog.repertoire.padIds;
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ArrowFunction
+src/main/library/managed-catalog.ts:127:9
+-           (id) => id !== pad.id,
++           () => undefined,
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:127:17
+-           (id) => id !== pad.id,
++           (id) => true,
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:127:17
+-           (id) => id !== pad.id,
++           (id) => false,
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] EqualityOperator
+src/main/library/managed-catalog.ts:127:17
+-           (id) => id !== pad.id,
++           (id) => id === pad.id,
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ArrowFunction
+src/main/library/managed-catalog.ts:129:41
+-         const unused = !catalog.pads.some((item) => item.assetId === pad.assetId);
++         const unused = !catalog.pads.some(() => undefined);
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:130:11
+-         if (unused)
++         if (true)
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ArrowFunction
+src/main/library/managed-catalog.ts:132:11
+-             (asset) => asset.id !== pad.assetId,
++             () => undefined,
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:132:22
+-             (asset) => asset.id !== pad.assetId,
++             (asset) => false,
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:145:9
+-           this.store.cleaned(name);
++           ;
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:153:5
+-       this.dependencies.assertEditLease(lease);
++       ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 4 more tests!
+
+
+[Survived] ConditionalExpression
+src/main/library/managed-catalog.ts:154:9
+-       if (this.busy) throw new CatalogFault(ErrorCode.Busy);
++       if (false) throw new CatalogFault(ErrorCode.Busy);
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 4 more tests!
+
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:155:5
+-       this.cleanup();
++       ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 4 more tests!
+
+
+[Survived] BlockStatement
+src/main/library/managed-catalog.ts:160:17
+-     close(): void {
+-       this.store.close();
+-     }
++     close(): void {}
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 7 more tests!
+
+
+[Survived] CallExpression
+src/main/library/managed-catalog.ts:161:5
+-       this.store.close();
++       ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 7 more tests!
+
+
+[NoCoverage] BlockStatement
+src/main/storage/catalog-store.ts:20:13
+-       } catch {
+-         throw new CatalogFault(ErrorCode.CorruptCatalog);
+-       }
++       } catch {}
+
+[NoCoverage] CallExpression
+src/main/storage/catalog-store.ts:21:7
+-         throw new CatalogFault(ErrorCode.CorruptCatalog);
++         ;
+
+[NoCoverage] BlockStatement
+src/main/storage/catalog-store.ts:43:25
+-           } catch (error) {
+-             this.db.exec('ROLLBACK');
+-             throw error;
+-           }
++           } catch (error) {}
+
+[NoCoverage] StringLiteral
+src/main/storage/catalog-store.ts:44:24
+-             this.db.exec('ROLLBACK');
++             this.db.exec("");
+
+[NoCoverage] BlockStatement
+src/main/storage/catalog-store.ts:93:13
+-       } catch {
+-         throw new CatalogFault(ErrorCode.CorruptCatalog);
+-       }
++       } catch {}
+
+[NoCoverage] CallExpression
+src/main/storage/catalog-store.ts:94:7
+-         throw new CatalogFault(ErrorCode.CorruptCatalog);
++         ;
+
+[Survived] StringLiteral
+src/main/storage/catalog-store.ts:24:20
+-         this.db.exec('PRAGMA foreign_keys = ON');
++         this.db.exec("");
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 8 more tests!
+
+
+[Survived] CallExpression
+src/main/storage/catalog-store.ts:48:7
+-         this.read();
++         ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 8 more tests!
+
+
+[Survived] CallExpression
+src/main/storage/catalog-store.ts:50:7
+-         this.db.close();
++         ;
+Tests ran:
+    reports missing media, corruption and future versions without reset
+
+
+[Survived] CallExpression
+src/main/storage/catalog-store.ts:101:7
+-         catalogSchema.parse(catalog);
++         ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    reports missing media, corruption and future versions without reset
+  and 4 more tests!
+
+
+[Survived] StringLiteral
+src/main/storage/catalog-store.ts:133:20
+-         this.db.exec('ROLLBACK');
++         this.db.exec("");
+Tests ran:
+    rolls back publication on SQL failure and removes promoted orphans on recovery
+    atomically rejects publication from an outdated second connection
+
+
+[Survived] BlockStatement
+src/main/storage/catalog-store.ts:145:31
+-     cleaned(name: string): void {
+-       this.db.prepare('DELETE FROM cleanup WHERE name = ?').run(name);
+-     }
++     cleaned(name: string): void {}
+Tests ran:
+    keeps deletion cleanup durable when unlink fails and retries on restart
+
+
+[Survived] BlockStatement
+src/main/storage/catalog-store.ts:148:17
+-     close(): void {
+-       this.db.close();
+-     }
++     close(): void {}
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 8 more tests!
+
+
+[Survived] CallExpression
+src/main/storage/catalog-store.ts:149:5
+-       this.db.close();
++       ;
+Tests ran:
+    persists 31 pads, labels, colors, ordering and managed bytes across restart
+    keeps deletion cleanup durable when unlink fails and retries on restart
+    never publishes failed copies or invalid audio and recovers staged files
+  and 8 more tests!
+
+
+Ran 1.74 tests per mutant on average.
+----------------------|------------------|----------|-----------|------------|----------|----------|
+                      | % Mutation score |          |           |            |          |          |
+File                  |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+----------------------|--------|---------|----------|-----------|------------|----------|----------|
+All files             |  85.49 |   88.56 |      271 |         0 |         35 |       11 |        0 |
+ contracts            | 100.00 |  100.00 |       16 |         0 |          0 |        0 |        0 |
+  catalog.ts          | 100.00 |  100.00 |        7 |         0 |          0 |        0 |        0 |
+  operations.ts       | 100.00 |  100.00 |        9 |         0 |          0 |        0 |        0 |
+ domain               | 100.00 |  100.00 |       65 |         0 |          0 |        0 |        0 |
+  lease.ts            | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  playback.ts         | 100.00 |  100.00 |       41 |         0 |          0 |        0 |        0 |
+ main                 |  80.51 |   84.44 |      190 |         0 |         35 |       11 |        0 |
+  library             |  74.40 |   77.50 |       93 |         0 |         27 |        5 |        0 |
+   managed-catalog.ts |  74.40 |   77.50 |       93 |         0 |         27 |        5 |        0 |
+  storage             |  87.39 |   92.38 |       97 |         0 |          8 |        6 |        0 |
+   catalog-store.ts   |  79.71 |   87.30 |       55 |         0 |          8 |        6 |        0 |
+   managed-files.ts   | 100.00 |  100.00 |       42 |         0 |          0 |        0 |        0 |
+----------------------|--------|---------|----------|-----------|------------|----------|----------|
+[91m21:07:12 (77931) ERROR MutationTestReportHelper[39m Final mutation score 85.49 under breaking threshold 100, setting exit code to 1 (failure).
+[32m21:07:12 (77931) INFO MutationTestReportHelper[39m (improve mutation score or set `thresholds.break = null` to prevent this error in the future)
+[32m21:07:12 (77931) INFO JsonReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-70db4119-b2b2b1e819a85c81/reports/mutation/mutation.json
+[32m21:07:12 (77931) INFO HtmlReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-70db4119-b2b2b1e819a85c81/reports/mutation/mutation.html
+[32m21:07:12 (77931) INFO MutationTestExecutor[39m Done in 1 minute and 49 seconds.

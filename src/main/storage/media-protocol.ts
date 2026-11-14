@@ -72,9 +72,14 @@ export class ManagedMediaProtocol {
       if (!stat.isFile()) throw new Error();
       let start = 0;
       let end = stat.size - 1;
-      const range = request.headers.get('range');
+      const requestedRange = request.headers.get('range');
+      const range =
+        request.method === 'GET' &&
+        requestedRange?.slice(0, 6).toLowerCase() === 'bytes='
+          ? requestedRange
+          : null;
       if (range !== null) {
-        if (!/^bytes=(?:\d+-\d*|-\d+)$/.test(range)) {
+        if (!/^bytes=(?:\d+-\d*|-\d+)$/i.test(range)) {
           await cleanup();
           return new Response(null, {
             status: 416,
@@ -111,7 +116,7 @@ export class ManagedMediaProtocol {
       if (request.method === 'HEAD') {
         await cleanup();
         return new Response(null, {
-          status: range === null ? 200 : 206,
+          status: 200,
           headers,
         });
       }

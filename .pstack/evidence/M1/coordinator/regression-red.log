@@ -1,0 +1,119 @@
+
+ RUN  v4.1.12 /home/igstefano/.t3/projects/mr-emo-virtual-pad
+
+ ❯ tests/media/protocol.test.ts (77 tests | 8 failed) 284ms
+   × serves one byte and ignores HEAD ranges 10ms
+   × ignores HEAD Range bytes=20- and reports the complete representation 3ms
+   × ignores HEAD Range bytes=- and reports the complete representation 3ms
+   × ignores HEAD Range items=0-2 and reports the complete representation 3ms
+   × ignores unrecognized range unit items=0-2 3ms
+   × ignores unrecognized range unit garbagebytes=0-2 4ms
+   × accepts case-insensitive byte units 3ms
+   × rejects an absolute relative destination from Windows cross-volume resolution 4ms
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 69 passed (77)
+   Start at  01:57:32
+   Duration  696ms (transform 131ms, setup 0ms, import 241ms, tests 284ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/media/protocol.test.ts > serves one byte and ignores HEAD ranges
+AssertionError: expected 206 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 206
+
+ ❯ tests/media/protocol.test.ts:336:23
+    334|     new Request(url, { method: 'HEAD', headers: { range: 'bytes=1-3' }…
+    335|   );
+    336|   expect(head.status).toBe(200);
+       |                       ^
+    337|   expect(head.headers.get('content-range')).toBeNull();
+    338|   expect(head.headers.get('content-length')).toBe('10');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/media/protocol.test.ts > ignores HEAD Range bytes=20- and reports the complete representation
+ FAIL  tests/media/protocol.test.ts > ignores HEAD Range bytes=- and reports the complete representation
+ FAIL  tests/media/protocol.test.ts > ignores HEAD Range items=0-2 and reports the complete representation
+AssertionError: expected 416 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 416
+
+ ❯ tests/media/protocol.test.ts:367:29
+    365|       new Request(url, { method: 'HEAD', headers: { range } }),
+    366|     );
+    367|     expect(response.status).toBe(200);
+       |                             ^
+    368|     expect(response.headers.get('content-length')).toBe('10');
+    369|     expect(response.headers.get('content-range')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/media/protocol.test.ts > ignores unrecognized range unit items=0-2
+ FAIL  tests/media/protocol.test.ts > ignores unrecognized range unit garbagebytes=0-2
+AssertionError: expected 416 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 416
+
+ ❯ tests/media/protocol.test.ts:380:29
+    378|       new Request(url, { headers: { range } }),
+    379|     );
+    380|     expect(response.status).toBe(200);
+       |                             ^
+    381|     expect(response.headers.get('content-length')).toBe('10');
+    382|     expect(response.headers.get('content-range')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/media/protocol.test.ts > accepts case-insensitive byte units
+AssertionError: expected 416 to be 206 // Object.is equality
+
+- Expected
++ Received
+
+- 206
++ 416
+
+ ❯ tests/media/protocol.test.ts:391:27
+    389|     new Request(url, { headers: { range: 'Bytes=1-3' } }),
+    390|   );
+    391|   expect(response.status).toBe(206);
+       |                           ^
+    392|   expect(response.headers.get('content-range')).toBe('bytes 1-3/10');
+    393|   expect(await response.text()).toBe('123');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/media/protocol.test.ts > rejects an absolute relative destination from Windows cross-volume resolution
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ tests/media/protocol.test.ts:408:29
+    406|   try {
+    407|     const response = await adapter.handle(new Request('pad-app://app/'…
+    408|     expect(response.status).toBe(403);
+       |                             ^
+    409|     expect(await response.text()).toBe('');
+    410|   } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+

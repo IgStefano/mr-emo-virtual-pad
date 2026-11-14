@@ -1,0 +1,14 @@
+{
+  "baseline": {
+    "status": 0,
+    "stdout": "Response opened; backing file truncated.\nRejected unexpected EOF.\n",
+    "stderr": ""
+  },
+  "mutant": {
+    "status": null,
+    "signal": "SIGTERM",
+    "timeout": true,
+    "stdout": "Response opened; backing file truncated.\n",
+    "stderr": ""
+  }
+}

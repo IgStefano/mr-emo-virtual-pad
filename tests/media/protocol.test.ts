@@ -1,6 +1,10 @@
 import { mkdtemp, writeFile, rm, symlink, truncate } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import * as paths from 'node:path';
+vi.mock('node:path', async (importOriginal) => ({
+  ...(await importOriginal<typeof paths>()),
+}));
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import * as fs from 'node:fs/promises';
 vi.mock('node:fs/promises', async (importOriginal) => ({
@@ -56,7 +60,6 @@ it.each([
   'bytes=10-',
   'bytes=5-4',
   'bytes=0-1,3-4',
-  'items=0-2',
   'bytes=999999999999999999999-',
   'bytes=0-999999999999999999999',
 ])('rejects invalid range %s', async (range) => {
@@ -312,7 +315,7 @@ it.each(['evilpad-media://media/' + id + '?lease=' + lease, url + '?x=1'])(
     expect((await media.handle(new Request(bad))).status).toBe(400);
   },
 );
-it.each(['garbagebytes=0-2', 'bytes=0-2garbage', 'bytes=-', 'bytes='])(
+it.each(['bytes=0-2garbage', 'bytes=garbagebytes=0-2', 'bytes=-', 'bytes='])(
   'rejects malformed range %s',
   async (range) => {
     const response = await media.handle(
@@ -322,7 +325,7 @@ it.each(['garbagebytes=0-2', 'bytes=0-2garbage', 'bytes=-', 'bytes='])(
     expect(response.headers.get('content-range')).toBe('bytes */10');
   },
 );
-it('serves one byte and HEAD ranges', async () => {
+it('serves one byte and ignores HEAD ranges', async () => {
   const response = await media.handle(
     new Request(url, { headers: { range: 'bytes=9-9' } }),
   );
@@ -330,9 +333,9 @@ it('serves one byte and HEAD ranges', async () => {
   const head = await media.handle(
     new Request(url, { method: 'HEAD', headers: { range: 'bytes=1-3' } }),
   );
-  expect(head.status).toBe(206);
-  expect(head.headers.get('content-range')).toBe('bytes 1-3/10');
-  expect(head.headers.get('content-length')).toBe('3');
+  expect(head.status).toBe(200);
+  expect(head.headers.get('content-range')).toBeNull();
+  expect(head.headers.get('content-length')).toBe('10');
   expect(await head.text()).toBe('');
 });
 it('rejects directories for both protocols', async () => {
@@ -353,6 +356,61 @@ it('rejects directories for both protocols', async () => {
       )
     ).status,
   ).toBe(404);
+});
+
+it.each(['bytes=20-', 'bytes=-', 'items=0-2'])(
+  'ignores HEAD Range %s and reports the complete representation',
+  async (range) => {
+    const response = await media.handle(
+      new Request(url, { method: 'HEAD', headers: { range } }),
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-length')).toBe('10');
+    expect(response.headers.get('content-range')).toBeNull();
+    expect(await response.text()).toBe('');
+  },
+);
+
+it.each(['items=0-2', 'garbagebytes=0-2'])(
+  'ignores unrecognized range unit %s',
+  async (range) => {
+    const response = await media.handle(
+      new Request(url, { headers: { range } }),
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-length')).toBe('10');
+    expect(response.headers.get('content-range')).toBeNull();
+    expect(await response.text()).toBe('0123456789');
+  },
+);
+
+it('accepts case-insensitive byte units', async () => {
+  const response = await media.handle(
+    new Request(url, { headers: { range: 'Bytes=1-3' } }),
+  );
+  expect(response.status).toBe(206);
+  expect(response.headers.get('content-range')).toBe('bytes 1-3/10');
+  expect(await response.text()).toBe('123');
+});
+
+it('rejects an absolute relative destination from Windows cross-volume resolution', async () => {
+  const adapter = new ApplicationProtocol(root);
+  const relative = vi
+    .spyOn(paths, 'relative')
+    .mockReturnValue(
+      paths.win32.relative('C:\\renderer', 'D:\\private\\secret.txt'),
+    );
+  const absolute = vi
+    .spyOn(paths, 'isAbsolute')
+    .mockImplementation((value) => paths.win32.isAbsolute(value));
+  try {
+    const response = await adapter.handle(new Request('pad-app://app/' + id));
+    expect(response.status).toBe(403);
+    expect(await response.text()).toBe('');
+  } finally {
+    relative.mockRestore();
+    absolute.mockRestore();
+  }
 });
 it('revokes only the selected lease', async () => {
   const secondLease = leaseIdSchema.parse(

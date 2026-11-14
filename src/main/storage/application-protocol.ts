@@ -35,7 +35,7 @@ export class ApplicationProtocol {
       const root = await realpath(this.rendererRoot);
       const path = await realpath(join(root, name));
       const child = relative(root, path);
-      if (child.startsWith(`..${sep}`))
+      if (isAbsolute(child) || child.startsWith(`..${sep}`))
         return new Response(null, { status: 403 });
       const file = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW);
       try {

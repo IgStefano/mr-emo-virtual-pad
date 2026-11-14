@@ -1,0 +1,36 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
+if (process.argv[2] === 'child') {
+  const ts = require('typescript');
+  require.extensions['.ts'] = (module, filename) => {
+    let source = fs.readFileSync(filename, 'utf8');
+    if (process.argv[4] === 'mutant' && filename.endsWith('/media-protocol.ts')) {
+      source = source.replace("if (bytesRead === 0) throw new Error('Unexpected end of media');", "if (false) throw new Error('Unexpected end of media');");
+    }
+    module._compile(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, filename);
+  };
+  const { ManagedMediaProtocol } = require(path.resolve('src/main/storage/media-protocol.ts'));
+  (async () => {
+    const root = process.argv[3];
+    const id = 'b91324d5-07bf-4cd5-b110-bd78d68b9778';
+    const file = path.join(root, id);
+    fs.writeFileSync(file, '0123456789');
+    const media = new ManagedMediaProtocol({ mediaRoot: root, authorize: async () => {} });
+    const response = await media.handle(new Request(`pad-media://media/${id}?lease=b91324d5-07bf-4cd5-b110-bd78d68b9779`));
+    fs.truncateSync(file, 0);
+    console.log('Response opened; backing file truncated.');
+    try { await response.text(); throw new Error('Expected rejection'); }
+    catch (error) { if (error.message !== 'Unexpected end of media') throw error; console.log('Rejected unexpected EOF.'); }
+    finally { media.dispose(); }
+  })().catch(error => { console.error(error); process.exitCode = 1; });
+} else {
+  const directory = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'pad-zero-read-'));
+  try {
+    const baseline = spawnSync(process.execPath, [__filename, 'child', directory, 'baseline'], { encoding: 'utf8', timeout: 3000 });
+    const mutant = spawnSync(process.execPath, [__filename, 'child', directory, 'mutant'], { encoding: 'utf8', timeout: 3000 });
+    const result = { baseline: { status: baseline.status, stdout: baseline.stdout, stderr: baseline.stderr }, mutant: { status: mutant.status, signal: mutant.signal, timeout: mutant.error?.code === 'ETIMEDOUT', stdout: mutant.stdout, stderr: mutant.stderr } };
+    console.log(JSON.stringify(result, null, 2));
+    if (baseline.status !== 0 || !result.mutant.timeout || !mutant.stdout.includes('backing file truncated')) process.exitCode = 1;
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+}

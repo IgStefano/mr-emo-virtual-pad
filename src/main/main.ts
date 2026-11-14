@@ -6,6 +6,7 @@ import {
   protocol,
   dialog,
   Menu,
+  powerMonitor,
 } from 'electron';
 import type { MenuItemConstructorOptions } from 'electron';
 import path from 'node:path';
@@ -21,6 +22,8 @@ import { registerDesktopIpc } from './ipc/desktop';
 import { desktopOperations } from '../contracts/desktop';
 import { ErrorCode, LeaseKind } from '../contracts/operations';
 import { CatalogFault } from './storage/catalog-store';
+import { WindowLifecycle } from './lifecycle/window';
+import { ApplicationShutdown } from './lifecycle/shutdown';
 import { RendererLifetime } from './ipc/renderer-lifetime';
 
 protocol.registerSchemesAsPrivileged([
@@ -48,6 +51,19 @@ if (verificationDirectory !== undefined) {
   }
   app.setPath('userData', verificationDirectory);
 }
+
+let shutdown: Promise<void> = Promise.resolve();
+const applicationShutdown = new ApplicationShutdown({
+  closeWindows: () => {
+    for (const window of BrowserWindow.getAllWindows()) window.close();
+  },
+  hasWindows: () => BrowserWindow.getAllWindows().length !== 0,
+  drain: () => shutdown,
+  quit: () => {
+    app.quit();
+  },
+  report: console.error,
+});
 
 async function openWindow(): Promise<void> {
   const entry = path.join(
@@ -128,7 +144,28 @@ async function openWindow(): Promise<void> {
     window.destroy();
   });
   window.webContents.once('destroyed', () => {
-    void terminate().catch(console.error);
+    shutdown = terminate();
+    void shutdown.catch(console.error);
+  });
+  const windowLifecycle = new WindowLifecycle({
+    isPlaying: () => lifetime.playing,
+    confirmClose: () =>
+      dialog.showMessageBoxSync(window, {
+        type: 'question',
+        message: 'Stop playback and close?',
+        buttons: ['Keep playing', 'Stop and close'],
+        defaultId: 0,
+        cancelId: 0,
+      }) === 1,
+    destroy: () => {
+      window.destroy();
+    },
+  });
+  window.on('close', (event) => {
+    if (!windowLifecycle.requestClose()) event.preventDefault();
+  });
+  powerMonitor.once('suspend', () => {
+    windowLifecycle.suspend();
   });
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-navigate', (event) => {
@@ -178,7 +215,12 @@ if (!app.requestSingleInstanceLock()) {
       console.error(error);
       app.quit();
     });
+  app.on('before-quit', (event) => {
+    if (!applicationShutdown.request()) event.preventDefault();
+  });
   app.on('window-all-closed', () => {
-    app.quit();
+    setImmediate(() => {
+      app.quit();
+    });
   });
 }

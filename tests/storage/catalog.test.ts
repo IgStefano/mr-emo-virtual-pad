@@ -1,5 +1,8 @@
 import {
   mkdtempSync,
+  chmodSync,
+  openSync,
+  closeSync,
   writeFileSync,
   readFileSync,
   rmSync,
@@ -8,6 +11,7 @@ import {
   symlinkSync,
   readlinkSync,
 } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -140,7 +144,11 @@ it('reports missing media, corruption and future versions without reset', async 
   const db = new DatabaseSync(path);
   db.exec('PRAGMA user_version = 2');
   db.close();
-  expect(() => new CatalogStore(path)).toThrow('future-schema');
+  const futureBytes = readFileSync(path);
+  for (let restart = 0; restart < 2; restart++) {
+    expect(() => new CatalogStore(path)).toThrow('future-schema');
+    expect(readFileSync(path)).toEqual(futureBytes);
+  }
   writeFileSync(path, 'invalid database');
   expect(() => new CatalogStore(path)).toThrow('corrupt-catalog');
   expect(readFileSync(path, 'utf8')).toBe('invalid database');
@@ -582,3 +590,167 @@ it.skipIf(process.platform !== 'linux')(
     expect(opened).not.toContain(path);
   },
 );
+
+it.each(['staging', 'publication', 'committed', 'deletion', 'unlink'])(
+  'converges after process death at %s without changing originals',
+  async (checkpoint) => {
+    const f = setup();
+    let library = new ManagedCatalog(f.root, f.dependencies);
+    const catalog = await library.importAudio({
+      lease: f.lease,
+      expectedRevision: 0,
+    });
+    library.close();
+    const asset = catalog.assets.at(0);
+    if (!asset) throw new Error('missing asset');
+    const child = spawnSync(process.execPath, [
+      '--experimental-transform-types',
+      '--input-type=module',
+      '-e',
+      `
+    import { registerHooks } from 'node:module';
+    registerHooks({ resolve(specifier, context, next) {
+      try { return next(specifier, context); }
+      catch (error) {
+        if (specifier.startsWith('.') && error.code === 'ERR_MODULE_NOT_FOUND') return next(specifier + '.ts', context);
+        throw error;
+      }
+    } });
+    const { ManagedCatalog } = await import('./src/main/library/managed-catalog.ts');
+    const { ManagedFiles } = await import('./src/main/storage/managed-files.ts');
+    const { CatalogStore } = await import('./src/main/storage/catalog-store.ts');
+    const [root, source, id, checkpoint] = process.argv.slice(1);
+    const die = () => {
+      if (process.platform === 'win32') process.exit(91);
+      process.kill(process.pid, 'SIGKILL');
+    };
+    const promote = ManagedFiles.prototype.promote;
+    ManagedFiles.prototype.promote = function(id) {
+      promote.call(this, id);
+      if (checkpoint === 'publication') die();
+    };
+    const commit = CatalogStore.prototype.commit;
+    CatalogStore.prototype.commit = function(catalog, cleanup) {
+      commit.call(this, catalog, cleanup);
+      if (checkpoint === 'deletion' || checkpoint === 'committed') die();
+    };
+    const remove = ManagedFiles.prototype.remove;
+    ManagedFiles.prototype.remove = function(id) {
+      remove.call(this, id);
+      if (checkpoint === 'unlink') die();
+    };
+    const library = new ManagedCatalog(root, {
+      assertEditLease() {}, selectFiles: async () => [source],
+      validateAudio: async () => {
+        if (checkpoint === 'staging') die();
+        return { durationSeconds: 12 };
+      },
+    });
+    const lease = { sessionId: id, leaseId: id, attemptId: 1, kind: 'edit' };
+    if (checkpoint === 'deletion' || checkpoint === 'unlink') {
+      const catalog = await library.getCatalog();
+      await library.deletePad({ lease, expectedRevision: 1, padId: catalog.pads[0].id });
+    } else await library.importAudio({ lease, expectedRevision: 1 });
+    throw new Error('checkpoint not reached');
+  `,
+      f.root,
+      f.source,
+      asset.id,
+      checkpoint,
+    ]);
+    expect(child.stderr.toString()).not.toContain('ERR_MODULE_NOT_FOUND');
+    expect({ status: child.status, signal: child.signal }).toEqual(
+      process.platform === 'win32'
+        ? { status: 91, signal: null }
+        : { status: null, signal: 'SIGKILL' },
+    );
+    for (let restart = 0; restart < 2; restart++) {
+      library = new ManagedCatalog(f.root, f.dependencies);
+      library.recover(f.lease);
+      const recovered = await library.getCatalog();
+      expect(recovered.pads).toHaveLength(
+        checkpoint === 'deletion' || checkpoint === 'unlink'
+          ? 0
+          : checkpoint === 'committed'
+            ? 2
+            : 1,
+      );
+      for (const recoveredAsset of recovered.assets) {
+        expect(
+          readFileSync(join(f.root, 'media', recoveredAsset.id), 'utf8'),
+        ).toBe('audio bytes');
+      }
+      expect(readdirSync(join(f.root, 'staging'))).toEqual([]);
+      expect(readdirSync(join(f.root, 'quarantine'))).toHaveLength(
+        checkpoint === 'staging' || checkpoint === 'publication' ? 1 : 0,
+      );
+      expect(readFileSync(f.source, 'utf8')).toBe('audio bytes');
+      library.close();
+    }
+  },
+);
+
+it.skipIf(process.platform === 'win32')(
+  'retains cleanup intent through real directory permission failure and repeated recovery',
+  async () => {
+    const f = setup();
+    let library = new ManagedCatalog(f.root, f.dependencies);
+    const catalog = await library.importAudio({
+      lease: f.lease,
+      expectedRevision: 0,
+    });
+    const pad = catalog.pads.at(0);
+    if (!pad) throw new Error('missing pad');
+    const media = join(f.root, 'media');
+    chmodSync(media, 0o500);
+    try {
+      await expect(
+        library.deletePad({
+          lease: f.lease,
+          expectedRevision: 1,
+          padId: pad.id,
+        }),
+      ).rejects.toMatchObject({ code: 'cleanup-required' });
+      library.close();
+      library = new ManagedCatalog(f.root, f.dependencies);
+      expect(() => {
+        library.recover(f.lease);
+      }).toThrow('cleanup-required');
+      expect(readFileSync(join(media, pad.assetId), 'utf8')).toBe(
+        'audio bytes',
+      );
+      expect((await library.getCatalog()).pads).toEqual([]);
+    } finally {
+      chmodSync(media, 0o700);
+    }
+    library.recover(f.lease);
+    library.recover(f.lease);
+    expect(readdirSync(media)).toEqual([]);
+    expect(readFileSync(f.source, 'utf8')).toBe('audio bytes');
+    library.close();
+  },
+);
+
+it('deletes a managed copy with an open host file handle without touching its original', async () => {
+  const f = setup();
+  const library = new ManagedCatalog(f.root, f.dependencies);
+  const catalog = await library.importAudio({
+    lease: f.lease,
+    expectedRevision: 0,
+  });
+  const pad = catalog.pads.at(0);
+  if (!pad) throw new Error('missing pad');
+  const handle = openSync(join(f.root, 'media', pad.assetId), 'r');
+  try {
+    await library.deletePad({
+      lease: f.lease,
+      expectedRevision: 1,
+      padId: pad.id,
+    });
+    expect(readdirSync(join(f.root, 'media'))).toEqual([]);
+    expect(readFileSync(f.source, 'utf8')).toBe('audio bytes');
+  } finally {
+    closeSync(handle);
+    library.close();
+  }
+});

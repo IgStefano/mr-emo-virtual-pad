@@ -106,6 +106,7 @@ export class DomAudioExecutor implements AudioExecutor {
 
   async dispose(): Promise<void> {
     this.disposed = true;
+    this.listeners.clear();
     if (this.resource) await this.stop(this.resource.request.attemptId);
   }
 }

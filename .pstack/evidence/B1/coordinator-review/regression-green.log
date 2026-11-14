@@ -1,0 +1,11 @@
+
+ RUN  v4.1.12 /home/igstefano/.t3/projects/mr-emo-virtual-pad
+
+(node:102179) ExperimentalWarning: v8.queryObjects() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:27:59
+   Duration  607ms (transform 63ms, setup 0ms, import 140ms, tests 326ms, environment 0ms)
+

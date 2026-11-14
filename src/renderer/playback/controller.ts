@@ -170,6 +170,7 @@ export class PlaybackController {
 
   async dispose(): Promise<void> {
     this.disposed = true;
+    this.listeners.clear();
     this.unsubscribe();
     await this.stop();
     if (this.attempt) throw new Error(ErrorCode.CleanupRequired);

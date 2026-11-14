@@ -1,7 +1,8 @@
 # V1 delivery and parallel work plan
 
-Status: planned, not dispatched. Baseline: scaffold, domain intentions and executable
-guardrails. Full playback, storage and editing are still to be implemented.
+Status: contracts, storage, playback and shell harness are integrated and verified
+within their module scopes. Runtime integration and the editing UI remain.
+The dispatch state and acceptance evidence are recorded in .pstack/work.json.
 The accepted behavior is in spec.md. Follow architecture.md and verification.md.
 
 ## Working agreement

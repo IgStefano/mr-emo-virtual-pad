@@ -1,8 +1,8 @@
 # Architecture and implementation status
 
-Single Electron/React/TypeScript project. Build: Forge + Vite. Runtime data will
-use SQLite metadata plus managed audio files; storage is not implemented yet.
-Driver choice requires the packaged Electron spike described in research v2.
+Single Electron/React/TypeScript project. Build: Forge + Vite. Storage uses
+node:sqlite metadata plus managed audio files. The storage and playback modules
+pass host verification; packaged target compatibility remains a release gate.
 
 ## Layer matrix
 
@@ -30,14 +30,15 @@ inputs and outputs as well as authorization; TS types alone are insufficient.
 `domain/playback.ts` is a pure transition function returning state and effects.
 It enforces single-attempt transitions, ignores busy clicks and stale callbacks,
 and emits start-at-zero/stop intentions. Attempt IDs must be unique and allocated
-by the future controller. Its stopped result means the transition has requested
-cleanup, not that a device is already silent. The future executor must retain its
+by PlaybackController. Its stopped result means the transition has requested
+cleanup, not that a device is already silent. The controller retains its
 busy gate until cleanup/lease release is acknowledged. Do not wire this reducer
 directly to React buttons as a complete playback controller.
 
-Audio execution, playback/edit leases, SQLite, file import/delete, managed media
-protocol and editing UI are not implemented. Use one HTMLAudioElement eligible
-to play, controlled outside React; main will arbitrate access to the acervo.
+ManagedCatalog coordinates import, revision checks, edits and deletion through
+CatalogStore and ManagedFiles. PlaybackController owns playback attempts and
+cleanup; DomAudioExecutor owns the single eligible HTMLAudioElement outside React.
+Main lease arbitration, IPC/media wiring and editing UI remain to be implemented.
 No global bus or event sourcing: asynchronous results return as correlated inputs.
 
 ## Runtime shell
@@ -58,10 +59,11 @@ No generic detector claims to prove absence of slop. Symbol-aware restrictions o
 future Audio/IPC/storage adapters must be added with those actual adapters.
 
 Tests run the real graph against illegal relative/alias/type/builtin imports and
-lint invalid snippets. Mutation includes every domain TS file today, at 100%,
+lint invalid snippets. Mutation covers domain, catalog/operation contracts,
+storage/library and playback modules at 100%,
 with a nonempty-report gate. Extend the mutation glob to new behavior-bearing
 controllers/adapters/contracts alongside their implementation. Current excluded
-shell/contracts are wiring, not verified playback or storage.
+shell/app-info files are wiring, not verified end-to-end playback or storage.
 
 Exceptions must identify rule, narrow scope, reason, compensating evidence and
 review condition. Global suppression/threshold reduction is a policy change,

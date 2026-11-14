@@ -1,0 +1,34 @@
+const fs = require('node:fs');
+const ts = require('typescript');
+require.extensions['.ts'] = (module, file) => module._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, file);
+const { DomAudioExecutor } = require('../../src/renderer/playback/dom-audio.ts');
+const { PlaybackController } = require('../../src/renderer/playback/controller.ts');
+const { sessionIdSchema } = require('../../src/contracts/catalog.ts');
+const assert = require('node:assert/strict');
+const tick = () => new Promise(resolve => setImmediate(resolve));
+async function collect() { for (let i = 0; i < 12; i++) { await tick(); global.gc(); } }
+function attach(owner, remove = false) {
+  const payload = { bytes: new Uint8Array(1024 * 1024) };
+  const ref = new WeakRef(payload);
+  const unsubscribe = owner.subscribe(() => payload.bytes.byteLength);
+  if (remove) unsubscribe();
+  return ref;
+}
+(async () => {
+  const audio = new DomAudioExecutor(() => 'unused');
+  const authority = { acquire: async () => { throw Error('unused'); }, release: async () => {}, disposeSession: async () => {} };
+  const controller = new PlaybackController(audio, authority, sessionIdSchema.parse('00000000-0000-4000-8000-000000000001'));
+  const a = attach(audio);
+  const c = attach(controller);
+  const controlA = attach(audio, true);
+  const controlC = attach(controller, true);
+  await controller.dispose();
+  await collect();
+  const retained = { audio: !!a.deref(), controller: !!c.deref() };
+  const controls = { audio: !!controlA.deref(), controller: !!controlC.deref() };
+  console.log('after successful disposal, subscriber payload retained:', retained);
+  console.log('explicitly unsubscribed controls retained:', controls);
+  assert.deepEqual(retained, { audio: true, controller: true });
+  assert.deepEqual(controls, { audio: false, controller: false });
+  console.log('owners still reachable:', audio.constructor.name, controller.snapshot().busy);
+})();

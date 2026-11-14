@@ -78,7 +78,7 @@
     {
       "id": "C1",
       "title": "Build isolated verification harness",
-      "status": "active",
+      "status": "accepted",
       "dependsOn": ["P0"],
       "ownedPaths": [
         "tests/electron",
@@ -87,8 +87,11 @@
         ".pstack/evidence/C1"
       ],
       "brief": ".pstack/briefs/C1.md",
-      "acceptedSha": null,
-      "evidence": []
+      "acceptedSha": "32bf1546ac3c62cf7486ae41e2a9264f3d8a364e",
+      "evidence": [
+        ".pstack/evidence/C1/coordinator.md",
+        ".pstack/evidence/C1/coordinator-live/result.json"
+      ]
     },
     {
       "id": "I1",

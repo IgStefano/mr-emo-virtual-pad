@@ -35,5 +35,10 @@ plus Input, using the shell's CSS tokens alongside the existing Button. No Tailw
 runtime or remote assets are needed. Radix supplies dialog focus management and
 progress/scroll semantics. Feature views compose these primitives; the native
 desktop API remains the only catalog boundary. Reorder handles support dragging
-and explicit Subir/Descer alternatives. Name changes save on blur; color and order
-save immediately. Failed saves stay visible and never display a success message.
+and explicit Subir/Descer alternatives. Name drafts live in the performance view. Salvar nome saves explicitly; color,
+order, import, deletion and concluding editing save pending names before acting.
+Blur does not start a save. A failed name save keeps editing open and retains the
+draft for retry. Color and order save immediately. Failed saves stay visible and never display a success message. Error responses
+refresh the current catalog, including deletions committed before cleanup failed;
+cleanup errors explain that reopening retries internal-file cleanup. The deletion
+dialog restores focus to its originating control, or the edit control if removed.

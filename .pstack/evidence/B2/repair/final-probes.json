@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "node",
+      ".pstack/evidence/B2/repair/recovery.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "node",
+      ".pstack/evidence/B2/repair/native-flows.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "node",
+      ".pstack/evidence/B2/repair/drafts-focus.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "node",
+      ".pstack/evidence/B2/repair/journey.mjs"
+    ],
+    "exit": 0
+  }
+]

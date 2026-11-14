@@ -1,0 +1,10 @@
+--- a/stryker.config.mjs
++++ b/stryker.config.mjs
+@@ -8,6 +8,7 @@
+     'src/renderer/playback/**/*.ts',
+     'src/renderer/runtime/**/*.ts',
+     'src/renderer/{performance,editing}/**/*.ts',
++    'src/renderer/{performance,editing}/**/*.tsx',
+     'src/renderer/lib/**/*.ts',
+     'src/preload/desktop-bridge.ts',
+   ],

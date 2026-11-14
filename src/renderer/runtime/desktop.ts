@@ -62,7 +62,11 @@ export async function connectDesktop(api: DesktopApi) {
           lease: { ...lease, kind: LeaseKind.Edit },
           expectedRevision: catalog.revision,
         };
-        catalog = unwrap(await operation(request));
+        const result = await operation(request);
+        if (!result.ok) {
+          catalog = unwrap(await api.getCatalog({ sessionId }));
+        }
+        catalog = unwrap(result);
         return catalog;
       } finally {
         unwrap(await api.release(lease));

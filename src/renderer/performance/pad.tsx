@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { DesktopRuntime } from '../runtime/desktop';
 import type { Pad as CatalogPad, PadId } from '../../contracts/catalog';
 import { transport } from './transport';
@@ -15,7 +15,11 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<CatalogPad | null>(null);
   const [dragged, setDragged] = useState<PadId | null>(null);
+  const [drafts, setDrafts] = useState<Partial<Record<PadId, string>>>({});
+  const deleteOrigin = useRef<HTMLElement | null>(null);
+  const editControl = useRef<HTMLButtonElement>(null);
   const [error, setError] = useState('');
+  const [cleanupError, setCleanupError] = useState('');
   useEffect(
     () =>
       runtime.playback.subscribe(() => {
@@ -27,9 +31,33 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
     setSaving(true);
     setError('');
     try {
+      for (const pad of runtime.catalog.pads) {
+        const label = drafts[pad.id];
+        if (label === undefined || label === pad.label) continue;
+        if (!label.trim())
+          throw new Error('Nome vazio. Informe um nome para salvar.');
+        await runtime.update({ ...pad, label: label.trim() });
+        setDrafts((current) => {
+          const next = { ...current };
+          next[pad.id] = undefined;
+          return next;
+        });
+      }
       setCatalog(await operation());
-    } catch {
-      setError('Não foi possível salvar. Tente novamente.');
+      return true;
+    } catch (failure) {
+      setCatalog(runtime.catalog);
+      const code =
+        failure instanceof Error ? failure.message : 'storage-failure';
+      if (code === 'cleanup-required')
+        setCleanupError(
+          'Catálogo atualizado. A limpeza da cópia interna falhou (cleanup-required). Feche e reabra o aplicativo para tentar a limpeza novamente.',
+        );
+      else
+        setError(
+          `Não foi possível salvar (${code}). Os nomes pendentes foram mantidos. Tente salvar novamente.`,
+        );
+      return false;
     } finally {
       setSaving(false);
     }
@@ -41,10 +69,17 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
         <h1>{catalog.repertoire.name}</h1>
         <div>
           <Button
+            ref={editControl}
             disabled={snapshot.busy || saving}
             aria-pressed={editing}
             onClick={() => {
-              setEditing(!editing);
+              if (!editing) setEditing(true);
+              else
+                void save(() => Promise.resolve(runtime.catalog))
+                  .then((saved) => {
+                    if (saved) setEditing(false);
+                  })
+                  .catch(() => {});
             }}
           >
             {editing ? 'Concluir edição' : 'Editar repertório'}
@@ -61,9 +96,11 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
           )}
         </div>
       </header>
-      {(error || snapshot.failed) && (
+      {(error || cleanupError || snapshot.failed) && (
         <p role="alert" className="error">
-          {error || 'Falha na reprodução. Pressione STOP e tente novamente.'}
+          {error ||
+            cleanupError ||
+            'Falha na reprodução. Pressione STOP e tente novamente.'}
         </p>
       )}
       {saving && <p role="status">Salvando…</p>}
@@ -148,11 +185,25 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
                     <Editor
                       pad={pad}
                       busy={saving}
+                      label={drafts[id] ?? pad.label}
+                      changeLabel={(label) => {
+                        setDrafts((current) => ({ ...current, [id]: label }));
+                      }}
                       save={async (updated) => {
                         await save(() => runtime.update(updated));
                       }}
-                      remove={() => {
-                        setDeleting(pad);
+                      remove={(control) => {
+                        deleteOrigin.current = control;
+                        void save(() => Promise.resolve(runtime.catalog))
+                          .then((saved) => {
+                            if (saved)
+                              setDeleting(
+                                runtime.catalog.pads.find(
+                                  (item) => item.id === id,
+                                ) ?? null,
+                              );
+                          })
+                          .catch(() => {});
                       }}
                     />
                   </>
@@ -201,6 +252,11 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
         </output>
       </footer>
       <Dialog
+        restoreFocus={() => {
+          const target = deleteOrigin.current;
+          if (target?.isConnected) target.focus();
+          else editControl.current?.focus();
+        }}
         open={deleting !== null}
         onOpenChange={(open) => {
           if (!open && !saving) setDeleting(null);
@@ -208,6 +264,11 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
         title={`Excluir ${deleting?.label || 'pad'}?`}
       >
         <p>O pad e sua cópia interna de áudio serão excluídos.</p>
+        {error && (
+          <p role="alert" className="error">
+            {error}
+          </p>
+        )}
         <div className="dialog-actions">
           <Button
             disabled={saving}
@@ -223,8 +284,14 @@ export function Pad({ runtime }: { runtime: DesktopRuntime }) {
               if (deleting)
                 save(() => runtime.edit(deleting.id))
                   .catch(() => {})
-                  .then(() => {
-                    setDeleting(null);
+                  .then((saved) => {
+                    if (
+                      saved ||
+                      !runtime.catalog.pads.some(
+                        (pad) => pad.id === deleting.id,
+                      )
+                    )
+                      setDeleting(null);
                   })
                   .catch(() => {});
             }}

@@ -5,17 +5,23 @@ export function Dialog({
   onOpenChange,
   title,
   children,
+  restoreFocus,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
   children: ReactNode;
+  restoreFocus: () => void;
 }) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="dialog-overlay" />
         <DialogPrimitive.Content
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            restoreFocus();
+          }}
           className="dialog-content"
           aria-describedby={undefined}
         >

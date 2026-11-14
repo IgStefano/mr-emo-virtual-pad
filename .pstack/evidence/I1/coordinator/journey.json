@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "mode": "unpackaged",
+  "observations": [
+    {
+      "profile": "/tmp/pad-journey-G5l1aS",
+      "packaged": false,
+      "preferences": {
+        "allowRunningInsecureContent": false,
+        "contextIsolation": true,
+        "disableDialogs": false,
+        "disablePopups": false,
+        "disableWakeLocks": false,
+        "enableBlinkFeatures": "",
+        "experimentalFeatures": false,
+        "javascript": true,
+        "nodeIntegration": false,
+        "nodeIntegrationInSubFrames": false,
+        "nodeIntegrationInWorker": false,
+        "safeDialogs": false,
+        "safeDialogsMessage": "",
+        "sandbox": true,
+        "webSecurity": true,
+        "webviewTag": false
+      }
+    },
+    {
+      "profile": "/tmp/pad-journey-G5l1aS",
+      "packaged": false,
+      "preferences": {
+        "allowRunningInsecureContent": false,
+        "contextIsolation": true,
+        "disableDialogs": false,
+        "disablePopups": false,
+        "disableWakeLocks": false,
+        "enableBlinkFeatures": "",
+        "experimentalFeatures": false,
+        "javascript": true,
+        "nodeIntegration": false,
+        "nodeIntegrationInSubFrames": false,
+        "nodeIntegrationInWorker": false,
+        "safeDialogs": false,
+        "safeDialogsMessage": "",
+        "sandbox": true,
+        "webSecurity": true,
+        "webviewTag": false
+      }
+    },
+    {
+      "progress": "0.2",
+      "media": [
+        {
+          "url": "pad-media://media/3f96f384-fd79-4782-ae35-889a6c9b4053?lease=e38bfd59-247d-4df9-9a30-6b7d84dee90f",
+          "status": 206
+        },
+        {
+          "url": "pad-media://media/3f96f384-fd79-4782-ae35-889a6c9b4053?lease=e21b1c24-9908-4563-aaaf-d853557e0c49",
+          "status": 206
+        }
+      ]
+    },
+    {
+      "profile": "/tmp/pad-journey-G5l1aS",
+      "packaged": false,
+      "preferences": {
+        "allowRunningInsecureContent": false,
+        "contextIsolation": true,
+        "disableDialogs": false,
+        "disablePopups": false,
+        "disableWakeLocks": false,
+        "enableBlinkFeatures": "",
+        "experimentalFeatures": false,
+        "javascript": true,
+        "nodeIntegration": false,
+        "nodeIntegrationInSubFrames": false,
+        "nodeIntegrationInWorker": false,
+        "safeDialogs": false,
+        "safeDialogsMessage": "",
+        "sandbox": true,
+        "webSecurity": true,
+        "webviewTag": false
+      }
+    },
+    {
+      "crashRestartStopped": true
+    }
+  ]
+}

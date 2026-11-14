@@ -193,7 +193,10 @@
         "src/main/lifecycle",
         "tests/storage",
         "tests/lifecycle",
-        ".pstack/evidence/A2"
+        ".pstack/evidence/A2",
+        "src/main/main.ts",
+        "src/main/ipc/renderer-lifetime.ts",
+        "tests/ipc/renderer-lifetime.test.ts"
       ],
       "brief": ".pstack/briefs/A2.md",
       "acceptedSha": null,
@@ -212,7 +215,18 @@
         "tests/ui",
         ".pstack/evidence/B2",
         "src/renderer/components",
-        "src/renderer/lib"
+        "src/renderer/lib",
+        "src/renderer/runtime",
+        "tests/integration/runtime.test.ts",
+        "package.json",
+        "package-lock.json",
+        "vite.renderer.config.mjs",
+        "tsconfig.renderer.json",
+        "components.json",
+        "docs/ui.md",
+        "PRODUCT.md",
+        "DESIGN.md",
+        ".impeccable"
       ],
       "brief": ".pstack/briefs/B2.md",
       "acceptedSha": null,

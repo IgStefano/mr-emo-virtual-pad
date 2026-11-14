@@ -1,4 +1,4 @@
-/* global document */
+/* global document, requestAnimationFrame */
 import assert from 'node:assert/strict';
 import {
   mkdir,
@@ -39,9 +39,41 @@ async function launch() {
   assert.equal(runtime.preferences.sandbox, true);
   assert.equal(runtime.preferences.contextIsolation, true);
   assert.equal(runtime.preferences.nodeIntegration, false);
+  const roles = await application.evaluate(({ Menu }) => {
+    const roles = [];
+    function visit(menu) {
+      for (const item of menu?.items ?? []) {
+        roles.push(String(item.role).toLowerCase());
+        visit(item.submenu);
+      }
+    }
+    visit(Menu.getApplicationMenu());
+    return roles;
+  });
+  assert.ok(!roles.includes('reload'));
+  assert.ok(!roles.includes('forcereload'));
+  assert.ok(roles.includes('filemenu'));
+  assert.ok(roles.includes('editmenu'));
   observations.push(runtime);
   const page = await application.firstWindow();
   await page.getByRole('button', { name: 'Importar áudio' }).waitFor();
+  await page.evaluate(() => {
+    document.documentElement.dataset.reloadProbe = 'retained';
+  });
+  await page.keyboard.press(
+    process.platform === 'darwin' ? 'Meta+r' : 'Control+r',
+  );
+  await page.keyboard.press('F5');
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      ),
+  );
+  assert.equal(
+    await page.evaluate(() => document.documentElement.dataset.reloadProbe),
+    'retained',
+  );
   return page;
 }
 try {

@@ -5,7 +5,9 @@ import {
   session,
   protocol,
   dialog,
+  Menu,
 } from 'electron';
+import type { MenuItemConstructorOptions } from 'electron';
 import path from 'node:path';
 import { appInfoChannel, appInfoSchema } from '../contracts/app-info';
 
@@ -156,6 +158,14 @@ if (!app.requestSingleInstanceLock()) {
   app
     .whenReady()
     .then(async () => {
+      const applicationMenu: MenuItemConstructorOptions[] = [
+        { role: 'fileMenu' },
+        { role: 'editMenu' },
+        { role: 'windowMenu' },
+      ];
+      if (process.platform === 'darwin')
+        applicationMenu.unshift({ role: 'appMenu' });
+      Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenu));
       session.defaultSession.setPermissionRequestHandler(
         (_contents, _permission, callback) => {
           callback(false);

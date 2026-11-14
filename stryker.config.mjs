@@ -4,9 +4,10 @@ export default {
   mutate: [
     'src/domain/**/*.ts',
     'src/contracts/{catalog,operations,desktop}.ts',
-    'src/main/{storage,library,ipc}/**/*.ts',
+    'src/main/{storage,library,ipc,lifecycle}/**/*.ts',
     'src/renderer/playback/**/*.ts',
     'src/renderer/runtime/**/*.ts',
+    'src/renderer/{performance,editing}/**/*.ts',
     'src/renderer/lib/**/*.ts',
     'src/preload/desktop-bridge.ts',
   ],

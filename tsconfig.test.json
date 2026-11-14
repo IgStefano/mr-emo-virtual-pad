@@ -13,6 +13,9 @@
     "tests/playback/**/*.ts",
     "tests/electron/**/*.ts",
     "tests/media/**/*.ts",
-    "tests/integration/**/*.ts"
+    "tests/integration/**/*.ts",
+    "tests/ui/**/*.ts",
+    "tests/lifecycle/**/*.ts",
+    "tests/model/**/*.ts"
   ]
 }

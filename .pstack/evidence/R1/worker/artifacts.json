@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "04551fbfaf4a543b58c6370c7a7434971e0aa1bf",
+  "sourceTree": "67c28214bfd6661d79a1dc3f7a9e1d1c744a70b0",
+  "worktreeStatus": "M .github/workflows/verify.yml\n?? docs/release/",
+  "platform": "linux",
+  "arch": "x64",
+  "osRelease": "6.18.58.1-microsoft-standard-WSL2",
+  "node": "v24.21.0",
+  "signing": "No Developer ID signing or notarization configured",
+  "runtimeResult": "Consult scenario reports and CI step outcomes separately",
+  "artifacts": [
+    {
+      "path": "out/make/zip/darwin/x64/Mr. Emo Virtual Pad-darwin-x64-0.1.0.zip",
+      "bytes": 124690483,
+      "sha256": "3228b67902bc465d605b992be96148eff4456747e83d72b2adee74424bce1a35"
+    }
+  ]
+}

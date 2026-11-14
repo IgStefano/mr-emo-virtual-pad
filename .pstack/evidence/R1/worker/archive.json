@@ -1,0 +1,7 @@
+{
+  "scope": "static archive only, no Mac execution",
+  "version": "0.1.0",
+  "entry": ".vite/build/main.cjs",
+  "files": 37,
+  "repositoryArtifactsExcluded": true
+}

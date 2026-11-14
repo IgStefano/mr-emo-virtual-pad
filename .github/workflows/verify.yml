@@ -6,42 +6,84 @@ permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       - run: npm run verify
+      - run: npm run verification:regressions
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mutation-report
-          path: reports/mutation
+          name: verification-${{ github.sha }}
+          path: reports
+          retention-days: 30
   package:
+    needs: verify
     strategy:
+      fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        include:
+          - os: macos-15
+            platform: darwin
+            arch: arm64
+            executable: out/Mr. Emo Virtual Pad-darwin-arm64/Mr. Emo Virtual Pad.app/Contents/MacOS/Mr. Emo Virtual Pad
+          - os: macos-15-intel
+            platform: darwin
+            arch: x64
+            executable: out/Mr. Emo Virtual Pad-darwin-x64/Mr. Emo Virtual Pad.app/Contents/MacOS/Mr. Emo Virtual Pad
+          - os: windows-2025
+            platform: win32
+            arch: x64
+            executable: out/Mr. Emo Virtual Pad-win32-x64/Mr. Emo Virtual Pad.exe
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      PAD_PACKAGED_EXECUTABLE: ${{ github.workspace }}/${{ matrix.executable }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
+      - name: Isolate Forge temporary files
+        env:
+          R1_TEMP: ${{ runner.temp }}/r1-forge
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const directory = process.env.R1_TEMP;
+          fs.mkdirSync(directory, { recursive: true });
+          fs.appendFileSync(process.env.GITHUB_ENV,
+            ['TMPDIR', 'TMP', 'TEMP'].map(key => `${key}=${directory}\n`).join(''));
+          JS
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run make
+      - run: npm run typecheck && npm test
+      - run: npm run make -- --platform=${{ matrix.platform }} --arch=${{ matrix.arch }}
+      - run: node docs/release/artifacts.mjs
       - run: npm run verification:drive
+      - run: node scripts/verification/journey.mjs
+      - run: npm run verification:packaged-playback
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: verification-${{ matrix.os }}
-          path: reports/verification
+          name: evidence-${{ matrix.platform }}-${{ matrix.arch }}-${{ github.sha }}
+          path: reports
+          retention-days: 30
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: app-${{ matrix.os }}
-          path: out/make
+          name: trial-${{ matrix.platform }}-${{ matrix.arch }}-0.1.0-${{ github.sha }}
+          path: out/make/zip
+          if-no-files-found: error
+          retention-days: 30

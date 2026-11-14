@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "name": "baseline",
+      "exitCode": 0
+    },
+    {
+      "name": "late-grant-starts-canceled-audio",
+      "exitCode": 1
+    },
+    {
+      "name": "cleanup-unlocks-before-release",
+      "exitCode": 1
+    }
+  ],
+  "scope": "controlled controller cancellation/cleanup variants, not Stryker inventory"
+}

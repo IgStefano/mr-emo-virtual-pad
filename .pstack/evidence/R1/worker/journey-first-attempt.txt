@@ -1,0 +1,21 @@
+Downloading Electron binary...
+/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-6afa48d1-9f5f50463502a05d/reports/verification/journey-72gkFc
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+true !== false
+
+    at launch (file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-6afa48d1-9f5f50463502a05d/scripts/verification/journey.mjs:38:10)
+    at async file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-6afa48d1-9f5f50463502a05d/scripts/verification/journey.mjs:80:14 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

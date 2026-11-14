@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "scope": "packaged decode/progress/STOP; catalog seeded by unpackaged native-dialog boundary control; NOT packaged import",
+  "executable": "/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-6afa48d1-9f5f50463502a05d/out/Mr. Emo Virtual Pad-linux-x64/Mr. Emo Virtual Pad",
+  "platform": "linux",
+  "media": [
+    {
+      "url": "pad-media://media/459e6107-7697-408e-ad4d-1395467549b1?lease=0488449a-8c11-4a9e-b7e9-362260d054b6",
+      "status": 206
+    }
+  ],
+  "route": "renderer CDP; release main inspection fuse unchanged",
+  "info": {
+    "version": "0.1.0"
+  },
+  "profile": "/tmp/pad-packaged-Cm4Uo5",
+  "url": "pad-app://app/index.html",
+  "stderr": "\nDevTools listening on ws://127.0.0.1:45013/devtools/browser/cd4d9d32-3ff2-4659-a823-15669ee7d1b8\n"
+}

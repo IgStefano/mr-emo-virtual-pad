@@ -1,0 +1,45 @@
+{
+  "counts": {
+    "Killed": 1203,
+    "Timeout": 1
+  },
+  "timeouts": [
+    {
+      "file": "src/main/storage/media-protocol.ts",
+      "id": "860",
+      "mutatorName": "ConditionalExpression",
+      "replacement": "false",
+      "statusReason": "Hit limit reached (1501/1500)",
+      "status": "Timeout",
+      "static": false,
+      "duration": 478,
+      "coveredBy": [
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "80",
+        "88",
+        "110",
+        "115",
+        "116",
+        "117",
+        "119",
+        "120",
+        "121"
+      ],
+      "location": {
+        "end": {
+          "column": 34,
+          "line": 147
+        },
+        "start": {
+          "column": 19,
+          "line": 147
+        }
+      }
+    }
+  ]
+}

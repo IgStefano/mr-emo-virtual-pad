@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "mode": "unpackaged Linux",
+  "observations": [
+    {
+      "imported": 31,
+      "persistedOrderAndColor": true,
+      "nativeMediaStatuses": [
+        206
+      ],
+      "playbackLocked": true,
+      "stopVisible": true,
+      "deleted": 1,
+      "originalPreserved": true
+    }
+  ]
+}

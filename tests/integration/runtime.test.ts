@@ -40,7 +40,12 @@ it('imports, serializes editing, releases authority on failure and deletes at th
       };
     if (channel === 'catalog:release' || channel === 'catalog:dispose')
       return { ok: true, value: null };
-    if (channel === 'catalog:import' || channel === 'catalog:delete') {
+    if (
+      channel === 'catalog:import' ||
+      channel === 'catalog:delete' ||
+      channel === 'catalog:update' ||
+      channel === 'catalog:reorder'
+    ) {
       if (fail) return { ok: false, error: { code: 'storage-failure' } };
       return { ok: true, value: { ...catalog, revision: 1 } };
     }
@@ -55,6 +60,25 @@ it('imports, serializes editing, releases authority on failure and deletes at th
   expect(
     requests.find((request) => request.channel === 'catalog:delete')?.payload,
   ).toMatchObject({ expectedRevision: 1, padId });
+  await runtime.update({
+    id: padIdSchema.parse(padId),
+    assetId: catalogSchema.shape.assets.element.shape.id.parse(assetId),
+    label: 'Novo nome',
+    color: 'blue',
+  });
+  await runtime.reorder([padIdSchema.parse(padId)]);
+  expect(
+    requests.find((request) => request.channel === 'catalog:update')?.payload,
+  ).toMatchObject({
+    expectedRevision: 1,
+    padId,
+    label: 'Novo nome',
+    color: 'blue',
+  });
+  expect(
+    requests.find((request) => request.channel === 'catalog:reorder')?.payload,
+  ).toMatchObject({ expectedRevision: 1, padIds: [padId] });
+  expect(runtime.catalog.revision).toBe(1);
   fail = true;
   await expect(runtime.edit()).rejects.toThrow('storage-failure');
   expect(requests.at(-1)?.channel).toBe('catalog:release');
@@ -69,6 +93,8 @@ it('imports, serializes editing, releases authority on failure and deletes at th
     { sessionId, kind: 'edit', attemptId: 2 },
     { sessionId, kind: 'edit', attemptId: 3 },
     { sessionId, kind: 'edit', attemptId: 4 },
+    { sessionId, kind: 'edit', attemptId: 5 },
+    { sessionId, kind: 'edit', attemptId: 6 },
   ]);
   await runtime.playback.dispose();
   expect(requests.at(-1)).toEqual({

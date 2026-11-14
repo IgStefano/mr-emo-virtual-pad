@@ -29,3 +29,11 @@ The project-local skill is `.agents/skills/impeccable/SKILL.md`, pinned in
 `.pstack/impeccable-lock.json`. Its context/design/critique playbooks guide UI
 work; shadcn/ui remains the component source. This installation does not run the
 native design detector on app startup or require network access at shows.
+
+B2 adds local shadcn-style Radix compositions for Dialog, Progress and Scroll Area,
+plus Input, using the shell's CSS tokens alongside the existing Button. No Tailwind
+runtime or remote assets are needed. Radix supplies dialog focus management and
+progress/scroll semantics. Feature views compose these primitives; the native
+desktop API remains the only catalog boundary. Reorder handles support dragging
+and explicit Subir/Descer alternatives. Name changes save on blur; color and order
+save immediately. Failed saves stay visible and never display a success message.

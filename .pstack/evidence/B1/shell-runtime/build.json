@@ -1,0 +1,13 @@
+{
+  "sha": "5525193683d3935e2bd87fcaee35401e350d0209",
+  "diff": "",
+  "untracked": "src/renderer/playback/controller.ts\nsrc/renderer/playback/dom-audio.ts\ntests/playback/controller.test.ts\ntests/playback/dom-audio.test.ts\n",
+  "version": "0.1.0",
+  "hashes": {
+    ".vite/build/main.cjs": "0afd12ca4827051a90dc9aba30e397a5ea677df32761f00f3e7650fe387e89c4",
+    ".vite/build/preload.cjs": "4ab898f5bd8a25ea3d605c4e8d45c6e5e49c4a56ef5b45d0dc51382dab064d4f",
+    ".vite/renderer/main_window/assets/index-B71ii1Fp.js": "00857616b52a93761e0016c13540a18ae882f03772bfe3fab860773ff601c847",
+    ".vite/renderer/main_window/assets/index-UDXLGs0F.css": "42562d2f82d2c253fc4105cf3c9fe7c0d7d7e29ea44f3f62884cc970a967f605",
+    ".vite/renderer/main_window/index.html": "ac79b9c91b5bc2a00d5aa6db4ab8d90026c6d2576b522c33018a731a16d97098"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "rejected": true,
+  "nativeElement": true,
+  "released": true,
+  "scope": "native factory and cleanup after rejected media; no successful media playback or physical output claim"
+}

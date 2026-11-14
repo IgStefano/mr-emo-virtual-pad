@@ -1,0 +1,216 @@
+
+> mr-emo-virtual-pad@0.1.0 test:mutation
+> stryker run && node scripts/check-mutation.mjs
+
+[33m21:05:01 (76966) WARN ProjectReader[39m Glob pattern "src/main/{storage,library}/**/*.ts" did not result in any files.
+[32m21:05:01 (76966) INFO ProjectReader[39m Found 6 of 781 file(s) to be mutated.
+[32m21:05:01 (76966) INFO Instrumenter[39m Instrumented 6 source file(s) with 218 mutant(s)
+[32m21:05:02 (76966) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m21:05:03 (76966) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m21:05:05 (76966) INFO DryRunExecutor[39m Initial test run succeeded. Ran 31 tests in 1 second (net 73.76780099999996 ms, overhead 1500.232199 ms).
+
+All tests
+  contracts
+    catalog.test.ts
+      ✓ catalog wire contracts accepts a versioned catalog without a thirty pad limit [line 33] (killed 7)
+      ✘ catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions [line 61] (covered 0)
+      ✘ catalog wire contracts validates every catalog record and rejects unknown fields [line 81] (covered 0)
+      ✓ operation ingress validates session-bound leases and finite errors [line 111] (killed 2)
+      ✓ operation ingress requires an edit lease and expected revision for catalog writes [line 143] (killed 6)
+      ✓ operation ingress correlates playback requests without accepting paths [line 176] (killed 1)
+    lease.test.ts
+      ✓ keeps authorization exclusive until the matching cleanup acknowledgement [line 9] (killed 17)
+      ✓ ignores stale sessions, wrong leases and idle acknowledgements [line 29] (killed 7)
+  domain/playback.test.ts
+    ✓ playback contract starts a chosen pad from zero with its attempt [line 23] (killed 3)
+    ✓ playback contract ignores every pad while 'starting' [line 38] (killed 3)
+    ~ playback contract ignores every pad while 'playing' [line 38] (covered 7)
+    ✓ playback contract STOP cancels the current attempt while 'starting' [line 55] (killed 5)
+    ~ playback contract STOP cancels the current attempt while 'playing' [line 55] (covered 9)
+    ✓ playback contract STOP is idempotent [line 65] (killed 2)
+    ✓ playback contract promotes only the current starting attempt [line 72] (killed 9)
+    ✓ playback contract ended cleans up only the current attempt [line 95] (killed 10)
+    ~ playback contract failed cleans up only the current attempt [line 95] (covered 20)
+    ~ playback contract ignores callbacks from a stopped attempt after a new pad is requested [line 115] (covered 29)
+    ~ playback contract does not mutate the input snapshot [line 137] (covered 11)
+    ✘ keeps the serialized playback vocabulary stable for adapters [line 148] (covered 0)
+  playback
+    controller.test.ts
+      ✓ reserves synchronously, ignores busy clicks, stops pending play and waits for release [line 116] (killed 32)
+      ✓ releases a late grant without starting and retains the gate after failed release [line 142] (killed 5)
+      ✓ publishes progress, cleans up natural end and cannot restart after disposal [line 159] (killed 26)
+      ✓ cleans up rejected acquisition and start without advancing playback [line 189] (killed 6)
+      ✓ ignores old callbacks during a new attempt and treats current failure as STOP [line 209] (killed 3)
+      ✓ rejects disposal with a held lease, then releases it on retry [line 230] (killed 2)
+      ~ retains ownership after failed stop and retries before allowing a new pad [line 249] (covered 67)
+      ✓ disposes while start is pending and ignores callbacks without an attempt [line 267] (killed 4)
+      ✓ notifies progress and completion independently and removes failing observers [line 285] (killed 9)
+    dom-audio.test.ts
+      ✓ plays exclusively from zero, correlates media events and clears the source on STOP [line 38] (killed 40)
+      ✓ creates the default audio element and releases it without playback [line 111] (killed 4)
+
+[Survived] BooleanLiteral
+src/renderer/playback/controller.ts:44:20
+-     private failed = false;
++     private failed = true;
+Tests ran:
+    reserves synchronously, ignores busy clicks, stops pending play and waits for release
+    releases a late grant without starting and retains the gate after failed release
+    publishes progress, cleans up natural end and cannot restart after disposal
+  and 6 more tests!
+
+
+[Survived] ObjectLiteral
+src/renderer/playback/controller.ts:101:49
+-         attempt.lease = await this.leases.acquire({
+-           sessionId: this.sessionId,
+-           attemptId: attempt.id,
+-           kind: LeaseKind.Playback,
+-         });
++         attempt.lease = await this.leases.acquire({});
+Tests ran:
+    reserves synchronously, ignores busy clicks, stops pending play and waits for release
+    releases a late grant without starting and retains the gate after failed release
+    publishes progress, cleans up natural end and cannot restart after disposal
+  and 6 more tests!
+
+
+[Survived] ConditionalExpression
+src/renderer/playback/controller.ts:124:9
+-       if (this.cleanup) return this.cleanup;
++       if (false) return this.cleanup;
+Tests ran:
+    reserves synchronously, ignores busy clicks, stops pending play and waits for release
+    releases a late grant without starting and retains the gate after failed release
+    publishes progress, cleans up natural end and cannot restart after disposal
+  and 6 more tests!
+
+
+[Survived] CallExpression
+src/renderer/playback/controller.ts:129:5
+-       this.notify();
++       ;
+Tests ran:
+    reserves synchronously, ignores busy clicks, stops pending play and waits for release
+    releases a late grant without starting and retains the gate after failed release
+    publishes progress, cleans up natural end and cannot restart after disposal
+  and 6 more tests!
+
+
+[Survived] CallExpression
+src/renderer/playback/controller.ts:178:5
+-       this.listeners.clear();
++       ;
+Tests ran:
+    publishes progress, cleans up natural end and cannot restart after disposal
+    rejects disposal with a held lease, then releases it on retry
+    disposes while start is pending and ignores callbacks without an attempt
+  and 1 more test!
+
+
+[Survived] ConditionalExpression
+src/renderer/playback/dom-audio.ts:39:11
+-         if (this.resource?.element !== element) return;
++         if (false) return;
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+
+
+[Survived] OptionalChaining
+src/renderer/playback/dom-audio.ts:39:11
+-         if (this.resource?.element !== element) return;
++         if (this.resource.element !== element) return;
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+
+
+[Survived] BlockStatement
+src/renderer/playback/dom-audio.ts:69:21
+-         detach: () => {
+-           element.removeEventListener('playing', playing);
+-           element.removeEventListener('ended', ended);
+-           element.removeEventListener('error', failed);
+-           element.removeEventListener('timeupdate', progress);
+-         },
++         detach: () => {},
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+[Survived] StringLiteral
+src/renderer/playback/dom-audio.ts:70:37
+-           element.removeEventListener('playing', playing);
++           element.removeEventListener("", playing);
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+[Survived] StringLiteral
+src/renderer/playback/dom-audio.ts:71:37
+-           element.removeEventListener('ended', ended);
++           element.removeEventListener("", ended);
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+[Survived] StringLiteral
+src/renderer/playback/dom-audio.ts:72:37
+-           element.removeEventListener('error', failed);
++           element.removeEventListener("", failed);
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+[Survived] StringLiteral
+src/renderer/playback/dom-audio.ts:73:37
+-           element.removeEventListener('timeupdate', progress);
++           element.removeEventListener("", progress);
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+[Survived] CallExpression
+src/renderer/playback/dom-audio.ts:87:7
+-         resource.detach();
++         ;
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+[Survived] CallExpression
+src/renderer/playback/dom-audio.ts:105:5
+-       this.listeners.clear();
++       ;
+Tests ran:
+    plays exclusively from zero, correlates media events and clears the source on STOP
+    creates the default audio element and releases it without playback
+
+
+Ran 2.06 tests per mutant on average.
+-----------------|------------------|----------|-----------|------------|----------|----------|
+                 | % Mutation score |          |           |            |          |          |
+File             |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+-----------------|--------|---------|----------|-----------|------------|----------|----------|
+All files        |  93.58 |   93.58 |      203 |         1 |         14 |        0 |        0 |
+ contracts       | 100.00 |  100.00 |       16 |         0 |          0 |        0 |        0 |
+  catalog.ts     | 100.00 |  100.00 |        7 |         0 |          0 |        0 |        0 |
+  operations.ts  | 100.00 |  100.00 |        9 |         0 |          0 |        0 |        0 |
+ domain          | 100.00 |  100.00 |       65 |         0 |          0 |        0 |        0 |
+  lease.ts       | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  playback.ts    | 100.00 |  100.00 |       41 |         0 |          0 |        0 |        0 |
+ renderer        |  89.78 |   89.78 |      122 |         1 |         14 |        0 |        0 |
+  playback       |  89.78 |   89.78 |      122 |         1 |         14 |        0 |        0 |
+   controller.ts |  94.05 |   94.05 |       78 |         1 |          5 |        0 |        0 |
+   dom-audio.ts  |  83.02 |   83.02 |       44 |         0 |          9 |        0 |        0 |
+-----------------|--------|---------|----------|-----------|------------|----------|----------|
+[91m21:06:29 (76966) ERROR MutationTestReportHelper[39m Final mutation score 93.58 under breaking threshold 100, setting exit code to 1 (failure).
+[32m21:06:29 (76966) INFO MutationTestReportHelper[39m (improve mutation score or set `thresholds.break = null` to prevent this error in the future)
+[32m21:06:29 (76966) INFO JsonReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-08df17a8-f31aacc519da9dcb/reports/mutation/mutation.json
+[32m21:06:29 (76966) INFO HtmlReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-08df17a8-f31aacc519da9dcb/reports/mutation/mutation.html
+[32m21:06:29 (76966) INFO MutationTestExecutor[39m Done in 1 minute and 28 seconds.

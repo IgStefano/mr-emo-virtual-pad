@@ -1,0 +1,7 @@
+
+> mr-emo-virtual-pad@0.1.0 verification:drive
+> node scripts/verification/run.mjs drive
+
+Downloading Electron binary...
+/home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-08df17a8-f31aacc519da9dcb/reports/verification/run-M3ip9t
+PASS

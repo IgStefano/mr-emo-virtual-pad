@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "route": "renderer CDP; release main inspection fuse unchanged",
+  "info": {
+    "version": "0.1.0"
+  },
+  "profile": "/tmp/pad-packaged-VAZNvc",
+  "url": "pad-app://app/index.html",
+  "stderr": "\nDevTools listening on ws://127.0.0.1:33729/devtools/browser/d069fd96-096d-4484-8099-f1b14a3a13f6\n"
+}

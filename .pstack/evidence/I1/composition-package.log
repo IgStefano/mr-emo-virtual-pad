@@ -1,0 +1,41 @@
+
+> mr-emo-virtual-pad@0.1.0 package
+> electron-forge package
+
+❯ Checking your system
+❯ Checking package manager version
+✔ Found npm@11.19.0
+✔ Checking your system
+❯ Preparing to package application
+✔ Preparing to package application
+❯ Running packaging hooks
+❯ Running generateAssets hook
+✔ Running generateAssets hook
+❯ Running prePackage hook
+❯ [plugin-vite] Building production Vite bundles
+❯ Building main and preload targets...
+❯ Building renderer targets...
+❯ Building src/main/main.ts
+❯ Building src/preload/preload.ts
+❯ Building main_window
+✔ Built target src/preload/preload.ts
+✔ Built target src/main/main.ts
+✔ Building main and preload targets...
+✔ Built target main_window
+✔ Building renderer targets...
+✔ [plugin-vite] Building production Vite bundles
+✔ Running prePackage hook
+✔ Running packaging hooks
+❯ Packaging application
+› Determining targets...
+❯ Packaging for x64 on linux
+❯ Copying files
+✔ Copying files
+❯ Preparing native dependencies
+✔ Preparing native dependencies
+❯ Finalizing package
+✔ Finalizing package
+✔ Packaging for x64 on linux
+✔ Packaging application
+❯ Running postPackage hook
+✔ Running postPackage hook

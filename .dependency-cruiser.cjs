@@ -7,6 +7,15 @@ const layerRule = (layer, allowed) => ({
 });
 module.exports = {
   forbidden: [
+    {
+      name: 'architecture/electron-entrypoints',
+      severity: 'error',
+      from: {
+        path: '^src/',
+        pathNot: '^src/(main/main|preload/preload)\\.ts$',
+      },
+      to: { path: '^node_modules/electron/' },
+    },
     layerRule('domain', ['domain']),
     layerRule('contracts', ['contracts']),
     layerRule('main', ['main', 'domain', 'contracts']),

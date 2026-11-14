@@ -8,7 +8,7 @@ The intended source location is `src/renderer/components/ui`. Feature views live
 in performance and editing. The component installer, Tailwind integration and
 initial Button, Dialog, Input, Progress and Scroll Area components belong to B2's
 setup, coordinated with the integrator for dependencies and build configuration.
-They are not installed in the current empty shell.
+I1 supplies the shadcn/ui Button composition (Radix Slot, cva and cn), styled with the incumbent shell CSS. B2 owns the remaining component setup and polished interface.
 
 The renderer lint rule rejects raw interactive HTML primitives outside that UI
 source directory. Named components are allowed; the rule governs composition,

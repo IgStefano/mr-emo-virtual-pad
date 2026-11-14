@@ -1,0 +1,5 @@
+{
+  "bridge": true,
+  "denied": true,
+  "error": "Error invoking remote method 'app:info': Error: Unauthorized IPC sender"
+}

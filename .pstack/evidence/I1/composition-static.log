@@ -1,0 +1,173 @@
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (43 modules, 115 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (1375.298474ms)
+✔ graph rejects alias layer crossing (1616.363671ms)
+✔ graph rejects type-only crossing (1318.490675ms)
+✔ graph rejects node builtin (1359.683583ms)
+✔ graph rejects bare builtin (1854.656578ms)
+✔ graph accepts the actual source (1592.545581ms)
+✔ graph rejects metadata filesystem access outside storage (1747.478779ms)
+✔ rejects privileged bypass architecture/electron-entrypoints (1295.871885ms)
+✔ rejects privileged bypass architecture/storage-owns-disk (992.64749ms)
+✔ new source folders cannot escape the layer matrix (108.847299ms)
+✔ lint rejects string enum union (3664.385267ms)
+✔ lint rejects native enum (26.619ms)
+✔ lint rejects inline discriminator (19.174ms)
+✔ lint rejects unknown in domain (13.9469ms)
+✔ lint rejects dynamic import (76.408099ms)
+✔ lint rejects double assertion (41.9103ms)
+✔ lint rejects ambient clock (25.060599ms)
+✔ lint rejects randomness (17.6738ms)
+✔ validated ingress may use unknown (757.823693ms)
+✔ const-object enum and derived type are accepted (21.578ms)
+✔ UI primitive button belongs to the approved component source (309.581098ms)
+✔ UI primitive input belongs to the approved component source (76.691999ms)
+✔ UI primitive select belongs to the approved component source (78.029499ms)
+✔ UI primitive textarea belongs to the approved component source (62.9073ms)
+✔ UI primitive dialog belongs to the approved component source (60.520899ms)
+✔ named UI components remain composable in feature views (81.373799ms)
+✔ component source can implement raw primitives without disabling other lint rules (7.6092ms)
+✔ renderer rejects privileged effect export const sound = new Audio(); (17.9883ms)
+✔ renderer rejects privileged effect export const bypass = () => fetch("file:///tmp/audio"); (23.8169ms)
+✔ native audio ownership follows resolved types: const NativeAudio = window.Audio; export const sound = new NativeAudio(); (33.0401ms)
+✔ native audio ownership follows resolved types: const create = document.createElement.bind(document); export const sound = create("audio"); (32.926299ms)
+✔ native audio ownership follows resolved types: export const sound = document.createElement("audio"); (20.2059ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19379.133059
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "impeccable": {
+    "version": "4.9.0",
+    "commit": "c4cd1924c389f68d37c687d9c2bbf13f12547c41",
+    "skills": 1
+  },
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (7.5654ms)
+✔ contract acceptance enables three disjoint implementation lanes (1.1812ms)
+✔ blocked prerequisites cannot be dispatched (1.2668ms)
+✔ cycle is rejected even when no task is active (0.8529ms)
+✔ unknown prerequisites and duplicate IDs are rejected (1.4683ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (0.5391ms)
+✔ active work requires accepted prerequisites (1.9298ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (1.0695ms)
+✔ a parent directory and child file cannot have concurrent writers (0.8016ms)
+✔ active tasks reserve capacity and paths (0.6625ms)
+✔ two conflicting active reservations fail validation (0.5598ms)
+✔ planned tasks cannot produce reserved launch requests (0.8528ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (0.4053ms)
+✔ owned paths cannot escape repository (1.3093ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (0.6536ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 182.160899
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (98.399599ms)
+✔ push gate rejects staging that would package a different tree from HEAD (70.298599ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (87.319299ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (106.605799ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 448.258096
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (33.840999ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.036699
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/fixtures.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (29.5356ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.469699

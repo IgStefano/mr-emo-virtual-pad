@@ -38,15 +38,14 @@ directly to React buttons as a complete playback controller.
 ManagedCatalog coordinates import, revision checks, edits and deletion through
 CatalogStore and ManagedFiles. PlaybackController owns playback attempts and
 cleanup; DomAudioExecutor owns the single eligible HTMLAudioElement outside React.
-Main lease arbitration, IPC/media wiring and editing UI remain to be implemented.
+Main lease arbitration and finite IPC/media composition are wired in bootstrap. The polished editing UI remains B2 work.
 No global bus or event sourcing: asynchronous results return as correlated inputs.
 
 ## Runtime shell
 
 One instance, one sandboxed/context-isolated window, Node disabled in renderer,
 permissions denied, navigation/new windows blocked, production CSP, ASAR and
-release fuses. Bundled CJS preload works in a sandbox. The shell currently loads
-local packaged HTML; migrate to a restricted custom protocol when media is added.
+release fuses. Bundled CJS preload works in a sandbox. The built shell loads local HTML through pad-app; pad-media serves managed assets under playback authority.
 Dev CSP allows Vite WebSocket on localhost and a per-server nonce for refresh/styles; packaged headers disallow connections.
 No remote content or shell API. Mac window closure exits the application.
 
@@ -82,13 +81,27 @@ Concurrent opens and reservations fail while recovery runs. Recovery failure
 revokes the session; recovery cannot be interrupted by closing the session.
 Reservations check session identity synchronously and release checks all lease
 fields. Callers must terminate renderer audio before closing a playback session.
-This authority is not yet wired into bootstrap or IPC. The existing shell remains
-app-info only. Restricted protocols, staged audio metadata validation and the
-renderer composition are still pending I1 work.
+Bootstrap owns the authority, catalog, service and restricted protocols. It captures successful open responses in main and drains pending responses after renderer destruction before closing the owned session. Recovery completes before open returns.
 
 The storage boundary now provides `storage/audio-metadata.ts`, using
 music-metadata to inspect an extensionless copied staging file and reject absent,
 nonfinite or nonpositive durations. Parser failures become UnsupportedFormat
 faults. This adapter is tested with real PCM stereo bytes and invalid metadata,
-but bootstrap does not yet supply it to ManagedCatalog. Its existence does not
-prove decoder compatibility or playback through a restricted protocol.
+and bootstrap supplies it to ManagedCatalog. The unpackaged Linux journey additionally proves native PCM decode and progress through pad-media, without claiming physical output or target codec compatibility.
+
+## I1 composition
+
+The finite preload API is adapted in renderer/runtime/desktop.ts. PlaybackController
+and DomAudioExecutor remain the playback and native audio owners, instantiated
+outside React. Edit reservations precede the native file dialog; revisioned
+mutations release authority even on failure. React subscribes to controller state.
+Bootstrap registers secure standard schemes before readiness and installs the
+accepted protocol handlers afterward. Both HTML and response CSP permit only the
+restricted media scheme. Renderer destruction drains pending opens and privileged
+work using main-captured identity; no renderer recovery capability is exposed.
+
+The executable unpackaged journey is scripts/verification/journey.mjs. It asserts
+the disposable profile, removes the original after byte comparison, restarts,
+observes native progress and a 206 media response, stops and deletes the copy.
+Release packaging retains the existing fuses; this journey does not inspect the
+fused package or prove physical output.

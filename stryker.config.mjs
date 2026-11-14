@@ -6,6 +6,8 @@ export default {
     'src/contracts/{catalog,operations,desktop}.ts',
     'src/main/{storage,library,ipc}/**/*.ts',
     'src/renderer/playback/**/*.ts',
+    'src/renderer/runtime/**/*.ts',
+    'src/renderer/lib/**/*.ts',
     'src/preload/desktop-bridge.ts',
   ],
   reporters: ['clear-text', 'html', 'json'],

@@ -1,0 +1,44 @@
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (1396.98676ms)
+✔ graph rejects alias layer crossing (1212.248353ms)
+✔ graph rejects type-only crossing (1060.459845ms)
+✔ graph rejects node builtin (1308.717156ms)
+✔ graph rejects bare builtin (1477.955264ms)
+✔ graph accepts the actual source (1475.914614ms)
+✔ graph rejects metadata filesystem access outside storage (1425.930609ms)
+✔ rejects privileged bypass architecture/electron-entrypoints (1225.355308ms)
+✔ rejects privileged bypass architecture/storage-owns-disk (1148.599008ms)
+✔ new source folders cannot escape the layer matrix (74.177801ms)
+✔ lint rejects string enum union (4965.648719ms)
+✔ lint rejects native enum (36.1628ms)
+✔ lint rejects inline discriminator (26.0352ms)
+✔ lint rejects unknown in domain (19.6504ms)
+✔ lint rejects dynamic import (81.3189ms)
+✔ lint rejects double assertion (45.906ms)
+✔ lint rejects ambient clock (27.9099ms)
+✔ lint rejects randomness (37.4456ms)
+✔ validated ingress may use unknown (944.634901ms)
+✔ const-object enum and derived type are accepted (24.8563ms)
+✔ UI primitive button belongs to the approved component source (412.009101ms)
+✔ UI primitive input belongs to the approved component source (95.8462ms)
+✔ UI primitive select belongs to the approved component source (74.4778ms)
+✔ UI primitive textarea belongs to the approved component source (92.4819ms)
+✔ UI primitive dialog belongs to the approved component source (70.4704ms)
+✔ named UI components remain composable in feature views (86.9204ms)
+✔ component source can implement raw primitives without disabling other lint rules (13.7404ms)
+✔ renderer rejects privileged effect export const sound = new Audio(); (26.4778ms)
+✔ renderer rejects privileged effect export const bypass = () => fetch("file:///tmp/audio"); (47.487ms)
+✔ native audio ownership follows resolved types: const NativeAudio = window.Audio; export const sound = new NativeAudio(); (39.8988ms)
+✔ native audio ownership follows resolved types: const create = document.createElement.bind(document); export const sound = create("audio"); (47.6399ms)
+✔ native audio ownership follows resolved types: export const sound = document.createElement("audio"); (22.7752ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19710.052646

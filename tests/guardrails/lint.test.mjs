@@ -106,3 +106,36 @@ test('component source can implement raw primitives without disabling other lint
   assert.equal(config.rules['policy/ui-primitives'], undefined);
   assert.equal(config.rules['@typescript-eslint/no-explicit-any'][0], 2);
 });
+
+for (const code of [
+  'export const sound = new Audio();',
+  'export const bypass = () => fetch("file:///tmp/audio");',
+]) {
+  test(`renderer rejects privileged effect ${code}`, async () => {
+    const results = await eslint.lintText(code, {
+      filePath: 'src/renderer/main.tsx',
+    });
+    assert.ok(
+      results
+        .flatMap((result) => result.messages)
+        .some((message) => message.ruleId === 'no-restricted-globals'),
+    );
+  });
+}
+
+for (const code of [
+  'const NativeAudio = window.Audio; export const sound = new NativeAudio();',
+  'const create = document.createElement.bind(document); export const sound = create("audio");',
+  'export const sound = document.createElement("audio");',
+]) {
+  test(`native audio ownership follows resolved types: ${code}`, async () => {
+    const results = await eslint.lintText(code, {
+      filePath: 'src/renderer/main.tsx',
+    });
+    assert.ok(
+      results
+        .flatMap((result) => result.messages)
+        .some((message) => message.ruleId === 'policy/audio-owner'),
+    );
+  });
+}

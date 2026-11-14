@@ -1,0 +1,431 @@
+
+> mr-emo-virtual-pad@0.1.0 verify
+> npm run verify:static && npm test && npm run test:mutation
+
+
+> mr-emo-virtual-pad@0.1.0 verify:static
+> npm run format:check && npm run lint && npm run typecheck && npm run architecture && npm run test:guardrails && npm run pstack:doctor && npm run test:pstack && npm run test:hooks && npm run test:runtime && npm run test:verification
+
+
+> mr-emo-virtual-pad@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> mr-emo-virtual-pad@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> mr-emo-virtual-pad@0.1.0 typecheck
+> tsc -p tsconfig.domain.json && tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json && tsc -p tsconfig.test.json
+
+
+> mr-emo-virtual-pad@0.1.0 architecture
+> node scripts/check-layout.mjs && depcruise src --config .dependency-cruiser.cjs
+
+
+✔ no dependency violations found (43 modules, 115 dependencies cruised)
+
+
+> mr-emo-virtual-pad@0.1.0 test:guardrails
+> node --test --test-concurrency=1 tests/guardrails/*.test.mjs
+
+✔ graph rejects relative layer crossing (798.319636ms)
+✔ graph rejects alias layer crossing (798.146837ms)
+✔ graph rejects type-only crossing (789.156135ms)
+✔ graph rejects node builtin (836.002938ms)
+✔ graph rejects bare builtin (781.777136ms)
+✔ graph accepts the actual source (796.011336ms)
+✔ graph rejects metadata filesystem access outside storage (795.515436ms)
+✔ rejects privileged bypass architecture/electron-entrypoints (783.000835ms)
+✔ rejects privileged bypass architecture/storage-owns-disk (765.807432ms)
+✔ new source folders cannot escape the layer matrix (48.170901ms)
+✔ lint rejects string enum union (3403.638747ms)
+✔ lint rejects native enum (51.833201ms)
+✔ lint rejects inline discriminator (26.0718ms)
+✔ lint rejects unknown in domain (15.9798ms)
+✔ lint rejects dynamic import (70.879301ms)
+✔ lint rejects double assertion (43.895001ms)
+✔ lint rejects ambient clock (26.4748ms)
+✔ lint rejects randomness (19.5262ms)
+✔ validated ingress may use unknown (938.383513ms)
+✔ const-object enum and derived type are accepted (25.136001ms)
+✔ UI primitive button belongs to the approved component source (341.736004ms)
+✔ UI primitive input belongs to the approved component source (92.596102ms)
+✔ UI primitive select belongs to the approved component source (77.742901ms)
+✔ UI primitive textarea belongs to the approved component source (92.351001ms)
+✔ UI primitive dialog belongs to the approved component source (66.617901ms)
+✔ named UI components remain composable in feature views (75.282301ms)
+✔ component source can implement raw primitives without disabling other lint rules (7.2819ms)
+✔ renderer rejects privileged effect export const sound = new Audio(); (18.115ms)
+✔ renderer rejects privileged effect export const bypass = () => fetch("file:///tmp/audio"); (38.482701ms)
+✔ native audio ownership follows resolved types: const NativeAudio = window.Audio; export const sound = new NativeAudio(); (43.2105ms)
+✔ native audio ownership follows resolved types: const create = document.createElement.bind(document); export const sound = create("audio"); (41.367201ms)
+✔ native audio ownership follows resolved types: export const sound = document.createElement("audio"); (20.3105ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13186.531406
+
+> mr-emo-virtual-pad@0.1.0 pstack:doctor
+> node scripts/pstack/cli.mjs doctor
+
+{
+  "upstream": "0.15.36",
+  "commit": "05b49176bc9e00d8e9e3dbf136fa76631cd6468a",
+  "skills": 58,
+  "impeccable": {
+    "version": "4.9.0",
+    "commit": "c4cd1924c389f68d37c687d9c2bbf13f12547c41",
+    "skills": 1
+  },
+  "budget": "small",
+  "roles": {
+    "feature, refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment, divergent, synthesizer": "inherit-parent",
+    "arena runners": "inherit-parent, inherit-parent",
+    "arena cross-judge pool": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "architect runners": "inherit-parent, inherit-parent",
+    "interrogate reviewers": "inherit-parent, inherit-parent"
+  },
+  "ready": []
+}
+
+> mr-emo-virtual-pad@0.1.0 test:pstack
+> node --test tests/pstack/*.test.mjs
+
+✔ only contract freeze and probes are initially ready (8.1289ms)
+✔ contract acceptance enables three disjoint implementation lanes (1.2522ms)
+✔ blocked prerequisites cannot be dispatched (1.433ms)
+✔ cycle is rejected even when no task is active (0.8527ms)
+✔ unknown prerequisites and duplicate IDs are rejected (1.5441ms)
+✔ accepted work needs SHA and evidence, not merely a status flag (0.7524ms)
+✔ active work requires accepted prerequisites (1.7893ms)
+✔ duplicate dispatch and worker capacity overflow are rejected (1.2009ms)
+✔ a parent directory and child file cannot have concurrent writers (0.9976ms)
+✔ active tasks reserve capacity and paths (0.8598ms)
+✔ two conflicting active reservations fail validation (0.6526ms)
+✔ planned tasks cannot produce reserved launch requests (0.9581ms)
+✔ handoff scope rejects shared config and directory-prefix tricks (0.5933ms)
+✔ owned paths cannot escape repository (1.9586ms)
+✔ accepted descendants cannot bypass unaccepted prerequisites (0.7606ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 209.895902
+
+> mr-emo-virtual-pad@0.1.0 test:hooks
+> node --test tests/hooks/*.test.mjs
+
+✔ index gate accepts staged changes but rejects partially staged content and untracked files (73.384301ms)
+✔ push gate rejects staging that would package a different tree from HEAD (69.350901ms)
+✔ push refs must identify the checked-out commit; deletions do not need packaging (85.365601ms)
+✔ a real git commit is blocked by the production hook when the index and worktree differ (103.795702ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 425.228906
+
+> mr-emo-virtual-pad@0.1.0 test:runtime
+> node --test tests/runtime/*.test.mjs
+
+✔ SQLite persists committed schema and rows while rejecting invalid references (31.1924ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.0213
+
+> mr-emo-virtual-pad@0.1.0 test:verification
+> node --test tests/electron/fixtures.test.mjs
+
+✔ redistributable PCM fixture has isolated left and right intervals (26.005ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 110.3491
+
+> mr-emo-virtual-pad@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-04a0ed1f-6f92b416fd6dda74
+
+(node:315795) ExperimentalWarning: v8.queryObjects() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  14 passed (14)
+      Tests  168 passed (168)
+   Start at  02:47:06
+   Duration  3.15s (transform 1.43s, setup 0ms, import 4.60s, tests 5.03s, environment 4ms)
+
+
+> mr-emo-virtual-pad@0.1.0 test:mutation
+> stryker run && node scripts/check-mutation.mjs
+
+[32m02:47:12 (315927) INFO ProjectReader[39m Found 19 of 1037 file(s) to be mutated.
+[32m02:47:12 (315927) INFO Instrumenter[39m Instrumented 19 source file(s) with 974 mutant(s)
+[32m02:47:14 (315927) INFO ConcurrencyTokenProvider[39m Creating 2 test runner process(es).
+[32m02:47:15 (315927) INFO DryRunExecutor[39m Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+[32m02:47:22 (315927) INFO DryRunExecutor[39m Initial test run succeeded. Ran 168 tests in 6 seconds (net 2810.297412 ms, overhead 3943.702588 ms).
+
+All tests
+  contracts
+    catalog.test.ts
+      ✘ catalog wire contracts accepts a versioned catalog without a thirty pad limit [line 33] (covered 0)
+      ✘ catalog wire contracts rejects invalid identifiers and nonintegral attempts/revisions [line 61] (covered 0)
+      ✘ catalog wire contracts validates every catalog record and rejects unknown fields [line 81] (covered 0)
+      ✘ operation ingress validates session-bound leases and finite errors [line 111] (covered 0)
+      ✓ operation ingress requires an edit lease and expected revision for catalog writes [line 143] (killed 1)
+      ✓ operation ingress correlates playback requests without accepting paths [line 176] (killed 1)
+    desktop.test.ts
+      ✓ rejects malformed requests before invocation and malformed responses after invocation [line 4] (killed 2)
+      ~ preserves the raw app info wire [line 35] (covered 5)
+      ✘ freezes the finite wire channels independently of the bridge and registration [line 44] (covered 0)
+      ✓ never serializes recovery authority to or from the renderer [line 65] (killed 1)
+    lease.test.ts
+      ✓ keeps authorization exclusive until the matching cleanup acknowledgement [line 9] (killed 17)
+      ✓ ignores stale sessions, wrong leases and idle acknowledgements [line 29] (killed 7)
+  domain/playback.test.ts
+    ✓ playback contract starts a chosen pad from zero with its attempt [line 23] (killed 4)
+    ✓ playback contract ignores every pad while 'starting' [line 38] (killed 3)
+    ~ playback contract ignores every pad while 'playing' [line 38] (covered 7)
+    ✓ playback contract STOP cancels the current attempt while 'starting' [line 55] (killed 5)
+    ~ playback contract STOP cancels the current attempt while 'playing' [line 55] (covered 9)
+    ✓ playback contract STOP is idempotent [line 65] (killed 2)
+    ✓ playback contract promotes only the current starting attempt [line 72] (killed 9)
+    ✓ playback contract ended cleans up only the current attempt [line 95] (killed 10)
+    ~ playback contract failed cleans up only the current attempt [line 95] (covered 20)
+    ~ playback contract ignores callbacks from a stopped attempt after a new pad is requested [line 115] (covered 29)
+    ~ playback contract does not mutate the input snapshot [line 137] (covered 11)
+    ✘ keeps the serialized playback vocabulary stable for adapters [line 148] (covered 0)
+  integration/runtime.test.ts
+    ✓ unwraps finite failures without manufacturing a value [line 24] (killed 5)
+    ✓ imports, serializes editing, releases authority on failure and deletes at the current revision [line 28] (killed 28)
+    ✓ uses the restricted media URL and prevents editing until STOP acknowledges cleanup [line 78] (killed 6)
+  ipc
+    authority.test.ts
+      ✓ reserves recovery before granting a session and excludes simultaneous acquisition [line 12] (killed 10)
+      ✓ rejects forged lease fields and revoked sessions [line 37] (killed 16)
+      ✓ keeps recovery failures closed and permits a later recovery retry [line 66] (killed 1)
+      ✓ prevents replacement authority until pending recovery completes [line 74] (killed 2)
+      ✓ rejects a released lease with an authorization fault and closes an idle session [line 86] (killed 2)
+    catalog-session.test.ts
+      ✓ runs a real copied catalog through the finite registered bridge and retains failed cleanup authority [line 20] (killed 139)
+      ✓ reserves before dialog and drains terminated pending import before replacement [line 222] (killed 15)
+      ✓ keeps terminated playback closed on cleanup failure and retries before reopening [line 282] (killed 11)
+      ✓ validates service responses before they leave main [line 359] (killed 1)
+      ✓ rejects privileged catalog calls before invoking ports and gates acquisitions during pending reads [line 415] (killed 15)
+      ✓ rejects read completion under released and replaced playback leases and drains reads on termination [line 546] (killed 2)
+      ✓ keeps cleanup exclusive while draining ordinary reads after termination [line 650] (killed 3)
+    renderer-lifetime.test.ts
+      ✓ drains an open response lost during renderer termination and rejects further operations [line 4] (killed 18)
+      ✓ never closes a failed open or successfully disposed session [line 27] (killed 5)
+      ✓ retains ownership on failed dispose, drains rejection and preserves cleanup failure for retry [line 52] (killed 1)
+      ~ drains every concurrent request even when the latest request completed first [line 75] (covered 20)
+  media
+    audio-metadata.test.ts
+      ✓ reads duration from an extensionless copied stereo staging file [line 15] (killed 6)
+      ✓ rejects unusable metadata duration undefined [line 48] (killed 2)
+      ~ rejects unusable metadata duration NaN [line 48] (covered 5)
+      ~ rejects unusable metadata duration Infinity [line 48] (covered 5)
+      ~ rejects unusable metadata duration -Infinity [line 48] (covered 5)
+      ~ rejects unusable metadata duration 0 [line 48] (covered 5)
+      ~ rejects unusable metadata duration -1 [line 48] (covered 5)
+    protocol.test.ts
+      ✓ serves exact bytes for undefined [line 41] (killed 50)
+      ✓ serves exact bytes for bytes=2-4 [line 41] (killed 31)
+      ✓ serves exact bytes for bytes=7- [line 41] (killed 6)
+      ✓ serves exact bytes for bytes=-3 [line 41] (killed 7)
+      ✓ serves exact bytes for bytes=0-99 [line 41] (killed 1)
+      ✓ serves exact bytes for bytes=-99 [line 41] (killed 1)
+      ✓ rejects invalid range bytes= [line 65] (killed 5)
+      ~ rejects invalid range bytes=- [line 65] (covered 79)
+      ✓ rejects invalid range bytes=-0 [line 65] (killed 5)
+      ~ rejects invalid range bytes=10- [line 65] (covered 101)
+      ~ rejects invalid range bytes=5-4 [line 65] (covered 102)
+      ✓ rejects invalid range bytes=0-1,3-4 [line 65] (killed 1)
+      ~ rejects invalid range bytes=999999999999999999999- [line 65] (covered 101)
+      ~ rejects invalid range bytes=0-999999999999999999999 [line 65] (covered 120)
+      ✓ supports HEAD and rejects other methods and malformed URLs [line 76] (killed 12)
+      ✓ rejects expired authorization, absent files and symlinks [line 92] (killed 6)
+      ✓ cleans up active bodies on revoke [line 103] (killed 10)
+      ✓ cleans up active bodies on dispose [line 103] (killed 2)
+      ✓ cleans up active bodies on abort [line 103] (killed 3)
+      ~ cleans up active bodies on cancel [line 103] (covered 83)
+      ~ prevents late authorization after revoke [line 126] (covered 49)
+      ~ prevents late authorization after dispose [line 126] (covered 44)
+      ~ prevents late authorization after abort [line 126] (covered 45)
+      ✓ surfaces a real truncated stream failure [line 149] (killed 4)
+      ✓ serves bundled application bytes, HEAD, MIME and restrictive CSP [line 154] (killed 45)
+      ✓ closes a late file open after revoke [line 196] (killed 2)
+      ~ closes a late file open after dispose [line 196] (covered 45)
+      ✓ rejects relative roots [line 229] (killed 6)
+      ✓ does not authorize malformed URLs or disposed requests [line 241] (killed 3)
+      ~ serves empty files and rejects ranges on them [line 251] (covered 129)
+      ✓ rejects an already aborted request [line 261] (killed 2)
+      ✓ serves a bounded range of a sparse long track [line 265] (killed 1)
+      ✓ serves bundled .js assets [line 275] (killed 1)
+      ✓ serves bundled .css assets [line 275] (killed 1)
+      ✓ serves bundled .svg assets [line 275] (killed 1)
+      ✓ serves bundled .png assets [line 275] (killed 1)
+      ✓ serves bundled .woff2 assets [line 275] (killed 1)
+      ✓ serves bundled .json assets [line 275] (killed 1)
+      ✓ serves bundled .ico assets [line 275] (killed 1)
+      ✓ serves bundled .bin assets [line 275] (killed 1)
+      ✓ rejects complete malformed app URL pad-app://app/%2e%2e%2fsecret [line 307] (killed 9)
+      ✓ rejects complete malformed app URL pad-app://app/%2e%2findex.html [line 307] (killed 2)
+      ✓ rejects complete malformed app URL pad-app://app//index.html [line 307] (killed 2)
+      ✓ rejects complete malformed app URL pad-app://app/index.html?x=1 [line 307] (killed 2)
+      ~ rejects complete malformed app URL pad-app://app/index.html#x [line 307] (covered 26)
+      ✓ rejects complete malformed app URL evilpad-app://app/index.html [line 307] (killed 1)
+      ~ rejects complete malformed app URL pad-app://app/ [line 307] (covered 26)
+      ✓ rejects malformed media URL evilpad-media://media/b91324d5-07bf-4cd5-b110-bd78d68b9778?lease=b91324d5-07bf-4cd5-b110-bd78d68b9779 [line 312] (killed 1)
+      ~ rejects malformed media URL pad-media://media/b91324d5-07bf-4cd5-b110-bd78d68b9778?lease=b91324d5-07bf-4cd5-b110-bd78d68b9779?x=1 [line 312] (covered 22)
+      ~ rejects malformed range bytes=0-2garbage [line 318] (covered 79)
+      ✓ rejects malformed range bytes=garbagebytes=0-2 [line 318] (killed 1)
+      ~ rejects malformed range bytes=- [line 318] (covered 79)
+      ~ rejects malformed range bytes= [line 318] (covered 79)
+      ✓ serves one byte and ignores HEAD ranges [line 328] (killed 6)
+      ✓ rejects directories for both protocols [line 341] (killed 3)
+      ~ ignores HEAD Range bytes=20- and reports the complete representation [line 361] (covered 71)
+      ~ ignores HEAD Range bytes=- and reports the complete representation [line 361] (covered 71)
+      ~ ignores HEAD Range items=0-2 and reports the complete representation [line 361] (covered 71)
+      ✓ ignores unrecognized range unit items=0-2 [line 374] (killed 1)
+      ~ ignores unrecognized range unit garbagebytes=0-2 [line 374] (covered 99)
+      ~ accepts case-insensitive byte units [line 387] (covered 136)
+      ~ rejects an absolute relative destination from Windows cross-volume resolution [line 396] (covered 51)
+      ✓ revokes only the selected lease [line 415] (killed 1)
+      ✓ releases completed requests from the cancellation registry [line 427] (killed 1)
+      ✓ removes request cancellation listeners after completion [line 449] (killed 1)
+      ✓ closes a file when cancelled during stat by revoke [line 455] (killed 1)
+      ~ closes a file when cancelled during stat by dispose [line 455] (covered 46)
+      ~ closes the real descriptor on HEAD [line 488] (covered 71)
+      ~ closes the real descriptor on range [line 488] (covered 101)
+      ~ closes the real descriptor on cancel [line 488] (covered 83)
+      ~ closes the real descriptor on revoke [line 488] (covered 91)
+      ~ closes the real descriptor on dispose [line 488] (covered 86)
+      ~ closes the real descriptor on abort [line 488] (covered 87)
+      ✓ returns application HEAD metadata and rejects directory HEAD [line 524] (killed 2)
+      ✓ closes bundled files after HEAD [line 541] (killed 1)
+      ✓ does not open a file after pending authorization is revoked [line 558] (killed 1)
+      ✓ rejects a pending reader immediately on revoke while a read is in flight [line 579] (killed 1)
+  playback
+    controller.test.ts
+      ✓ reserves synchronously, ignores busy clicks, stops pending play and waits for release [line 122] (killed 32)
+      ✓ releases a late grant without starting and retains the gate after failed release [line 151] (killed 5)
+      ✓ publishes progress, cleans up natural end and cannot restart after disposal [line 168] (killed 26)
+      ✓ cleans up rejected acquisition and start without advancing playback [line 198] (killed 6)
+      ✓ ignores old callbacks during a new attempt and treats current failure as STOP [line 218] (killed 4)
+      ✓ rejects disposal with a held lease, then releases it on retry [line 241] (killed 2)
+      ~ retains ownership after failed stop and retries before allowing a new pad [line 260] (covered 67)
+      ✓ disposes while start is pending and ignores callbacks without an attempt [line 278] (killed 4)
+      ✓ notifies progress and completion independently and removes failing observers [line 296] (killed 10)
+      ✓ starts healthy, authorizes its session and publishes STOP before release acknowledgment [line 341] (killed 4)
+    dom-audio.test.ts
+      ✓ plays exclusively from zero, correlates media events and clears the source on STOP [line 53] (killed 51)
+      ✓ creates the default audio element and releases it without playback [line 137] (killed 4)
+    subscriptions.test.ts
+      ✓ releases subscriber resources on disposal while both owners remain reachable [line 25] (killed 2)
+  storage/catalog.test.ts
+    ✓ persists 31 pads, labels, colors, ordering and managed bytes across restart [line 48] (killed 108)
+    ✓ keeps deletion cleanup durable when unlink fails and retries on restart [line 83] (killed 37)
+    ✓ never publishes failed copies or invalid audio and recovers staged files [line 110] (killed 7)
+    ✓ reports missing media, corruption and future versions without reset [line 127] (killed 12)
+    ✓ rolls back publication on SQL failure and removes promoted orphans on recovery [line 149] (killed 2)
+    ✓ reserves edits across selection and rejects stale revisions and revoked leases [line 165] (killed 11)
+    ✓ leaves a cancelled selection unchanged [line 198] (killed 1)
+    ✓ atomically rejects publication from an outdated second connection [line 209] (killed 2)
+    ✓ quarantines unknown and staged files without following symlinks [line 223] (killed 4)
+    ✓ rejects managed directory symlinks and referenced symlinks [line 238] (killed 3)
+    ✓ rejects unknown pads and invalid reorder without saving [line 259] (killed 9)
+    ✓ keeps the last commit after a relational constraint fails [line 289] (killed 1)
+    ~ preserves metadata and quarantine bytes after a failed batch [line 305] (covered 111)
+    ✓ detects broken foreign keys without resetting existing bytes [line 325] (killed 5)
+    ✓ retries a completed deletion without touching the original [line 338] (killed 3)
+    ~ rejects invalid duration NaN without publication [line 361] (covered 79)
+    ~ rejects invalid duration Infinity without publication [line 361] (covered 79)
+    ~ rejects invalid duration -1 without publication [line 361] (covered 82)
+    ~ does not publish when validation or promotion fails [line 375] (covered 86)
+    ✓ retains shared assets until their last pad is removed [line 394] (killed 12)
+    ✓ rejects a lease before selection and after asynchronous validation [line 430] (killed 1)
+    ~ rejects duplicate and foreign pad orders [line 454] (covered 114)
+    ✓ reports inaccessible database paths and failed migrations without resetting [line 476] (killed 3)
+    ~ reports corruption introduced after open [line 500] (covered 37)
+    ~ persists cleanup intent with deletion and acknowledges only completed work [line 513] (covered 52)
+    ✓ deletes one asset while retaining another [line 528] (killed 3)
+    ✓ refuses recovery with a revoked lease [line 552] (killed 1)
+    ~ releases the database descriptor after initialization failure [line 566] (covered 14)
+
+Ran 3.77 tests per mutant on average.
+---------------------------|------------------|----------|-----------|------------|----------|----------|
+                           | % Mutation score |          |           |            |          |          |
+File                       |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+---------------------------|--------|---------|----------|-----------|------------|----------|----------|
+All files                  | 100.00 |  100.00 |      973 |         1 |          0 |        0 |        0 |
+ contracts                 | 100.00 |  100.00 |       26 |         0 |          0 |        0 |        0 |
+  catalog.ts               | 100.00 |  100.00 |        7 |         0 |          0 |        0 |        0 |
+  desktop.ts               | 100.00 |  100.00 |       10 |         0 |          0 |        0 |        0 |
+  operations.ts            | 100.00 |  100.00 |        9 |         0 |          0 |        0 |        0 |
+ domain                    | 100.00 |  100.00 |       65 |         0 |          0 |        0 |        0 |
+  lease.ts                 | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  playback.ts              | 100.00 |  100.00 |       41 |         0 |          0 |        0 |        0 |
+ main                      | 100.00 |  100.00 |      697 |         1 |          0 |        0 |        0 |
+  ipc                      | 100.00 |  100.00 |      212 |         0 |          0 |        0 |        0 |
+   authority.ts            | 100.00 |  100.00 |       47 |         0 |          0 |        0 |        0 |
+   catalog-session.ts      | 100.00 |  100.00 |      110 |         0 |          0 |        0 |        0 |
+   desktop.ts              | 100.00 |  100.00 |       31 |         0 |          0 |        0 |        0 |
+   renderer-lifetime.ts    | 100.00 |  100.00 |       24 |         0 |          0 |        0 |        0 |
+  library                  | 100.00 |  100.00 |      118 |         0 |          0 |        0 |        0 |
+   managed-catalog.ts      | 100.00 |  100.00 |      118 |         0 |          0 |        0 |        0 |
+  storage                  | 100.00 |  100.00 |      367 |         1 |          0 |        0 |        0 |
+   application-protocol.ts | 100.00 |  100.00 |       76 |         0 |          0 |        0 |        0 |
+   audio-metadata.ts       | 100.00 |  100.00 |        8 |         0 |          0 |        0 |        0 |
+   catalog-store.ts        | 100.00 |  100.00 |       69 |         0 |          0 |        0 |        0 |
+   managed-files.ts        | 100.00 |  100.00 |       42 |         0 |          0 |        0 |        0 |
+   media-protocol.ts       | 100.00 |  100.00 |      172 |         1 |          0 |        0 |        0 |
+ preload                   | 100.00 |  100.00 |        5 |         0 |          0 |        0 |        0 |
+  desktop-bridge.ts        | 100.00 |  100.00 |        5 |         0 |          0 |        0 |        0 |
+ renderer                  | 100.00 |  100.00 |      180 |         0 |          0 |        0 |        0 |
+  playback                 | 100.00 |  100.00 |      143 |         0 |          0 |        0 |        0 |
+   controller.ts           | 100.00 |  100.00 |       86 |         0 |          0 |        0 |        0 |
+   dom-audio.ts            | 100.00 |  100.00 |       57 |         0 |          0 |        0 |        0 |
+  runtime                  | 100.00 |  100.00 |       37 |         0 |          0 |        0 |        0 |
+   desktop.ts              | 100.00 |  100.00 |       37 |         0 |          0 |        0 |        0 |
+---------------------------|--------|---------|----------|-----------|------------|----------|----------|
+[32m02:53:13 (315927) INFO MutationTestReportHelper[39m Final mutation score of 100.00 is greater than or equal to break threshold 100
+[32m02:53:13 (315927) INFO JsonReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-04a0ed1f-6f92b416fd6dda74/reports/mutation/mutation.json
+[32m02:53:13 (315927) INFO HtmlReporter[39m Your report can be found at: file:///home/igstefano/.t3/worktrees/mr-emo-virtual-pad/t3-04a0ed1f-6f92b416fd6dda74/reports/mutation/mutation.html
+[32m02:53:13 (315927) INFO MutationTestExecutor[39m Done in 6 minutes and 2 seconds.
+Mutation gate: 974 mutants, 1 detected by timeout.

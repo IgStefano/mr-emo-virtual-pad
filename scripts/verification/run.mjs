@@ -114,6 +114,7 @@ if (command === 'fixtures') {
       }
       application = await _electron.launch({
         executablePath: electron,
+        chromiumSandbox: true,
         args: [root],
         cwd: root,
         timeout: 20000,

@@ -29,10 +29,11 @@ export async function drive(application, profile, version, evidence) {
   assert.equal(runtime.windows[0].contextIsolation, true);
   assert.equal(runtime.windows[0].nodeIntegration, false);
   const page = await application.firstWindow();
-  await page
-    .getByRole('heading', { name: 'Seu repertório. Pronto para o palco.' })
-    .waitFor();
-  assert.equal((await page.getByRole('status').innerText()).trim(), 'Parado');
+  await page.getByRole('heading', { name: 'Seu repertório' }).waitFor();
+  assert.equal(
+    (await page.getByText('Parado', { exact: true }).innerText()).trim(),
+    'Parado',
+  );
   assert.match(
     await page.getByRole('main').innerText(),
     /O repertório está vazio/,

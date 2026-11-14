@@ -83,3 +83,27 @@ The coordinator completed an unpackaged WSLg shell journey with GTK and epoxy
 extracted into a user-local cache and supplied through LD_LIBRARY_PATH. The
 committed evidence is in `.pstack/evidence/C1/coordinator-live`. This host setup
 is not shipped with the app and does not establish Windows/Mac release behavior.
+
+## I1 composed runtime
+
+`node scripts/verification/journey.mjs` runs the built **unpackaged** application
+with Chromium sandboxing explicitly enabled and a disposable userData directory.
+It asserts `app.getPath('userData')`, imports the generated stereo PCM fixture
+through the finite bridge (controlling only the native dialog boundary), compares
+the managed bytes, removes the original and restarts. Native audio progress and a
+206 response from pad-media are required before STOP. Deletion then requires an
+empty managed-media directory. The profile is removed after evidence is saved.
+
+`node scripts/verification/packaged-shell.mjs` uses renderer CDP against the fused
+Linux package, without main-process inspection. It requires the restricted UI
+origin, stopped state, a working finite bridge and no renderer require. This is a
+packaged shell/SQLite/recovery smoke, not packaged import/playback evidence. Its
+profile is supplied at launch; the exact main-process getPath assertion belongs
+to the unpackaged journey. Release fuse values are inspected independently with
+`getCurrentFuseWire`. No inspection fuse is disabled for verification.
+
+On this host these commands need
+`LD_LIBRARY_PATH=/home/igstefano/.cache/mr-emo/electron-runtime/root/usr/lib/x86_64-linux-gnu`.
+The full target Mac/interface journey, physical stereo output, latency and
+representative codec acceptance remain unverified. No performance result is
+inferred from native timeupdate events. Evidence is under `.pstack/evidence/I1`.

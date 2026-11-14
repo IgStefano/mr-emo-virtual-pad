@@ -6,6 +6,27 @@ import vitest from '@vitest/eslint-plugin';
 
 const policy = {
   rules: {
+    'audio-owner': {
+      meta: {
+        type: 'problem',
+        schema: [],
+        messages: {
+          owner: 'AUDIO001: create native audio only in DomAudioExecutor.',
+        },
+      },
+      create(context) {
+        const services = context.sourceCode.parserServices;
+        const checker = services.program.getTypeChecker();
+        function check(node) {
+          const type = checker.getTypeAtLocation(
+            services.esTreeNodeToTSNodeMap.get(node),
+          );
+          if (checker.typeToString(type) === 'HTMLAudioElement')
+            context.report({ node, messageId: 'owner' });
+        }
+        return { CallExpression: check, NewExpression: check };
+      },
+    },
     'const-object-enums': {
       meta: {
         type: 'problem',
@@ -222,6 +243,11 @@ export default tseslint.config(
     files: ['src/renderer/**/*.{ts,tsx}'],
     ignores: ['src/renderer/components/ui/**'],
     rules: { 'policy/ui-primitives': 'error' },
+  },
+  {
+    files: ['src/renderer/**/*.{ts,tsx}'],
+    ignores: ['src/renderer/playback/dom-audio.ts'],
+    rules: { 'policy/audio-owner': 'error' },
   },
   { files: ['src/main/main.ts'], rules: { 'no-console': 'off' } },
   {

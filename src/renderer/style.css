@@ -42,3 +42,43 @@ p {
   border-radius: 50%;
   background: #aab5a4;
 }
+.button {
+  color: #f0eee9;
+  background: #252b31;
+  border: 1px solid #59636d;
+  border-radius: 6px;
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  font: inherit;
+  cursor: pointer;
+}
+.button:hover {
+  background: #343d46;
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.button:focus-visible {
+  outline: 3px solid #ff795a;
+  outline-offset: 3px;
+}
+.transport {
+  position: sticky;
+  top: 0;
+  background: #101316;
+  margin-bottom: 2rem;
+}
+li {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+::selection {
+  background: #ff795a;
+  color: #101316;
+}

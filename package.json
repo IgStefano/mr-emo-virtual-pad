@@ -3,7 +3,7 @@
   "productName": "Mr. Emo Virtual Pad",
   "version": "0.1.0",
   "private": true,
-  "description": "Pad virtual offline para reprodu\u00e7\u00e3o de tracks em shows.",
+  "description": "Pad virtual offline para reprodução de tracks em shows.",
   "license": "UNLICENSED",
   "author": "Mr. Emo",
   "main": ".vite/build/main.cjs",
@@ -37,9 +37,13 @@
     "verification:drive": "node scripts/verification/run.mjs drive"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "1.5.0",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
     "music-metadata": "12.5.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "tailwind-merge": "3.7.0",
     "zod": "4.6.7"
   },
   "devDependencies": {

@@ -60,3 +60,27 @@ test('graph rejects metadata filesystem access outside storage', async () => {
     await rm(adapter, { force: true });
   }
 });
+
+for (const [file, code, rule] of [
+  [
+    'src/main/ipc/__boundary.ts',
+    "import { ipcMain } from 'electron'; export const bypass = ipcMain;",
+    'architecture/electron-entrypoints',
+  ],
+  [
+    'src/main/ipc/__boundary.ts',
+    "import { readFile } from 'node:fs/promises'; export const bypass = readFile;",
+    'architecture/storage-owns-disk',
+  ],
+]) {
+  test(`rejects privileged bypass ${rule}`, async () => {
+    try {
+      await writeFile(file, code);
+      const result = checkGraph();
+      assert.ok(result.status > 0, result.stdout + result.stderr);
+      assert.ok(result.stdout.includes(rule), result.stdout);
+    } finally {
+      await rm(file, { force: true });
+    }
+  });
+}

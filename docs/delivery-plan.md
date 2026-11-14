@@ -237,3 +237,14 @@ The I1 continuation adds the staged-file metadata adapter and media/integration
 TypeScript discovery. Bootstrap, protocol and renderer integration are still
 pending. The current real Electron harness continues to exercise only the empty
 shell. No import/persist/play/STOP/delete acceptance has been established.
+
+## I1 composition evidence
+
+I1 now wires the accepted M1/J1 exports rather than replacing their adapters.
+The Linux unpackaged disposable-profile journey imports the synthetic stereo PCM
+fixture, compares managed bytes, removes its original, restarts, observes native
+progress through a 206 restricted media response, stops and deletes the managed
+copy. Run `node scripts/verification/journey.mjs` after packaging, with the host
+Electron runtime library path configured. This is functional evidence, not a
+physical latency benchmark or packaged runtime acceptance. Mac/interface and
+representative codec checks remain final-candidate gates.

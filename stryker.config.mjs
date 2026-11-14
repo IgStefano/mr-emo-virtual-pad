@@ -1,5 +1,6 @@
 export default {
   testRunner: 'vitest',
+  ignorePatterns: ['/out'],
   vitest: { configFile: 'vitest.config.mjs', related: false },
   mutate: [
     'src/domain/**/*.ts',

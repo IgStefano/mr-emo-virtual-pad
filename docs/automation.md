@@ -27,3 +27,15 @@ primitive placement are enforced in lint/graph configuration. Command execution
 belongs to hooks/CI rather than reminders in the agent context. The contract for
 real-device evidence remains in verification.md because a hook cannot infer sound
 quality or invent missing Mac hardware.
+
+Feature views under `renderer/performance` and `renderer/editing` use the
+`feature/views` ESLint rule. TSX renders and binds events; state, asynchronous
+work and behavioral control flow live in mutation-covered TypeScript modules.
+Guardrail fixtures reject eleven forbidden forms and check that the actual
+ESLint configuration enables the rule for both feature directories. Rendering
+conditions and shadcn primitives remain supported. React/Radix DOM tests exercise
+the extracted behavior through visible controls.
+
+Stryker omits generated `out/` distributions from sandbox copying. macOS bundles
+contain directory symlinks that cannot be copied as ordinary source files. This
+setting does not exclude production sources from mutation.

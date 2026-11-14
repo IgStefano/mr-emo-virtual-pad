@@ -6,7 +6,7 @@ Use Node 24 (see engines) and `npm ci`, then `npm run verify`. This runs formatt
 strict lint, environment-specific typechecks, resolved import graph, negative
 policy fixtures, domain tests and Stryker. Mutation artifacts survive in
 `reports/mutation/`. The postcheck rejects empty scope and non-detected/invalid
-mutants, and reports timeout count. Current small scope has no ignored mutants.
+mutants, and reports timeout count. The gate accepts no ignored mutants.
 
 Use `npm run package` for Electron changes. CI also makes unsigned ZIP artifacts
 on Windows/macOS. Signing/notarization and runtime smoke on those platforms are
@@ -15,8 +15,8 @@ not established by a successful Linux build.
 ## Live shell
 
 Launch with `npm start` on a desktop with Electron system dependencies. Confirm
-empty-repertoire screen, stopped status and clean window closure. This shell
-cannot import/play audio yet; never report its empty state as a playback test.
+empty-repertoire screen, stopped status and clean window closure. The empty-shell smoke checks launch and isolation; the product journeys below
+check import and playback.
 Linux headless hosts may need Xvfb and Chromium system libraries; sandboxing must
 remain enabled for production. The isolated C1 driver below automates the empty shell.
 
@@ -24,8 +24,8 @@ When adding runtime features, provide launch/doctor/drive/evidence/cleanup scrip
 use an isolated temporary userData directory, identify the build/platform/runtime,
 drive accessible controls, assert visible state plus disk/resources, save artifacts
 before teardown, and terminate only processes created by that run. Never use the
-real repertoire as a test profile. The C1 driver implements the empty-shell portion; future product journeys
-still require integration.
+real repertoire as a test profile. The C1 driver implements the empty-shell portion; the composed runtime and C2
+drivers below check product journeys.
 
 ## Evidence
 
@@ -75,9 +75,9 @@ A missing build requires rerunning package. Separate concurrent invocations use
 separate profiles and evidence directories.
 
 The standalone MJS journey is intentionally outside the Node Vitest mutation
-runner. It currently proves only the empty shell. Packaged release automation,
-SQLite probe integration, import/play/STOP/delete and physical output remain
-separate gates. No latency or throughput is measured by this harness.
+runner. It proves the empty shell. The I1 and C2 journeys below cover
+import/play/STOP/delete and packaged playback. Physical output remains a
+separate gate. No latency or throughput is measured by this harness.
 
 The coordinator completed an unpackaged WSLg shell journey with GTK and epoxy
 extracted into a user-local cache and supplied through LD_LIBRARY_PATH. The

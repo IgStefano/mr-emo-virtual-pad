@@ -34,10 +34,9 @@ export async function drive(application, profile, version, evidence) {
     (await page.getByText('Parado', { exact: true }).innerText()).trim(),
     'Parado',
   );
-  assert.match(
-    await page.getByRole('main').innerText(),
-    /O repertório está vazio/,
-  );
+  await page
+    .getByRole('heading', { name: 'Seu repertório está vazio', exact: true })
+    .waitFor();
   assert.deepEqual(await page.evaluate(() => window.pad.getAppInfo()), {
     version,
   });

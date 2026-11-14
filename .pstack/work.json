@@ -189,7 +189,7 @@
     {
       "id": "A2",
       "title": "Harden recovery and lifecycle",
-      "status": "active",
+      "status": "accepted",
       "dependsOn": ["I1"],
       "ownedPaths": [
         "src/main/storage",
@@ -203,13 +203,13 @@
         "tests/ipc/renderer-lifetime.test.ts"
       ],
       "brief": ".pstack/briefs/A2.md",
-      "acceptedSha": null,
-      "evidence": []
+      "acceptedSha": "57f98184a16e7736f57870db4057a8994b08176a",
+      "evidence": [".pstack/evidence/A2/coordinator/result.md"]
     },
     {
       "id": "B2",
       "title": "Build performance grid and editing interface",
-      "status": "active",
+      "status": "accepted",
       "dependsOn": ["I1"],
       "ownedPaths": [
         "src/renderer/performance",
@@ -233,13 +233,17 @@
         ".impeccable"
       ],
       "brief": ".pstack/briefs/B2.md",
-      "acceptedSha": null,
-      "evidence": []
+      "acceptedSha": "edfa0d04e8e2b2b696a9b6822e47ab3736bdf7a9",
+      "evidence": [
+        ".pstack/evidence/B2/coordinator/result.md",
+        ".pstack/evidence/B2/mutation-integration/README.md",
+        ".pstack/evidence/B2/coordinator/packaged.json"
+      ]
     },
     {
       "id": "C2",
       "title": "Expand model/property and native regression verification",
-      "status": "active",
+      "status": "accepted",
       "dependsOn": ["I1"],
       "ownedPaths": [
         "tests/electron",
@@ -249,13 +253,13 @@
         ".pstack/evidence/C2"
       ],
       "brief": ".pstack/briefs/C2.md",
-      "acceptedSha": null,
-      "evidence": []
+      "acceptedSha": "57f98184a16e7736f57870db4057a8994b08176a",
+      "evidence": [".pstack/evidence/C2/coordinator/result.md"]
     },
     {
       "id": "R1",
       "title": "Prepare automatically verified release candidate for final Mac validation",
-      "status": "planned",
+      "status": "active",
       "dependsOn": ["A2", "B2", "C2"],
       "ownedPaths": [
         "docs/release",

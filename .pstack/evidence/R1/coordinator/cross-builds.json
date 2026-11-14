@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "edfa0d04e8e2b2b696a9b6822e47ab3736bdf7a9",
+  "sourceTree": "b7102f200ab11850da693a16ca5cbdc10726aa12",
+  "host": "Linux x64",
+  "artifacts": [
+    {
+      "path": "out/make/zip/darwin/x64/Mr. Emo Virtual Pad-darwin-x64-0.1.0.zip",
+      "sha256": "2c14f12d5fa109ba0b11c6be97d73a3640a8b5caecef7b9fab58302d6bfb718d",
+      "bytes": 124690483,
+      "runtimeExecuted": false
+    },
+    {
+      "path": "out/make/zip/win32/x64/Mr. Emo Virtual Pad-win32-x64-0.1.0.zip",
+      "sha256": "36278a691cda4bce72689da339154965841586f2ef2835f0d4a11ac3d7053c19",
+      "bytes": 158667909,
+      "runtimeExecuted": false
+    }
+  ],
+  "macArm64": "FAILED: Forge requires macOS codesign to reset ad-hoc signature after fuse edits; no bypass applied",
+  "signing": "No developer signing or notarization",
+  "remoteCI": "Not observed"
+}

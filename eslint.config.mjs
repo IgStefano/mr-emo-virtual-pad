@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import featureViews from './scripts/eslint-feature-views.mjs';
 import tseslint from 'typescript-eslint';
 import hooks from 'eslint-plugin-react-hooks';
 import a11y from 'eslint-plugin-jsx-a11y';
@@ -248,6 +249,11 @@ export default tseslint.config(
     files: ['src/renderer/**/*.{ts,tsx}'],
     ignores: ['src/renderer/playback/dom-audio.ts'],
     rules: { 'policy/audio-owner': 'error' },
+  },
+  {
+    files: ['src/renderer/{performance,editing}/**/*.tsx'],
+    plugins: { feature: { rules: { views: featureViews } } },
+    rules: { 'feature/views': 'error' },
   },
   { files: ['src/main/main.ts'], rules: { 'no-console': 'off' } },
   {

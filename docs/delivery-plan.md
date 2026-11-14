@@ -216,3 +216,13 @@ first; the operator validates the Mac only at the end. R1 can produce that
 candidate while S1 physical acceptance is blocked. Automated integration evidence
 does not claim the missing physical checks passed; show readiness still requires
 them.
+
+### I1 partial implementation checkpoint
+
+The main-process session authority and its behavioral tests are implemented.
+Discovery includes IPC/media/integration tests and mutation includes main IPC
+modules. This checkpoint does not complete I1. Bootstrap/preload integration,
+restricted UI/media protocols, dialog reservation, staged metadata inspection,
+privileged-boundary negative guardrails and the import/persist/play/STOP/delete
+journey remain pending. No playback, packaged-media or physical-performance
+acceptance follows from this checkpoint.

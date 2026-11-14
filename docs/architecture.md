@@ -74,3 +74,14 @@ host branch protection automatically.
 Enum values are named objects with `as const`; types derive from their values.
 Lint rejects native enums, string-literal unions and inline type/status/kind
 discriminators; literal values in serialized fixtures remain valid test data.
+
+## I1 authority foundation
+
+`main/ipc/authority.ts` reserves a recovery lease before returning a new session.
+Concurrent opens and reservations fail while recovery runs. Recovery failure
+revokes the session; recovery cannot be interrupted by closing the session.
+Reservations check session identity synchronously and release checks all lease
+fields. Callers must terminate renderer audio before closing a playback session.
+This authority is not yet wired into bootstrap or IPC. The existing shell remains
+app-info only. Restricted protocols, staged audio metadata validation and the
+renderer composition are still pending I1 work.

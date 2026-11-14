@@ -6,6 +6,7 @@
   },
   "include": [
     "tests/domain/**/*.ts",
+    "tests/ipc/**/*.ts",
     "src/domain/**/*.ts",
     "tests/contracts/**/*.ts",
     "tests/storage/**/*.ts",

@@ -4,7 +4,7 @@ export default {
   mutate: [
     'src/domain/**/*.ts',
     'src/contracts/{catalog,operations}.ts',
-    'src/main/{storage,library}/**/*.ts',
+    'src/main/{storage,library,ipc}/**/*.ts',
     'src/renderer/playback/**/*.ts',
   ],
   reporters: ['clear-text', 'html', 'json'],

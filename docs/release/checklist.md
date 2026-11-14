@@ -26,7 +26,7 @@ para teste, mantendo os originais de produção protegidos.
 | Start/STOP         | Método abaixo, amostras brutas e limites acordados com baterista                                                                            | NOT RUN   |
 | Ensaio offline     | Wi-Fi/rede desligados, duração real em horas, repertório e falhas/glitches registrados                                                      | NOT RUN   |
 | Fechar             | Cancelar fechamento ocupado mantém faixa; confirmar fecha; reabrir parado                                                                   | NOT RUN   |
-| Suspender          | Suspender durante reprodução, acordar; não retomar automaticamente; STOP e nova faixa funcionam                                             | NOT RUN   |
+| Suspender          | Suspender durante reprodução fecha o app; acordar e reabrir parado; nova faixa e STOP funcionam                                             | NOT RUN   |
 | Interface removida | Desconectar/reconectar durante execução; registrar silêncio/erro/saída escolhida; nenhuma faixa seguinte automática                         | NOT RUN   |
 | Reinício/falha     | Fechar forçado apenas perfil de teste; reabrir parado, catálogo íntegro, originais intactos                                                 | NOT RUN   |
 | Biblioteca         | Copiar/restaurar biblioteca inteira com app encerrado em ambiente de teste e conferir pads/bytes                                            | NOT RUN   |

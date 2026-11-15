@@ -4,6 +4,11 @@ export default {
   packagerConfig: { asar: true },
   makers: [
     {
+      name: '@electron-forge/maker-dmg',
+      enabled: process.platform === 'darwin',
+      platforms: ['darwin'],
+    },
+    {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin', 'win32', 'linux'],
     },

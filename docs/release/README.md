@@ -8,11 +8,12 @@ codec da banda foi aprovado neste host Linux.
 
 Em Sobre Este Mac, chip Apple usa `darwin-arm64`; processador Intel usa
 `darwin-x64`. Windows de desenvolvimento usa `win32-x64`. Não escolha por Rosetta.
-Use o ZIP correspondente e confira seu SHA-256 contra `reports/release/artifacts.json`
+Use o DMG ou ZIP correspondente e confira seu SHA-256 contra `reports/release/artifacts.json`
 do mesmo job/commit (`shasum -a 256 arquivo.zip` no Mac). Identifique sempre versão,
 arquitetura e SHA do código, pois 0.1.0 sozinho não distingue candidatos.
 
-Extraia o ZIP pelo Finder e copie o app para uma pasta local. Abra pelo Finder.
+Abra o DMG e arraste o app para Aplicativos. Se usar ZIP, extraia pelo Finder
+e copie o app para uma pasta local. Abra pelo Finder.
 Este ensaio não tem assinatura Developer ID nem notarização. Uma assinatura local
 ad-hoc, quando presente, não identifica um desenvolvedor aprovado pela Apple.
 Se o macOS bloquear um app de origem conferida, use o fluxo normal de Ajustes do
@@ -67,7 +68,7 @@ Windows 2025 x64. Os rótulos foram conferidos em 14/11/2026 na
 [referência oficial do GitHub](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
 Checkout usa histórico completo para verificar ancestralidade dos acceptedSha.
 O job de verificação mantém inventário de mutação e regressões; cada job nativo
-empacota ZIP, grava SHA-256/commit/runtime, executa shell, jornada e playback
+empacota ZIP (e DMG no Mac), grava SHA-256/commit/runtime, executa shell, jornada e playback
 empacotado. Artefatos e relatórios são preservados mesmo se uma etapa posterior
 falhar. A presença de ZIP não equivale ao sucesso do job. Retenção é 30 dias;
 o coordenador deve arquivar o candidato escolhido e seus relatórios juntos.
@@ -83,3 +84,7 @@ aprovação deste candidato. Arm64 exige build no macOS para o codesign ad-hoc a
 fuses; não se contorna esse requisito no Linux. Consulte a evidência R1 do worker
 para comandos locais e resultados. O checklist seguinte mantém todo resultado
 físico como NOT RUN até ser preenchido no destino.
+
+O maker DMG requer um host macOS. No Linux, cross-build de ZIP Intel pode
+ser gerado, mas isso não produz DMG nem comprova execução no Mac. Os jobs Mac
+do workflow geram DMG para arm64 e x64 em `out/make/dmg/<arquitetura>/`.
